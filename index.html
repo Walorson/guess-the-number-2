@@ -11,13 +11,13 @@
 </head>
 <body>
     <div class="title"><h1><span class="big-letter">G</span>uess <span class="big-letter">T</span>he <span class="big-letter">N</span>umber <span class="big-letter rotated">2</span></h1></div>
-    <div class="buttons">
-        <button>Play</button>
+    <div class="menu" id="main">
+        <button data-click="changeMenu('gamemodes')">Play</button>
         <button>Options</button>
         <button>Quit</button>
     </div>
 
-    <!-- <div class="buttons">
+    <div class="menu" id="gamemodes">
         <button>Classic</button>
         <button>Hardcore</button>
         <button>Puzzle</button>
@@ -25,7 +25,7 @@
         <button>Time</button>
         <button>One Chance</button>
         <button>Three Chance</button>
-        <button>Back</button>
-    </div> -->
+        <button class="back-button" data-click="changeMenu('main')">Back</button>
+    </div>
 </body>
 </html>

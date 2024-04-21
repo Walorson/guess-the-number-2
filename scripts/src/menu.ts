@@ -1,6 +1,7 @@
 import fs from 'fs';
 
-const buttons = document.querySelectorAll("button");
+let buttons = document.getElementById("main").querySelectorAll("button");
+let menuChosen: string = "main";
 let index: number;
 let buttonsMax: number = buttons.length-1;
 let last: HTMLElement;
@@ -12,7 +13,7 @@ window.addEventListener("keydown", (e: KeyboardEvent) =>
 
 window.addEventListener("keydown", (e) => {
     if(e.key == "Enter") {
-        console.log(buttons[index].textContent);
+        eval(buttons[index].getAttribute("data-click"));
     }
 });
 
@@ -38,6 +39,27 @@ function changeButton(e: KeyboardEvent): void
     if(last != undefined)
         last.classList.remove("hover");
 
+    buttons[index].classList.add("hover");
+    last = buttons[index];
+}
+
+function changeMenu(name: string) 
+{
+    if(last != undefined)
+        last.classList.remove("hover");
+
+    document.getElementById(menuChosen).style.display = 'none';
+    document.getElementById(name).style.display = 'flex';
+    menuChosen = name;
+
+    resetButtonHoverPosition(name);
+}
+
+function resetButtonHoverPosition(name: string): void
+{
+    buttons = document.getElementById(name).querySelectorAll("button");
+    buttonsMax = buttons.length-1;
+    index = 0;
     buttons[index].classList.add("hover");
     last = buttons[index];
 }

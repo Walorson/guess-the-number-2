@@ -1,4 +1,5 @@
-const buttons = document.querySelectorAll("button");
+let buttons = document.getElementById("main").querySelectorAll("button");
+let menuChosen = "main";
 let index;
 let buttonsMax = buttons.length - 1;
 let last;
@@ -7,7 +8,7 @@ window.addEventListener("keydown", (e) => {
 });
 window.addEventListener("keydown", (e) => {
     if (e.key == "Enter") {
-        console.log(buttons[index].textContent);
+        eval(buttons[index].getAttribute("data-click"));
     }
 });
 function changeButton(e) {
@@ -28,6 +29,21 @@ function changeButton(e) {
     }
     if (last != undefined)
         last.classList.remove("hover");
+    buttons[index].classList.add("hover");
+    last = buttons[index];
+}
+function changeMenu(name) {
+    if (last != undefined)
+        last.classList.remove("hover");
+    document.getElementById(menuChosen).style.display = 'none';
+    document.getElementById(name).style.display = 'flex';
+    menuChosen = name;
+    resetButtonHoverPosition(name);
+}
+function resetButtonHoverPosition(name) {
+    buttons = document.getElementById(name).querySelectorAll("button");
+    buttonsMax = buttons.length - 1;
+    index = 0;
     buttons[index].classList.add("hover");
     last = buttons[index];
 }

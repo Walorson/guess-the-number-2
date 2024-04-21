@@ -24,14 +24,15 @@
     margin-left: 10px;
     animation: blink 10s infinite linear;
 }
-.buttons {
+.menu {
     position: absolute;
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    display: flex;
+    display: none;
     flex-direction: column;
     gap: 6px;
 }
+#main { display: flex; }
 button {
     display: block;
     padding: 15px 0;
@@ -48,6 +49,13 @@ button {
 button:hover, .hover {
     cursor: pointer;
     animation: hover-button 0.8s infinite linear;
+}
+.back-button {
+    margin-top: 35px;
+}
+#gamemodes {
+    top: 240px;
+    transform: translateX(-50%);
 }
 
 @keyframes hover-button {
