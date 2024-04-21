@@ -1,0 +1,17 @@
+{
+  "name": "guess-the-number-2",
+  "version": "1.0.0",
+  "description": "Remake of my old game from 2020. Better gameplay, UI and fun :D",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "Szymon Gniadek",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "typescript": "^5.4.5"
+  }
+}
