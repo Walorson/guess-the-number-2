@@ -1,0 +1,4 @@
+import { writeGuess, getGuess } from "../input.js";
+window.addEventListener("keydown", writeGuess);
+console.log(window.addEventListener("keydown", getGuess));
+//# sourceMappingURL=classic.js.map

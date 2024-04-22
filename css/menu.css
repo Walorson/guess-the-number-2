@@ -1,11 +1,3 @@
-@font-face {
-    font-family: milker;
-    src: url("../fonts/Milker.otf");
-}
-@font-face {
-    font-family: typewriter;
-    src: url("../fonts/JMH Typewriter.otf");
-}
 .title {
     text-align: center;
     font-size: 2rem;
