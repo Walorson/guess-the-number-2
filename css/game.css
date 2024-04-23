@@ -15,3 +15,24 @@
     color: rgb(217, 29, 29);
     text-shadow: 0px 0px 22px rgb(175, 21, 21);
 }
+.output {
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    letter-spacing: 10px;
+    opacity: 0;
+}
+.outputApperance {
+    animation: outputApperance 1s ease-in;
+}
+@keyframes outputApperance {
+    from {
+        letter-spacing: 10px;
+        opacity: 1;
+    }
+    to {
+        letter-spacing: 50px;
+        opacity: 0;
+    }
+}

@@ -9,7 +9,7 @@ function writeGuess(e: KeyboardEvent): void
         if(guess == '0' && e.key != '0')
             guess = "";
 
-        if(e.key != '0' && guess.length < guessMaxLength)
+        if(guess[0] != '0' && guess.length < guessMaxLength)
             guess += e.key;
 
         input.textContent = guess;
@@ -25,9 +25,8 @@ function writeGuess(e: KeyboardEvent): void
     }
 }
 
-function getGuess(e: KeyboardEvent): number {
-    if(e.key == 'Enter')
-        return Number(guess);
+function getGuess(): number {
+    return Number(guess);
 }
 
 export { writeGuess, getGuess }

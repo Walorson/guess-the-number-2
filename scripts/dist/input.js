@@ -5,7 +5,7 @@ function writeGuess(e) {
     if (isNaN(Number(e.key)) == false) {
         if (guess == '0' && e.key != '0')
             guess = "";
-        if (e.key != '0' && guess.length < guessMaxLength)
+        if (guess[0] != '0' && guess.length < guessMaxLength)
             guess += e.key;
         input.textContent = guess;
     }
@@ -16,9 +16,8 @@ function writeGuess(e) {
         input.textContent = guess;
     }
 }
-function getGuess(e) {
-    if (e.key == 'Enter')
-        return Number(guess);
+function getGuess() {
+    return Number(guess);
 }
 export { writeGuess, getGuess };
 //# sourceMappingURL=input.js.map
