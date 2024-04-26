@@ -1,7 +1,10 @@
 const input = document.getElementById("input");
+const lastGuess = document.getElementById("lastGuess");
+const attemptsDiv = document.getElementById("attempts");
 let guess = "0";
 let guessMaxLength = 3;
-function writeGuess(e) {
+let attempts = 0;
+export function writeGuess(e) {
     if (isNaN(Number(e.key)) == false) {
         if (guess == '0' && e.key != '0')
             guess = "";
@@ -16,8 +19,14 @@ function writeGuess(e) {
         input.textContent = guess;
     }
 }
-function getGuess() {
+export function getGuess() {
+    attempts++;
+    attemptsDiv.textContent = "Attempts: " + attempts;
     return Number(guess);
 }
-export { writeGuess, getGuess };
+export function clearGuess() {
+    lastGuess.textContent = guess;
+    guess = "0";
+    input.textContent = "0";
+}
 //# sourceMappingURL=input.js.map

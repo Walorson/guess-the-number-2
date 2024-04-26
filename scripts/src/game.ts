@@ -3,6 +3,7 @@ import { writeGuess } from "./input.js";
 const input = document.getElementById("input");
 const output = document.getElementById("output");
 const circleLoad = document.getElementById("circleLoad");
+const lastGuess = document.getElementById("lastGuess");
 
 export function win(): void {
     window.removeEventListener("keydown", writeGuess);
@@ -10,6 +11,7 @@ export function win(): void {
     output.style.opacity = '1';
     output.textContent = "CORRECT CORRECT CORRECT CORRECT CORRECT  CORRECT CORRECT CORRECT";
     output.classList.add("scrollText");
+    lastGuess.style.display = 'none';
 }
 
 let ReadyForReloadPage: boolean = false;

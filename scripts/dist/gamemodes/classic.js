@@ -1,4 +1,4 @@
-import { writeGuess, getGuess } from "../input.js";
+import { writeGuess, getGuess, clearGuess } from "../input.js";
 import { setOutput } from "../output.js";
 import { win, gameEvents } from "../game.js";
 const rand = Math.floor(Math.random() * 101);
@@ -14,6 +14,8 @@ window.addEventListener("keydown", (e) => {
         }
         else
             win();
+        if (guess != rand)
+            clearGuess();
     }
 });
 gameEvents();

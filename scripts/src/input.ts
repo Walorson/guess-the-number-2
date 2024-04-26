@@ -1,8 +1,11 @@
 const input: HTMLElement = document.getElementById("input");
+const lastGuess: HTMLElement = document.getElementById("lastGuess");
+const attemptsDiv: HTMLElement = document.getElementById("attempts");
 let guess: string = "0";
 let guessMaxLength: number = 3;
+let attempts: number = 0;
 
-function writeGuess(e: KeyboardEvent): void
+export function writeGuess(e: KeyboardEvent): void
 {
     if(isNaN(Number(e.key)) == false)
     {
@@ -25,8 +28,13 @@ function writeGuess(e: KeyboardEvent): void
     }
 }
 
-function getGuess(): number {
+export function getGuess(): number {
+    attempts++;
+    attemptsDiv.textContent = "Attempts: "+attempts;
     return Number(guess);
 }
-
-export { writeGuess, getGuess }
+export function clearGuess(): void {
+    lastGuess.textContent = guess; 
+    guess = "0"; 
+    input.textContent = "0";
+}
