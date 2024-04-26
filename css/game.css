@@ -15,6 +15,12 @@
     color: rgb(217, 29, 29);
     text-shadow: 0px 0px 22px rgb(175, 21, 21);
 }
+.correct {
+    font-size: 15rem;
+    font-weight: 900;
+    color: rgb(217, 29, 29);
+    animation: rainbow 1s infinite linear, zoomInZoomOut 1s infinite linear;
+}
 .output {
     position: absolute;
     bottom: 5%;
@@ -22,9 +28,34 @@
     transform: translateX(-50%);
     letter-spacing: 10px;
     opacity: 0;
+    white-space: nowrap;
 }
 .outputApperance {
     animation: outputApperance 1s ease-in;
+}
+.progressCircle {
+    position: absolute;
+    right: 30px;
+    bottom: 60px;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    background: black linear-gradient(to right, transparent 50%, red 0);
+    opacity: 1;
+    --anim-play-state: paused;
+    --anim: circleLoad 1s linear;
+    opacity: 0;
+}
+.progressCircle::before {
+    content: '';
+    display: block;
+    height: 100%;
+    margin-left: 50%;
+    transform-origin: left;
+    border-radius: 0 100% 100% 0/50%;
+    background-color: black;
+    animation: var(--anim);
+    animation-play-state: var(--anim-play-state);
 }
 @keyframes outputApperance {
     from {
@@ -34,5 +65,50 @@
     to {
         letter-spacing: 50px;
         opacity: 0;
+    }
+}
+@keyframes rainbow {
+    from {
+        filter: hue-rotate(0deg);
+    }
+    to {
+        filter: hue-rotate(360deg);
+    }
+}
+@keyframes zoomInZoomOut {
+    0%, 100% {
+        transform: translate(-50%, -50%) translateZ(-50px);
+    }
+    50% {
+        transform: translate(-50%, -50%) translateZ(50px);
+    }
+}
+
+@keyframes scrollText {
+    from {
+        transform: translateX(-50%);
+    }
+    to {
+        transform: translateX(-62.75%);
+    }
+}
+.scrollText { animation: scrollText 1s infinite linear; }
+
+@keyframes circleLoad {
+    0% {
+        transform: rotate(calc(0 * 0.01turn));
+        background-color: black;
+    }
+    49.9% {
+        transform: rotate(calc(50 * 0.01turn));
+        background-color: black;
+    }
+    50% {
+        transform: rotate(calc(0 * 0.01turn));
+        background-color: red;
+    }
+    100% {
+        transform: rotate(calc(50 * 0.01turn));
+        background-color: red;
     }
 }

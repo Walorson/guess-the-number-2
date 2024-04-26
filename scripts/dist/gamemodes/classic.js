@@ -1,5 +1,6 @@
 import { writeGuess, getGuess } from "../input.js";
 import { setOutput } from "../output.js";
+import { win, gameEvents } from "../game.js";
 const rand = Math.floor(Math.random() * 101);
 window.addEventListener("keydown", writeGuess);
 window.addEventListener("keydown", (e) => {
@@ -12,7 +13,8 @@ window.addEventListener("keydown", (e) => {
             setOutput("TO SMALL!");
         }
         else
-            setOutput("CORRECT!");
+            win();
     }
 });
+gameEvents();
 //# sourceMappingURL=classic.js.map

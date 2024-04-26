@@ -1,5 +1,6 @@
 import { writeGuess, getGuess } from "../input.js";
 import { setOutput } from "../output.js";
+import { win, gameEvents } from "../game.js";
 
 const rand = Math.floor(Math.random()*101);
 
@@ -18,6 +19,8 @@ window.addEventListener("keydown", (e: KeyboardEvent) =>
         {
             setOutput("TO SMALL!");
         }
-        else setOutput("CORRECT!");
+        else win();
     }
 });
+
+gameEvents();
