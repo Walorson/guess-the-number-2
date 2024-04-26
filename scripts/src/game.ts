@@ -14,8 +14,13 @@ export function win(): void {
 
 let ReadyForReloadPage: boolean = false;
 let reloadPage: NodeJS.Timeout;
+let reloadBlock: boolean = true;
 export function gameEvents(): void 
 {
+    window.addEventListener("load",() => {
+        setTimeout(() => { reloadBlock = false }, 1000);
+    });
+
     window.addEventListener("keydown", (e: KeyboardEvent) => {
         if(e.key == 'Escape')
         {
@@ -23,9 +28,10 @@ export function gameEvents(): void
         }
         if(e.key === 'r' || e.key === 'R')
         {
-            if(reloadPage == undefined) {
-                reloadPage = setTimeout(function() { if(ReadyForReloadPage) location.reload() }, 1000);
-            }
+            if(reloadBlock == true) return;
+
+            reloadPage = setTimeout(function() { if(ReadyForReloadPage) location.reload() }, 1000);
+            
             ReadyForReloadPage = true;
             circleLoad.style.setProperty('--anim-play-state', 'running');
             circleLoad.style.setProperty('--anim', 'circleLoad 1s linear'); 
@@ -37,8 +43,8 @@ export function gameEvents(): void
         if(e.key === 'r' || e.key === 'R')
         {
             e.preventDefault();
+            clearTimeout(reloadPage);
             ReadyForReloadPage = false;
-            reloadPage = undefined;
             circleLoad.classList.remove("circleLoad");
             circleLoad.style.setProperty('--anim-play-state', 'paused');
             circleLoad.style.setProperty('--anim', 'none');
