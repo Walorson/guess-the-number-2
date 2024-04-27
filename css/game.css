@@ -73,6 +73,12 @@
     font-weight: bold;
     text-align: center;
 }
+#time-seconds, #time-miliseconds {
+    font-family: monospace;
+    font-weight: bolder;
+    font-size: 1.2rem;
+    line-height: 0;
+}
 @keyframes outputApperance {
     from {
         letter-spacing: 10px;

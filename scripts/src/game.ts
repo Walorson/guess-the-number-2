@@ -4,9 +4,6 @@ const input = document.getElementById("input");
 const output = document.getElementById("output");
 const circleLoad = document.getElementById("circleLoad");
 const lastGuess = document.getElementById("lastGuess");
-const timeDiv: HTMLElement = document.getElementById("time");
-export let timeInterval: NodeJS.Timeout;
-let time: number = 0;
 
 export function win(): void {
     window.removeEventListener("keydown", writeGuess);
@@ -60,14 +57,35 @@ export function gameEvents(): void
     })
 }
 
-function timer(): void    
-{
-    time++;
-    timeDiv.textContent = "Time: "+time;
+const time = {
+    sDiv: document.getElementById("time-seconds"),
+    msDiv: document.getElementById("time-miliseconds"),
+    s: 0,
+    ms: 0,
+    sTimer: function() 
+    {
+        time.s++;
+        time.sDiv.textContent = String(time.s);
+    },
+    msTimer: function() 
+    {
+        time.ms++;
+        if(time.ms > 9)
+            time.msDiv.textContent = ""+time.ms;
+        else
+            time.msDiv.textContent = "0"+time.ms;
+
+        if(time.ms >= 99) time.ms = 0;
+    },
+    sInterval: undefined,
+    msInterval: undefined
 }
+
 export function startTimer(): void {
-    timeInterval = setInterval(timer, 1000);
+    time.sInterval = setInterval(time.sTimer, 1000);
+    time.msInterval = setInterval(time.msTimer, 10);
 }
 export function stopTimer(): void {
-    clearInterval(timeInterval);
+    clearInterval(time.sInterval);
+    clearInterval(time.msInterval);
 }
