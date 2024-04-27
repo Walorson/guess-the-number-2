@@ -1,26 +1,31 @@
-import fs from 'fs';
-
 let buttons = document.getElementById("main").querySelectorAll("button");
 let menuChosen: string = "main";
 let index: number;
 let buttonsMax: number = buttons.length-1;
 let last: HTMLElement;
+let keyboardUse: boolean = false;
+
+window.addEventListener("load", () => { assignClickEventForButtons(); });
 
 window.addEventListener("keydown", (e: KeyboardEvent) => 
 {
+    keyboardUse = true;
     changeButton(e);
 });
 
-window.addEventListener("keydown", (e) => {
+window.addEventListener("keydown", (e: KeyboardEvent) => {
     if(e.key == "Enter") {
         eval(buttons[index].getAttribute("data-click"));
     }
 });
 
-buttons.forEach((button: HTMLElement) => {
-    button.addEventListener("click", () => {
-        eval(button.getAttribute("data-click"));
-    });
+window.addEventListener("mousemove", () => {
+    if(keyboardUse == true)
+    {
+        keyboardUse = false;
+        buttons[index].classList.remove('hover');
+        index = undefined;
+    }
 });
 
 function changeButton(e: KeyboardEvent): void
@@ -49,7 +54,7 @@ function changeButton(e: KeyboardEvent): void
     last = buttons[index];
 }
 
-function changeMenu(name: string) 
+function changeMenu(name: string): void
 {
     if(last != undefined)
         last.classList.remove("hover");
@@ -58,14 +63,27 @@ function changeMenu(name: string)
     document.getElementById(name).style.display = 'flex';
     menuChosen = name;
 
+    assignClickEventForButtons();
     resetButtonHoverPosition(name);
 }
 
 function resetButtonHoverPosition(name: string): void
 {
-    buttons = document.getElementById(name).querySelectorAll("button");
+    if(keyboardUse == false) return;
+    
     buttonsMax = buttons.length-1;
     index = 0;
     buttons[index].classList.add("hover");
     last = buttons[index];
+}
+
+function assignClickEventForButtons(): void 
+{
+    buttons = document.getElementById(menuChosen).querySelectorAll("button");
+
+    buttons.forEach((button: HTMLElement) => {
+        button.onclick = () => {
+            eval(button.getAttribute("data-click"));
+        }
+    });
 }
