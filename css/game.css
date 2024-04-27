@@ -1,10 +1,14 @@
+body {
+    font-family: typewriter;
+    color: rgb(217, 29, 29);
+    text-shadow: 0px 0px 22px rgb(175, 21, 21);
+}
 .quest {
     text-align: center;
     font-size: 3rem;
-    font-family: typewriter;
+    letter-spacing: 5px;
     color: rgb(182, 23, 23);
     text-shadow: 0px 0px 22px rgb(137,16,16);
-    letter-spacing: 5px;
 }
 .input, .lastGuess {
     position: absolute;
@@ -12,8 +16,6 @@
     transform: translate(-50%,-50%);
     font-family: monospace;
     font-size: 9rem;
-    color: rgb(217, 29, 29);
-    text-shadow: 0px 0px 22px rgb(175, 21, 21);
 }
 .lastGuess {
     position: absolute;
@@ -67,18 +69,31 @@
     display: flex;
     justify-content: center;
     gap: 20px;
-    font-family: typewriter;
-    color: rgb(217, 29, 29);
-    text-shadow: 0px 0px 22px rgb(175, 21, 21);
     font-weight: bold;
     text-align: center;
+    align-items: baseline;
+    margin-top: -3px;
 }
 #time-seconds, #time-miliseconds {
     font-family: monospace;
     font-weight: bolder;
     font-size: 1.2rem;
-    line-height: 0;
 }
+.gamemode-info {
+    color: rgb(170, 24, 24);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+/*.gamemode-info {
+    position: absolute;
+    top: 1px;
+    right: 35px;
+    text-transform: uppercase;
+    font-size: 3rem;
+    letter-spacing: 5px;
+    font-weight: bolder;
+    opacity: 0.3;
+}*/
 @keyframes outputApperance {
     from {
         letter-spacing: 10px;

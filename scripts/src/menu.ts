@@ -71,7 +71,6 @@ function resetButtonHoverPosition(name: string): void
 {
     if(keyboardUse == false) return;
     
-    buttonsMax = buttons.length-1;
     index = 0;
     buttons[index].classList.add("hover");
     last = buttons[index];
@@ -80,6 +79,7 @@ function resetButtonHoverPosition(name: string): void
 function assignClickEventForButtons(): void 
 {
     buttons = document.getElementById(menuChosen).querySelectorAll("button");
+    buttonsMax = buttons.length-1;
 
     buttons.forEach((button: HTMLElement) => {
         button.onclick = () => {

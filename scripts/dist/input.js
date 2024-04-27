@@ -20,6 +20,7 @@ export function writeGuess(e) {
         input.textContent = guess;
     }
 }
+window.addEventListener("keydown", writeGuess);
 export function getGuess() {
     if (attempts <= 0)
         startTimer();

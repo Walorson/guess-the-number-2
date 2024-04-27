@@ -10,15 +10,8 @@ window.addEventListener("keydown", (e: KeyboardEvent) =>
     {
         let guess = getGuess();
 
-        if(guess > rand)
-        {
-            setOutput("TOO BIG!");
-        }
-        else if(guess < rand)
-        {
-            setOutput("TO SMALL!");
-        }
-        else win();
+        if(guess == rand) win();
+        else setOutput("INCORRECT");
 
         if(guess != rand) clearGuess();
     }

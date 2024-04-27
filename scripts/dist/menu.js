@@ -54,13 +54,13 @@ function changeMenu(name) {
 function resetButtonHoverPosition(name) {
     if (keyboardUse == false)
         return;
-    buttonsMax = buttons.length - 1;
     index = 0;
     buttons[index].classList.add("hover");
     last = buttons[index];
 }
 function assignClickEventForButtons() {
     buttons = document.getElementById(menuChosen).querySelectorAll("button");
+    buttonsMax = buttons.length - 1;
     buttons.forEach((button) => {
         button.onclick = () => {
             eval(button.getAttribute("data-click"));

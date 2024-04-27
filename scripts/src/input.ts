@@ -30,6 +30,7 @@ export function writeGuess(e: KeyboardEvent): void
         input.textContent = guess;
     }
 }
+window.addEventListener("keydown", writeGuess);
 
 export function getGuess(): number {
     if(attempts <= 0)
