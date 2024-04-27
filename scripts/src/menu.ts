@@ -17,6 +17,12 @@ window.addEventListener("keydown", (e) => {
     }
 });
 
+buttons.forEach((button: HTMLElement) => {
+    button.addEventListener("click", () => {
+        eval(button.getAttribute("data-click"));
+    });
+});
+
 function changeButton(e: KeyboardEvent): void
 {
     if(e.key != "ArrowUp" && e.key != "ArrowDown") return;

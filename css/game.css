@@ -63,7 +63,10 @@
     animation: var(--anim);
     animation-play-state: var(--anim-play-state);
 }
-.attempts {
+.top-nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
     font-family: typewriter;
     color: rgb(217, 29, 29);
     text-shadow: 0px 0px 22px rgb(175, 21, 21);

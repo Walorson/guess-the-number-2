@@ -4,6 +4,9 @@ const input = document.getElementById("input");
 const output = document.getElementById("output");
 const circleLoad = document.getElementById("circleLoad");
 const lastGuess = document.getElementById("lastGuess");
+const timeDiv: HTMLElement = document.getElementById("time");
+export let timeInterval: NodeJS.Timeout;
+let time: number = 0;
 
 export function win(): void {
     window.removeEventListener("keydown", writeGuess);
@@ -12,11 +15,13 @@ export function win(): void {
     output.textContent = "CORRECT CORRECT CORRECT CORRECT CORRECT  CORRECT CORRECT CORRECT";
     output.classList.add("scrollText");
     lastGuess.style.display = 'none';
+    stopTimer();
 }
 
 let ReadyForReloadPage: boolean = false;
 let reloadPage: NodeJS.Timeout;
 let reloadBlock: boolean = true;
+
 export function gameEvents(): void 
 {
     window.addEventListener("load",() => {
@@ -53,4 +58,16 @@ export function gameEvents(): void
             circleLoad.style.opacity = '0'; 
         }
     })
+}
+
+function timer(): void    
+{
+    time++;
+    timeDiv.textContent = "Time: "+time;
+}
+export function startTimer(): void {
+    timeInterval = setInterval(timer, 1000);
+}
+export function stopTimer(): void {
+    clearInterval(timeInterval);
 }
