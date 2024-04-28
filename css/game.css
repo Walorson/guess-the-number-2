@@ -79,10 +79,17 @@ body {
     font-weight: bolder;
     font-size: 1.2rem;
 }
-.gamemode-info {
+.faint, .gamemode-info {
     color: rgb(170, 24, 24);
+}
+.gamemode-info {
     text-transform: uppercase;
     letter-spacing: 1px;
+}
+#hint {
+    text-align: center;
+    margin-bottom: 10px;
+    font-weight: bolder;
 }
 /*.gamemode-info {
     position: absolute;

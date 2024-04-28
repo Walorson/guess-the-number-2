@@ -5,6 +5,8 @@ const output = document.getElementById("output");
 const circleLoad = document.getElementById("circleLoad");
 const lastGuess = document.getElementById("lastGuess");
 
+export const rand = Math.floor(Math.random()*101); // THE CORE OF GAME
+
 export function win(): void {
     window.removeEventListener("keydown", writeGuess);
     input.classList.add("correct");
@@ -28,7 +30,7 @@ export function gameEvents(): void
     window.addEventListener("keydown", (e: KeyboardEvent) => {
         if(e.key == 'Escape')
         {
-            location.href = '/';     
+            location.href = '../index.html';     
         }
         if(e.key === 'r' || e.key === 'R')
         {
