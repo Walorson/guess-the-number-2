@@ -6,7 +6,8 @@ const features = {
     even: false,
     divisibleBy3: false,
     prime: true,
-    graterThan50: false
+    graterThan50: false,
+    inFibonacciSequence: isInFibonacciSequence(rand)
 };
 window.addEventListener("load", () => {
     if (rand > 50)
@@ -25,19 +26,23 @@ window.addEventListener("load", () => {
     }
     else
         features.prime = false;
-    hint.textContent = "The number is: ";
+    hint.innerHTML = '<span class="faint">The number is: </span>';
     if (features.even == true)
-        hint.textContent += "even, ";
+        hint.innerHTML += "even, &nbsp;";
     else
-        hint.textContent += "odd, ";
+        hint.innerHTML += "odd, &nbsp;";
     if (features.divisibleBy3 == true)
-        hint.textContent += "divisible by 3, ";
-    if (features.prime == true)
-        hint.textContent += "prime, ";
-    if (features.graterThan50 == true)
-        hint.textContent += "greater than 50.";
+        hint.innerHTML += "divisible by 3, &nbsp;";
     else
-        hint.textContent += "less than 50.";
+        hint.innerHTML += "NOT divisible by 3, &nbsp;";
+    if (features.prime == true)
+        hint.innerHTML += "prime, &nbsp;";
+    if (features.inFibonacciSequence == true)
+        hint.innerHTML += "in Fibonacci Sequence, &nbsp;";
+    if (features.graterThan50 == true)
+        hint.innerHTML += "greater than 50.";
+    else
+        hint.innerHTML += "less than or equal to 50.";
 });
 window.addEventListener("keydown", (e) => {
     if (e.key == 'Enter') {
@@ -51,4 +56,24 @@ window.addEventListener("keydown", (e) => {
     }
 });
 gameEvents();
+function isInFibonacciSequence(num) {
+    let n1 = 1;
+    let n2 = 1;
+    let temp;
+    if (num < 1)
+        return false;
+    else if (num == n1)
+        return true;
+    for (let i = 0; i < Infinity; i++) {
+        temp = n1 + n2;
+        if (num == temp)
+            return true;
+        else if (temp > num)
+            return false;
+        if (i % 2 == 0)
+            n1 = temp;
+        else
+            n2 = temp;
+    }
+}
 //# sourceMappingURL=puzzle.js.map
