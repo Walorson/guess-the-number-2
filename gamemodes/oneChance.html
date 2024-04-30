@@ -7,18 +7,18 @@
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/game.css">
 
-    <script type="module" src="../scripts/dist/gamemodes/health.js" defer></script>
+    <script type="module" src="../scripts/dist/gamemodes/oneChance.js" defer></script>
 </head>
 <body>
-    <h1 class="quest">Guess a number from 0 to 100</h1>
+    <h1 class="quest">Guess a number from 0 to 10</h1>
+    <div id="hint"></div>
     <div id="input" class="input">0</div>
     <div id="lastGuess" class="lastGuess"></div>
     <div id="output" class="output quest"></div>
     <div class="top-nav">
-        <div id="health">Health: 100</div>
         <div id="attempts">Attempts: 0</div>
         <div id="time">Time: <span id="time-seconds">0</span>,<span id="time-miliseconds">00</span></div>
-        <div class="gamemode-info">Health</div>
+        <div class="gamemode-info">One Chance</div>
     </div>
     <div class="progressCircle" id="circleLoad"></div>
 </body>

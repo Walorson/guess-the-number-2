@@ -6,7 +6,12 @@ const circleLoad = document.getElementById("circleLoad");
 const lastGuess = document.getElementById("lastGuess");
 let isGameEnd: boolean = false;
 
-export const rand = Math.floor(Math.random()*101); // THE CORE OF GAME
+export let rand = Math.floor(Math.random()*101); // THE CORE OF THE GAME
+
+export function setRand(min: number, max: number): void
+{
+    rand = Math.floor(Math.random() * (max + 1 - min)) + min;
+}
 
 export function init(game: Function): void
 {
@@ -26,7 +31,7 @@ export function win(): void {
     window.removeEventListener("keydown", writeGuess);
     input.classList.add("correct");
     output.style.opacity = '1';
-    output.textContent = "CORRECT CORRECT CORRECT CORRECT CORRECT  CORRECT CORRECT CORRECT";
+    output.textContent = "CORRECT CORRECT CORRECT CORRECT CORRECT CORRECT CORRECT CORRECT";
     output.classList.add("scrollText");
     lastGuess.style.display = 'none';
     stopTimer();
@@ -114,6 +119,7 @@ export function dead(): void {
     output.style.opacity = '1';
     output.innerHTML = "YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp;";
     output.classList.add("scrollTextDead");
-    lastGuess.style.display = 'none';
+    lastGuess.textContent = `It was ${rand}`;
+    lastGuess.style.marginTop = "40px";
     stopTimer();
 }

@@ -5,6 +5,9 @@ const attemptsDiv = document.getElementById("attempts");
 let guess = "0";
 let guessMaxLength = 3;
 let attempts = 0;
+export function setGuessMaxLength(value) {
+    guessMaxLength = value;
+}
 export function writeGuess(e) {
     if (isNaN(Number(e.key)) == false) {
         if (guess == '0' && e.key != '0')

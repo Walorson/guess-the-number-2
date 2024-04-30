@@ -8,6 +8,11 @@ let guess: string = "0";
 let guessMaxLength: number = 3;
 let attempts: number = 0;
 
+export function setGuessMaxLength(value: number): void
+{
+    guessMaxLength = value;
+}
+
 export function writeGuess(e: KeyboardEvent): void
 {
     if(isNaN(Number(e.key)) == false)
