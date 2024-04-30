@@ -1,25 +1,22 @@
 import { getGuess, clearGuess } from "../input.js";
 import { setOutput } from "../output.js";
-import { win, gameEvents, rand } from "../game.js";
+import { init, win, rand } from "../game.js";
 
-window.addEventListener("keydown", (e: KeyboardEvent) => 
+function classicGamemode(): void
 {
-    if(e.key == 'Enter')
+    let guess = getGuess();
+
+    if(guess > rand)
     {
-        let guess = getGuess();
-
-        if(guess > rand)
-        {
-            setOutput("TOO BIG!");
-        }
-        else if(guess < rand)
-        {
-            setOutput("TO SMALL!");
-        }
-        else win();
-
-        if(guess != rand) clearGuess();
+        setOutput("TOO BIG!");
     }
-});
+    else if(guess < rand)
+    {
+        setOutput("TO SMALL!");
+    }
+    else win();
 
-gameEvents();
+    if(guess != rand) clearGuess();
+}
+
+init(classicGamemode);

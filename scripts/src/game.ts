@@ -4,10 +4,25 @@ const input = document.getElementById("input");
 const output = document.getElementById("output");
 const circleLoad = document.getElementById("circleLoad");
 const lastGuess = document.getElementById("lastGuess");
+let isGameEnd: boolean = false;
 
 export const rand = Math.floor(Math.random()*101); // THE CORE OF GAME
 
+export function init(game: Function): void
+{
+    window.addEventListener("keydown", (e: KeyboardEvent) => 
+    {
+        if(e.key == 'Enter' && isGameEnd == false)
+        {
+            game();
+        }
+    });
+
+    gameEvents();
+}
+
 export function win(): void {
+    isGameEnd = true;
     window.removeEventListener("keydown", writeGuess);
     input.classList.add("correct");
     output.style.opacity = '1';
@@ -90,4 +105,15 @@ export function startTimer(): void {
 export function stopTimer(): void {
     clearInterval(time.sInterval);
     clearInterval(time.msInterval);
+}
+
+export function dead(): void {
+    isGameEnd = true;
+    window.removeEventListener("keydown", writeGuess);
+    input.classList.add("dead");
+    output.style.opacity = '1';
+    output.innerHTML = "YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp;";
+    output.classList.add("scrollTextDead");
+    lastGuess.style.display = 'none';
+    stopTimer();
 }

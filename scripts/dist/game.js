@@ -3,8 +3,18 @@ const input = document.getElementById("input");
 const output = document.getElementById("output");
 const circleLoad = document.getElementById("circleLoad");
 const lastGuess = document.getElementById("lastGuess");
+let isGameEnd = false;
 export const rand = Math.floor(Math.random() * 101); // THE CORE OF GAME
+export function init(game) {
+    window.addEventListener("keydown", (e) => {
+        if (e.key == 'Enter' && isGameEnd == false) {
+            game();
+        }
+    });
+    gameEvents();
+}
 export function win() {
+    isGameEnd = true;
     window.removeEventListener("keydown", writeGuess);
     input.classList.add("correct");
     output.style.opacity = '1';
@@ -75,5 +85,15 @@ export function startTimer() {
 export function stopTimer() {
     clearInterval(time.sInterval);
     clearInterval(time.msInterval);
+}
+export function dead() {
+    isGameEnd = true;
+    window.removeEventListener("keydown", writeGuess);
+    input.classList.add("dead");
+    output.style.opacity = '1';
+    output.innerHTML = "YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp;";
+    output.classList.add("scrollTextDead");
+    lastGuess.style.display = 'none';
+    stopTimer();
 }
 //# sourceMappingURL=game.js.map

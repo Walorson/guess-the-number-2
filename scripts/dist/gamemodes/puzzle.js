@@ -1,6 +1,6 @@
 import { getGuess, clearGuess } from "../input.js";
 import { setOutput } from "../output.js";
-import { win, gameEvents, rand } from "../game.js";
+import { init, win, rand } from "../game.js";
 const hint = document.getElementById("hint");
 const features = {
     even: false,
@@ -9,6 +9,15 @@ const features = {
     graterThan50: false,
     inFibonacciSequence: isInFibonacciSequence(rand)
 };
+function puzzleGamemode() {
+    let guess = getGuess();
+    if (guess == rand)
+        win();
+    else
+        setOutput("INCORRECT");
+    if (guess != rand)
+        clearGuess();
+}
 window.addEventListener("load", () => {
     if (rand > 50)
         features.graterThan50 = true;
@@ -44,18 +53,6 @@ window.addEventListener("load", () => {
     else
         hint.innerHTML += "less than or equal to 50.";
 });
-window.addEventListener("keydown", (e) => {
-    if (e.key == 'Enter') {
-        let guess = getGuess();
-        if (guess == rand)
-            win();
-        else
-            setOutput("INCORRECT");
-        if (guess != rand)
-            clearGuess();
-    }
-});
-gameEvents();
 function isInFibonacciSequence(num) {
     let n1 = 1;
     let n2 = 1;
@@ -76,4 +73,5 @@ function isInFibonacciSequence(num) {
             n2 = temp;
     }
 }
+init(puzzleGamemode);
 //# sourceMappingURL=puzzle.js.map

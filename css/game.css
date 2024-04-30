@@ -91,6 +91,11 @@ body {
     margin-bottom: 10px;
     font-weight: bolder;
 }
+.dead {
+    color: black;
+    font-size: 15rem;
+    font-weight: 900;
+}
 /*.gamemode-info {
     position: absolute;
     top: 1px;
@@ -136,7 +141,16 @@ body {
         transform: translateX(-62.75%);
     }
 }
+@keyframes scrollTextDead {
+    from {
+        transform: translateX(-50%);
+    }
+    to {
+        transform: translateX(-66.8%);
+    }
+}
 .scrollText { animation: scrollText 1s infinite linear; }
+.scrollTextDead { animation: scrollTextDead 1.75s infinite linear; }
 
 @keyframes circleLoad {
     0% {
