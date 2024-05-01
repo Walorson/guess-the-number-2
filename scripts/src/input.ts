@@ -1,4 +1,4 @@
-import { startTimer } from './game.js'
+import { time } from './time.js'
 
 const input: HTMLElement = document.getElementById("input");
 const lastGuess: HTMLElement = document.getElementById("lastGuess");
@@ -39,7 +39,7 @@ window.addEventListener("keydown", writeGuess);
 
 export function getGuess(): number {
     if(attempts <= 0)
-        startTimer();
+        time.startTimer();
 
     attempts++;
     attemptsDiv.textContent = "Attempts: "+attempts;

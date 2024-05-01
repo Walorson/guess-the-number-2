@@ -1,9 +1,11 @@
 import { writeGuess } from "./input.js";
+import { time } from "./time.js";
 const input = document.getElementById("input");
 const output = document.getElementById("output");
 const circleLoad = document.getElementById("circleLoad");
 const lastGuess = document.getElementById("lastGuess");
 let isGameEnd = false;
+export let timerDir = 1; //1 or -1
 export let rand = Math.floor(Math.random() * 101); // THE CORE OF THE GAME
 export function setRand(min, max) {
     rand = Math.floor(Math.random() * (max + 1 - min)) + min;
@@ -24,7 +26,7 @@ export function win() {
     output.textContent = "CORRECT CORRECT CORRECT CORRECT CORRECT CORRECT CORRECT CORRECT";
     output.classList.add("scrollText");
     lastGuess.style.display = 'none';
-    stopTimer();
+    time.stopTimer();
 }
 let ReadyForReloadPage = false;
 let reloadPage;
@@ -60,35 +62,6 @@ export function gameEvents() {
         }
     });
 }
-const time = {
-    sDiv: document.getElementById("time-seconds"),
-    msDiv: document.getElementById("time-miliseconds"),
-    s: 0,
-    ms: 0,
-    sTimer: function () {
-        time.s++;
-        time.sDiv.textContent = String(time.s);
-    },
-    msTimer: function () {
-        time.ms++;
-        if (time.ms > 9)
-            time.msDiv.textContent = "" + time.ms;
-        else
-            time.msDiv.textContent = "0" + time.ms;
-        if (time.ms >= 99)
-            time.ms = 0;
-    },
-    sInterval: undefined,
-    msInterval: undefined
-};
-export function startTimer() {
-    time.sInterval = setInterval(time.sTimer, 1000);
-    time.msInterval = setInterval(time.msTimer, 10);
-}
-export function stopTimer() {
-    clearInterval(time.sInterval);
-    clearInterval(time.msInterval);
-}
 export function dead() {
     isGameEnd = true;
     window.removeEventListener("keydown", writeGuess);
@@ -98,6 +71,6 @@ export function dead() {
     output.classList.add("scrollTextDead");
     lastGuess.textContent = `It was ${rand}`;
     lastGuess.style.marginTop = "40px";
-    stopTimer();
+    time.stopTimer();
 }
 //# sourceMappingURL=game.js.map

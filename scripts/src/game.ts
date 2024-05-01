@@ -1,10 +1,12 @@
 import { writeGuess } from "./input.js";
+import { time } from "./time.js";
 
 const input = document.getElementById("input");
 const output = document.getElementById("output");
 const circleLoad = document.getElementById("circleLoad");
 const lastGuess = document.getElementById("lastGuess");
 let isGameEnd: boolean = false;
+export let timerDir: number = 1; //1 or -1
 
 export let rand = Math.floor(Math.random()*101); // THE CORE OF THE GAME
 
@@ -34,7 +36,7 @@ export function win(): void {
     output.textContent = "CORRECT CORRECT CORRECT CORRECT CORRECT CORRECT CORRECT CORRECT";
     output.classList.add("scrollText");
     lastGuess.style.display = 'none';
-    stopTimer();
+    time.stopTimer();
 }
 
 let ReadyForReloadPage: boolean = false;
@@ -79,39 +81,6 @@ export function gameEvents(): void
     })
 }
 
-const time = {
-    sDiv: document.getElementById("time-seconds"),
-    msDiv: document.getElementById("time-miliseconds"),
-    s: 0,
-    ms: 0,
-    sTimer: function() 
-    {
-        time.s++;
-        time.sDiv.textContent = String(time.s);
-    },
-    msTimer: function() 
-    {
-        time.ms++;
-        if(time.ms > 9)
-            time.msDiv.textContent = ""+time.ms;
-        else
-            time.msDiv.textContent = "0"+time.ms;
-
-        if(time.ms >= 99) time.ms = 0;
-    },
-    sInterval: undefined,
-    msInterval: undefined
-}
-
-export function startTimer(): void {
-    time.sInterval = setInterval(time.sTimer, 1000);
-    time.msInterval = setInterval(time.msTimer, 10);
-}
-export function stopTimer(): void {
-    clearInterval(time.sInterval);
-    clearInterval(time.msInterval);
-}
-
 export function dead(): void {
     isGameEnd = true;
     window.removeEventListener("keydown", writeGuess);
@@ -121,5 +90,5 @@ export function dead(): void {
     output.classList.add("scrollTextDead");
     lastGuess.textContent = `It was ${rand}`;
     lastGuess.style.marginTop = "40px";
-    stopTimer();
+    time.stopTimer();
 }
