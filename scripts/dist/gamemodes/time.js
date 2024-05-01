@@ -3,7 +3,7 @@ import { setOutput } from "../output.js";
 import { init, win, rand } from "../game.js";
 import { time } from "../time.js";
 time.setTimerDir(-1);
-time.setTime(2, 99);
+time.setTime(9, 99);
 time.forceStopTimerIf(0, "<");
 function timeGamemode() {
     let guess = getGuess();

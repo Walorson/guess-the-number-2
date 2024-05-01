@@ -4,7 +4,7 @@ const lastGuess = document.getElementById("lastGuess");
 const attemptsDiv = document.getElementById("attempts");
 let guess = "0";
 let guessMaxLength = 3;
-let attempts = 0;
+export let attempts = 0;
 export function setGuessMaxLength(value) {
     guessMaxLength = value;
 }

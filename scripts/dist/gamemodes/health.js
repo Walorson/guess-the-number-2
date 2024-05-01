@@ -2,8 +2,11 @@ import { getGuess, clearGuess } from "../input.js";
 import { setOutput } from "../output.js";
 import { init, win, dead, rand } from "../game.js";
 const healthDiv = document.getElementById("health");
-let health = 100;
+const hint = document.getElementById("hint");
+let health = 80;
 const damage = 10;
+healthDiv.textContent = "Health: " + health;
+hint.textContent = `You have only ${health} HP. Be careful with your guesses.`;
 function healthGamemode() {
     let guess = getGuess();
     if (guess > rand) {

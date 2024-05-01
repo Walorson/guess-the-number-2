@@ -3,8 +3,12 @@ import { setOutput } from "../output.js";
 import { init, win, dead, rand } from "../game.js";
 
 const healthDiv: HTMLElement = document.getElementById("health");
-let health: number = 100;
+const hint: HTMLElement = document.getElementById("hint");
+let health: number = 80;
 const damage: number = 10;
+
+healthDiv.textContent = "Health: "+health;
+hint.textContent = `You have only ${health} HP. Be careful with your guesses.`;
 
 function healthGamemode(): void
 {

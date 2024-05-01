@@ -6,7 +6,7 @@ const attemptsDiv: HTMLElement = document.getElementById("attempts");
 
 let guess: string = "0";
 let guessMaxLength: number = 3;
-let attempts: number = 0;
+export let attempts: number = 0;
 
 export function setGuessMaxLength(value: number): void
 {
