@@ -1,10 +1,12 @@
 import { writeGuess } from "./input.js";
 import { time } from "./time.js";
 
-const input = document.getElementById("input");
-const output = document.getElementById("output");
-const circleLoad = document.getElementById("circleLoad");
-const lastGuess = document.getElementById("lastGuess");
+const input: HTMLElement = document.getElementById("input");
+const output: HTMLElement = document.getElementById("output");
+const circleLoad: HTMLElement = document.getElementById("circleLoad");
+const lastGuess: HTMLElement = document.getElementById("lastGuess");
+const guide: HTMLElement = document.getElementById("guide");
+let isGuideVisible: boolean = true;
 let isGameEnd: boolean = false;
 export let timerDir: number = 1; //1 or -1
 
@@ -26,17 +28,39 @@ export function init(game: Function): void
     });
 
     gameEvents();
+    guide.innerHTML = `
+    <p><span class="outline">ENTER</span> Guess</p>
+    <p><span class="outline">ESC</span> Return to menu</p>
+    <p><span><span class="outline">HOLD R</span> Restart</p>
+    <p><span class="outline">H</span> Hide guide</p>
+    `
 }
 
-export function win(): void {
+function end(): void {
     isGameEnd = true;
     window.removeEventListener("keydown", writeGuess);
-    input.classList.add("correct");
     output.style.opacity = '1';
+    time.stopTimer();
+    guide.style.bottom = "95px";
+}
+
+export function win(): void 
+{
+    end();
+    input.classList.add("correct");
     output.textContent = "CORRECT CORRECT CORRECT CORRECT CORRECT CORRECT CORRECT CORRECT";
     output.classList.add("scrollText");
     lastGuess.style.display = 'none';
-    time.stopTimer();
+}
+
+export function dead(): void 
+{
+    end();
+    input.classList.add("dead");
+    output.innerHTML = "YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp;";
+    output.classList.add("scrollTextDead");
+    lastGuess.textContent = `It was ${rand}`;
+    lastGuess.style.marginTop = "40px";
 }
 
 let ReadyForReloadPage: boolean = false;
@@ -65,6 +89,19 @@ export function gameEvents(): void
             circleLoad.style.setProperty('--anim', 'circleLoad 1s linear'); 
             circleLoad.style.opacity = '1';
         }
+        if(e.key === 'h' || e.key === 'H' )
+        {
+            if(isGuideVisible == true)
+            {
+                guide.style.display = 'none';
+                isGuideVisible = false;
+            }
+            else
+            {
+                guide.style.display = '';
+                isGuideVisible = true;
+            }
+        }
     });
 
     window.addEventListener("keyup", (e: KeyboardEvent) => {
@@ -79,16 +116,4 @@ export function gameEvents(): void
             circleLoad.style.opacity = '0'; 
         }
     })
-}
-
-export function dead(): void {
-    isGameEnd = true;
-    window.removeEventListener("keydown", writeGuess);
-    input.classList.add("dead");
-    output.style.opacity = '1';
-    output.innerHTML = "YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp;";
-    output.classList.add("scrollTextDead");
-    lastGuess.textContent = `It was ${rand}`;
-    lastGuess.style.marginTop = "40px";
-    time.stopTimer();
 }

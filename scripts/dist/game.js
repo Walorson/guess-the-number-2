@@ -4,6 +4,8 @@ const input = document.getElementById("input");
 const output = document.getElementById("output");
 const circleLoad = document.getElementById("circleLoad");
 const lastGuess = document.getElementById("lastGuess");
+const guide = document.getElementById("guide");
+let isGuideVisible = true;
 let isGameEnd = false;
 export let timerDir = 1; //1 or -1
 export let rand = Math.floor(Math.random() * 101); // THE CORE OF THE GAME
@@ -17,16 +19,34 @@ export function init(game) {
         }
     });
     gameEvents();
+    guide.innerHTML = `
+    <p><span class="outline">ENTER</span> Guess</p>
+    <p><span class="outline">ESC</span> Return to menu</p>
+    <p><span><span class="outline">HOLD R</span> Restart</p>
+    <p><span class="outline">H</span> Hide guide</p>
+    `;
 }
-export function win() {
+function end() {
     isGameEnd = true;
     window.removeEventListener("keydown", writeGuess);
-    input.classList.add("correct");
     output.style.opacity = '1';
+    time.stopTimer();
+    guide.style.bottom = "95px";
+}
+export function win() {
+    end();
+    input.classList.add("correct");
     output.textContent = "CORRECT CORRECT CORRECT CORRECT CORRECT CORRECT CORRECT CORRECT";
     output.classList.add("scrollText");
     lastGuess.style.display = 'none';
-    time.stopTimer();
+}
+export function dead() {
+    end();
+    input.classList.add("dead");
+    output.innerHTML = "YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp;";
+    output.classList.add("scrollTextDead");
+    lastGuess.textContent = `It was ${rand}`;
+    lastGuess.style.marginTop = "40px";
 }
 let ReadyForReloadPage = false;
 let reloadPage;
@@ -49,6 +69,16 @@ export function gameEvents() {
             circleLoad.style.setProperty('--anim', 'circleLoad 1s linear');
             circleLoad.style.opacity = '1';
         }
+        if (e.key === 'h' || e.key === 'H') {
+            if (isGuideVisible == true) {
+                guide.style.display = 'none';
+                isGuideVisible = false;
+            }
+            else {
+                guide.style.display = '';
+                isGuideVisible = true;
+            }
+        }
     });
     window.addEventListener("keyup", (e) => {
         if (e.key === 'r' || e.key === 'R') {
@@ -61,16 +91,5 @@ export function gameEvents() {
             circleLoad.style.opacity = '0';
         }
     });
-}
-export function dead() {
-    isGameEnd = true;
-    window.removeEventListener("keydown", writeGuess);
-    input.classList.add("dead");
-    output.style.opacity = '1';
-    output.innerHTML = "YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp;";
-    output.classList.add("scrollTextDead");
-    lastGuess.textContent = `It was ${rand}`;
-    lastGuess.style.marginTop = "40px";
-    time.stopTimer();
 }
 //# sourceMappingURL=game.js.map

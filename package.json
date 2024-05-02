@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc"
   },
-  "keywords": [],
+  "keywords": ["game", "guess the number", "number", "random"],
   "author": "Szymon Gniadek",
   "license": "ISC",
   "devDependencies": {
