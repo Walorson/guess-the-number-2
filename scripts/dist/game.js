@@ -54,6 +54,7 @@ let reloadBlock = true;
 export function gameEvents() {
     window.addEventListener("load", () => {
         setTimeout(() => { reloadBlock = false; }, 1000);
+        setTimeout(() => { window.scrollTo(0, 0); }, 50);
     });
     window.addEventListener("keydown", (e) => {
         if (e.key == 'Escape') {

@@ -33,7 +33,7 @@ export function init(game: Function): void
     <p><span class="outline">ESC</span> Return to menu</p>
     <p><span><span class="outline">HOLD R</span> Restart</p>
     <p><span class="outline">H</span> Hide guide</p>
-    `
+    `;
 }
 
 function end(): void {
@@ -71,6 +71,7 @@ export function gameEvents(): void
 {
     window.addEventListener("load",() => {
         setTimeout(() => { reloadBlock = false }, 1000);
+        setTimeout(() => { window.scrollTo(0, 0); }, 50);
     });
 
     window.addEventListener("keydown", (e: KeyboardEvent) => {
