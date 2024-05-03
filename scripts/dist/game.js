@@ -5,7 +5,6 @@ const output = document.getElementById("output");
 const circleLoad = document.getElementById("circleLoad");
 const lastGuess = document.getElementById("lastGuess");
 const guide = document.getElementById("guide");
-let isGuideVisible = true;
 let isGameEnd = false;
 export let timerDir = 1; //1 or -1
 export let rand = Math.floor(Math.random() * 101); // THE CORE OF THE GAME
@@ -55,6 +54,9 @@ export function gameEvents() {
     window.addEventListener("load", () => {
         setTimeout(() => { reloadBlock = false; }, 1000);
         setTimeout(() => { window.scrollTo(0, 0); }, 50);
+        if (localStorage.getItem("isGuideVisible") == 'false') {
+            guide.style.display = 'none';
+        }
     });
     window.addEventListener("keydown", (e) => {
         if (e.key == 'Escape') {
@@ -71,13 +73,13 @@ export function gameEvents() {
             circleLoad.style.opacity = '1';
         }
         if (e.key === 'h' || e.key === 'H') {
-            if (isGuideVisible == true) {
+            if (localStorage.getItem("isGuideVisible") == "true") {
                 guide.style.display = 'none';
-                isGuideVisible = false;
+                localStorage.setItem("isGuideVisible", "false");
             }
             else {
                 guide.style.display = '';
-                isGuideVisible = true;
+                localStorage.setItem("isGuideVisible", "true");
             }
         }
     });

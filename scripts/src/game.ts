@@ -6,7 +6,6 @@ const output: HTMLElement = document.getElementById("output");
 const circleLoad: HTMLElement = document.getElementById("circleLoad");
 const lastGuess: HTMLElement = document.getElementById("lastGuess");
 const guide: HTMLElement = document.getElementById("guide");
-let isGuideVisible: boolean = true;
 let isGameEnd: boolean = false;
 export let timerDir: number = 1; //1 or -1
 
@@ -72,6 +71,11 @@ export function gameEvents(): void
     window.addEventListener("load",() => {
         setTimeout(() => { reloadBlock = false }, 1000);
         setTimeout(() => { window.scrollTo(0, 0); }, 50);
+
+        if(localStorage.getItem("isGuideVisible") == 'false') 
+        {
+            guide.style.display = 'none';
+        }
     });
 
     window.addEventListener("keydown", (e: KeyboardEvent) => {
@@ -92,15 +96,15 @@ export function gameEvents(): void
         }
         if(e.key === 'h' || e.key === 'H' )
         {
-            if(isGuideVisible == true)
+            if(localStorage.getItem("isGuideVisible") == "true")
             {
                 guide.style.display = 'none';
-                isGuideVisible = false;
+                localStorage.setItem("isGuideVisible", "false");
             }
             else
             {
                 guide.style.display = '';
-                isGuideVisible = true;
+                localStorage.setItem("isGuideVisible", "true");
             }
         }
     });

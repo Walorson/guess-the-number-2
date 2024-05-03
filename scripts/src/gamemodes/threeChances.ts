@@ -17,7 +17,11 @@ function threeChancesGamemode(): void
     {
         setOutput("TO SMALL!");
     }
-    else win();
+    else
+    {
+        win();
+        return;
+    }
     
     if(attempts >= 3) {
         dead();

@@ -11,8 +11,10 @@ function threeChancesGamemode() {
     else if (guess < rand) {
         setOutput("TO SMALL!");
     }
-    else
+    else {
         win();
+        return;
+    }
     if (attempts >= 3) {
         dead();
         return;
