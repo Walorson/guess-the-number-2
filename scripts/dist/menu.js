@@ -1,3 +1,4 @@
+import { customGamemode, buttonsEditable } from "./customSetup.js";
 let buttons = document.getElementById("main").querySelectorAll("button");
 let menuChosen = "main";
 let index;
@@ -37,6 +38,10 @@ function changeButton(e) {
         if (index > buttonsMax)
             index = 0;
     }
+    buttonsEditable.forEach((btn) => {
+        if (btn.classList.contains("edit"))
+            btn.classList.remove("edit");
+    });
     if (last != undefined)
         last.classList.remove("hover");
     buttons[index].classList.add("hover");
@@ -50,6 +55,8 @@ function changeMenu(name) {
     menuChosen = name;
     assignClickEventForButtons();
     resetButtonHoverPosition(name);
+    if (name == 'custom')
+        customGamemode();
 }
 function resetButtonHoverPosition(name) {
     if (keyboardUse == false)
@@ -67,5 +74,4 @@ function assignClickEventForButtons() {
         };
     });
 }
-export {};
 //# sourceMappingURL=menu.js.map

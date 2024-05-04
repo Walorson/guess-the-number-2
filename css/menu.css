@@ -56,6 +56,9 @@ button:hover {
     top: 180px;
     transform: translateX(-50%);
 }
+.edit {
+    animation: edit 0.8s infinite linear;
+}
 
 @keyframes hover-button {
     0% {
@@ -73,6 +76,15 @@ button:hover {
     }
     100% {
         transform: scale(1);
+        filter: hue-rotate(360deg) brightness(140%);
+    }
+}
+
+@keyframes edit {
+    from {
+        filter: hue-rotate(0deg) brightness(140%);
+    }
+    to {
         filter: hue-rotate(360deg) brightness(140%);
     }
 }

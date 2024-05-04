@@ -1,3 +1,5 @@
+import { customGamemode, buttonsEditable } from "./customSetup.js"
+
 let buttons = document.getElementById("main").querySelectorAll("button");
 let menuChosen: string = "main";
 let index: number;
@@ -47,6 +49,12 @@ function changeButton(e: KeyboardEvent): void
         if(index > buttonsMax) index = 0;
     }
 
+    buttonsEditable.forEach((btn: HTMLButtonElement) => 
+    { 
+        if(btn.classList.contains("edit"))
+            btn.classList.remove("edit");
+    });
+
     if(last != undefined)
         last.classList.remove("hover");
 
@@ -65,6 +73,9 @@ function changeMenu(name: string): void
 
     assignClickEventForButtons();
     resetButtonHoverPosition(name);
+
+    if(name == 'custom')
+        customGamemode();
 }
 
 function resetButtonHoverPosition(name: string): void

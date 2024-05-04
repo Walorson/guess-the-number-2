@@ -39,7 +39,12 @@ export const time = {
     },
     startTimer: function(dir: number = 1): void {
         time.sDiv.textContent = String(time.s);
-        time.msDiv.textContent = String(time.ms);
+        
+        if(time.ms > 9)
+            time.msDiv.textContent = ""+time.ms;
+        else
+            time.msDiv.textContent = "0"+time.ms;
+
         time.sInterval = setInterval(() => time.sTimer(), 1000);
         time.msInterval = setInterval(() => time.msTimer(), 10);
     },
