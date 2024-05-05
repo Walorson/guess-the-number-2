@@ -1,12 +1,14 @@
-import { customGamemode, buttonsEditable } from "./customSetup.js";
-let buttons = document.getElementById("main").querySelectorAll("button");
+import { customGamemode, editMode } from "./customSetup.js";
+export let buttons = document.getElementById("main").querySelectorAll("button");
 let menuChosen = "main";
-let index;
+export let index;
 let buttonsMax = buttons.length - 1;
 let last;
 let keyboardUse = false;
-window.addEventListener("load", () => { assignClickEventForButtons(); });
+window.addEventListener("load", () => { assignClickEventForButtons(); customGamemode(); });
 window.addEventListener("keydown", (e) => {
+    if (editMode == true)
+        return;
     keyboardUse = true;
     changeButton(e);
 });
@@ -38,25 +40,26 @@ function changeButton(e) {
         if (index > buttonsMax)
             index = 0;
     }
-    buttonsEditable.forEach((btn) => {
-        if (btn.classList.contains("edit"))
+    /*buttonsEditable.forEach((btn: HTMLButtonElement) =>
+    {
+        if(btn.classList.contains("edit"))
             btn.classList.remove("edit");
-    });
+    });*/
     if (last != undefined)
         last.classList.remove("hover");
     buttons[index].classList.add("hover");
     last = buttons[index];
 }
 function changeMenu(name) {
-    if (last != undefined)
-        last.classList.remove("hover");
-    document.getElementById(menuChosen).style.display = 'none';
-    document.getElementById(name).style.display = 'flex';
-    menuChosen = name;
-    assignClickEventForButtons();
-    resetButtonHoverPosition(name);
-    if (name == 'custom')
-        customGamemode();
+    setTimeout(() => {
+        if (last != undefined)
+            last.classList.remove("hover");
+        document.getElementById(menuChosen).style.display = 'none';
+        document.getElementById(name).style.display = 'flex';
+        menuChosen = name;
+        assignClickEventForButtons();
+        resetButtonHoverPosition(name);
+    });
 }
 function resetButtonHoverPosition(name) {
     if (keyboardUse == false)

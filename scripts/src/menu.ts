@@ -1,16 +1,18 @@
-import { customGamemode, buttonsEditable } from "./customSetup.js"
+import { customGamemode, editMode } from "./customSetup.js"
 
-let buttons = document.getElementById("main").querySelectorAll("button");
+export let buttons = document.getElementById("main").querySelectorAll("button");
 let menuChosen: string = "main";
-let index: number;
+export let index: number;
 let buttonsMax: number = buttons.length-1;
 let last: HTMLElement;
 let keyboardUse: boolean = false;
 
-window.addEventListener("load", () => { assignClickEventForButtons(); });
+window.addEventListener("load", () => { assignClickEventForButtons(); customGamemode(); });
 
 window.addEventListener("keydown", (e: KeyboardEvent) => 
 {
+    if(editMode == true) return;
+
     keyboardUse = true;
     changeButton(e);
 });
@@ -49,12 +51,6 @@ function changeButton(e: KeyboardEvent): void
         if(index > buttonsMax) index = 0;
     }
 
-    buttonsEditable.forEach((btn: HTMLButtonElement) => 
-    { 
-        if(btn.classList.contains("edit"))
-            btn.classList.remove("edit");
-    });
-
     if(last != undefined)
         last.classList.remove("hover");
 
@@ -64,18 +60,18 @@ function changeButton(e: KeyboardEvent): void
 
 function changeMenu(name: string): void
 {
-    if(last != undefined)
-        last.classList.remove("hover");
-
-    document.getElementById(menuChosen).style.display = 'none';
-    document.getElementById(name).style.display = 'flex';
-    menuChosen = name;
-
-    assignClickEventForButtons();
-    resetButtonHoverPosition(name);
-
-    if(name == 'custom')
-        customGamemode();
+    setTimeout(() => 
+    {
+        if(last != undefined)
+            last.classList.remove("hover");
+    
+        document.getElementById(menuChosen).style.display = 'none';
+        document.getElementById(name).style.display = 'flex';
+        menuChosen = name;
+    
+        assignClickEventForButtons();
+        resetButtonHoverPosition(name);
+    });
 }
 
 function resetButtonHoverPosition(name: string): void
