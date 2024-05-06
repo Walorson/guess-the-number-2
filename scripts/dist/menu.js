@@ -1,4 +1,5 @@
 import { customGamemode, editMode } from "./customSetup.js";
+localStorage.setItem("Custom Mode", "false");
 export let buttons = document.getElementById("main").querySelectorAll("button");
 let menuChosen = "main";
 export let index;
@@ -9,7 +10,6 @@ window.addEventListener("load", () => { assignClickEventForButtons(); customGame
 window.addEventListener("keydown", (e) => {
     if (editMode == true)
         return;
-    keyboardUse = true;
     changeButton(e);
 });
 window.addEventListener("keydown", (e) => {
@@ -27,6 +27,7 @@ window.addEventListener("mousemove", () => {
 function changeButton(e) {
     if (e.key != "ArrowUp" && e.key != "ArrowDown")
         return;
+    keyboardUse = true;
     if (index == undefined) {
         index = 0;
     }
@@ -40,11 +41,6 @@ function changeButton(e) {
         if (index > buttonsMax)
             index = 0;
     }
-    /*buttonsEditable.forEach((btn: HTMLButtonElement) =>
-    {
-        if(btn.classList.contains("edit"))
-            btn.classList.remove("edit");
-    });*/
     if (last != undefined)
         last.classList.remove("hover");
     buttons[index].classList.add("hover");

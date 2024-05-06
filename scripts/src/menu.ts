@@ -1,5 +1,7 @@
 import { customGamemode, editMode } from "./customSetup.js"
 
+localStorage.setItem("Custom Mode", "false");
+
 export let buttons = document.getElementById("main").querySelectorAll("button");
 let menuChosen: string = "main";
 export let index: number;
@@ -13,7 +15,6 @@ window.addEventListener("keydown", (e: KeyboardEvent) =>
 {
     if(editMode == true) return;
 
-    keyboardUse = true;
     changeButton(e);
 });
 
@@ -35,6 +36,8 @@ window.addEventListener("mousemove", () => {
 function changeButton(e: KeyboardEvent): void
 {
     if(e.key != "ArrowUp" && e.key != "ArrowDown") return;
+
+    keyboardUse = true;
 
     if(index == undefined) 
     {

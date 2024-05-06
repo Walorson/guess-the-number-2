@@ -2,7 +2,7 @@ import { time } from './time.js';
 const input = document.getElementById("input");
 const lastGuess = document.getElementById("lastGuess");
 const attemptsDiv = document.getElementById("attempts");
-let guess = "0";
+export let guess = "0";
 let guessMaxLength = 3;
 export let attempts = 0;
 export function setGuessMaxLength(value) {

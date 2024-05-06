@@ -8,7 +8,7 @@ type Features = {
     even: boolean,
     divisibleBy3: boolean,
     prime: boolean,
-    graterThan50: boolean,
+    graterThanHalf: boolean,
     inFibonacciSequence: boolean
 }
 
@@ -16,7 +16,7 @@ const features: Features = {
     even: false,
     divisibleBy3: false,
     prime: true,
-    graterThan50: false,
+    graterThanHalf: false,
     inFibonacciSequence: isInFibonacciSequence(rand)
 };
 
@@ -30,8 +30,20 @@ function puzzleGamemode(): void
     if(guess != rand) clearGuess();
 }
 
-window.addEventListener("load", () => {
-    if(rand > 50) features.graterThan50 = true;
+window.addEventListener("load", () => printHints());
+
+export function printHints(customMode: boolean = false): void {
+    if(customMode == true && localStorage.getItem("Hints") == "false" || localStorage.getItem("Hints") == "false") return;
+
+    let half: number;
+    if(customMode == true && localStorage.getItem("max") != null) {
+        half = Math.floor(Number(localStorage.getItem("max"))/2);
+    }
+    else {
+        half = 50;
+    }
+
+    if(rand > half) features.graterThanHalf = true;
     if(rand % 2 == 0) features.even = true;
     if(rand % 3 == 0) features.divisibleBy3 = true;
 
@@ -49,20 +61,36 @@ window.addEventListener("load", () => {
 
     hint.innerHTML = '<span class="faint">The number is: </span>';
 
-    if(features.even == true) hint.innerHTML += "even, &nbsp;";
-    else hint.innerHTML += "odd, &nbsp;"
+    if(customMode == true && localStorage.getItem("Parity") == "true" || customMode == false) 
+    {
+        if(features.even == true) hint.innerHTML += "even, &nbsp;";
+        else hint.innerHTML += "odd, &nbsp;"
+    }
 
-    if(features.divisibleBy3 == true) hint.innerHTML += "divisible by 3, &nbsp;";
-    else hint.innerHTML += "NOT divisible by 3, &nbsp;";
+    if(customMode == true && localStorage.getItem("Divisible By 3") == "true" || customMode == false)
+    {
+        if(features.divisibleBy3 == true) hint.innerHTML += "divisible by 3, &nbsp;";
+        else hint.innerHTML += "NOT divisible by 3, &nbsp;";
+    }
 
-    if(features.prime == true) hint.innerHTML += "prime, &nbsp;";
+    if(customMode == true && localStorage.getItem("Prime") == "true" || customMode == false)
+    {
+        if(features.prime == true) hint.innerHTML += "prime, &nbsp;";
+    }
 
-    if(features.inFibonacciSequence == true) hint.innerHTML += "in Fibonacci Sequence, &nbsp;";
+    if(customMode == true && localStorage.getItem("Fibonacci Sequence") == "true" || customMode == false)
+    {
+        if(features.inFibonacciSequence == true) hint.innerHTML += "in Fibonacci Sequence, &nbsp;";
+    }
+    
+    if(customMode == true && localStorage.getItem("Greater Than Half") == "true" || customMode == false)
+    {
+        if(features.graterThanHalf == true) hint.innerHTML += "greater than half,";
+        else hint.innerHTML += "less than or equal to half,";
+    }
 
-    if(features.graterThan50 == true) hint.innerHTML += "greater than 50.";
-    else hint.innerHTML += "less than or equal to 50.";
-
-});
+    hint.innerHTML = hint.innerHTML.slice(0, hint.innerHTML.length-8)+".";
+}
 
 function isInFibonacciSequence(num: number): boolean
 {
@@ -86,4 +114,7 @@ function isInFibonacciSequence(num: number): boolean
     }
 }
 
-init(puzzleGamemode);
+window.addEventListener("load", () => {
+    if(localStorage.getItem("Custom Mode") != "true")
+        init(puzzleGamemode);
+});

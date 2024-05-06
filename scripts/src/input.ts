@@ -4,7 +4,7 @@ const input: HTMLElement = document.getElementById("input");
 const lastGuess: HTMLElement = document.getElementById("lastGuess");
 const attemptsDiv: HTMLElement = document.getElementById("attempts");
 
-let guess: string = "0";
+export let guess: string = "0";
 let guessMaxLength: number = 3;
 export let attempts: number = 0;
 
