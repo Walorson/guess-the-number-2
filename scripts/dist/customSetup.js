@@ -1,10 +1,11 @@
-import { buttons, index } from "./menu.js";
+import { buttons, index, menuChosen } from "./menu.js";
 const customMenu = document.getElementById("custom");
 export let editMode = false;
 class CustomSetting {
-    constructor(name, defaultValue, where = "custom", dataValidation = undefined) {
+    constructor(name, defaultValue, where = "custom", dataValidation = undefined, offMode = false) {
         this.name = name;
         this.where = where;
+        this.offMode = offMode;
         this.dataValidation = dataValidation;
         if (localStorage.getItem(name) != null) {
             this.value = localStorage.getItem(name);
@@ -16,14 +17,16 @@ class CustomSetting {
         localStorage.setItem(this.name, this.value);
     }
     createButton(where) {
-        document.getElementById(where).innerHTML += `<button class="editable" id="customSetting-${this.name}">${this.name}: <span>${this.value}</span></button>`;
+        if (this.value == "0" && this.offMode == true)
+            this.value = "OFF";
+        document.getElementById(where).innerHTML += `<button class="editable" id="customSetting-${this.name}">${this.name}: <span><span style="color:${this.color()}">${this.value}</span></span></button>`;
     }
     getButton() {
         this.button = document.getElementById("customSetting-" + this.name);
     }
     displayValue() {
         this.getButton();
-        this.button.querySelector("span").textContent = this.value;
+        this.button.querySelector("span").innerHTML = `<span style="color:${this.color()}">${this.value}</span>`;
     }
     setValue(value) {
         this.value = value;
@@ -33,7 +36,15 @@ class CustomSetting {
     applySetting() {
         if (this.dataValidation != undefined)
             this.dataValidation();
+        if (this.value == "0" && this.offMode == true)
+            this.setValue("OFF");
         localStorage.setItem(this.name, this.value);
+    }
+    color() {
+        if (this.value == "OFF" && this.offMode == true)
+            return "red";
+        else
+            return "green";
     }
 }
 class CustomSettingBoolean extends CustomSetting {
@@ -73,7 +84,18 @@ export function customGamemode() {
         new CustomSetting("max", "100", "custom", () => {
             if (Number(settings[0].value) > Number(settings[1].value))
                 settings[1].setValue(settings[0].value);
-        })
+        }),
+        new CustomSettingBoolean("more/less", "true", "custom"),
+        new CustomSetting("time", "0", "custom", () => {
+            if (Number(settings[3].value) < 0) {
+                settings[3].setValue("0");
+            }
+        }, true),
+        new CustomSetting("max attempts", "0", "custom", () => {
+            if (Number(settings[4].value) < 0) {
+                settings[4].setValue("0");
+            }
+        }, true)
     ];
     const settingsHint = [
         new CustomSettingBoolean("Hints", "false", "custom-hints"),
@@ -124,7 +146,13 @@ export function customGamemode() {
         if (buttons[index].classList.contains("editable-boolean") == false)
             return;
         if (e.key == 'Enter') {
-            settingsHint[index].swapValue();
+            if (menuChosen == 'custom') {
+                //@ts-ignore
+                settings[index].swapValue();
+            }
+            else if (menuChosen == 'custom-hints') {
+                settingsHint[index].swapValue();
+            }
         }
     });
     customMenu.innerHTML += `

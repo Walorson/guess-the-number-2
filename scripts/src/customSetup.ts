@@ -1,4 +1,6 @@
-import { buttons, index } from "./menu.js"
+import { SecureContext } from "tls";
+import { buttons, index, menuChosen } from "./menu.js"
+import { off } from "process";
 
 const customMenu: HTMLElement = document.getElementById("custom");
 export let editMode: boolean = false;
@@ -7,11 +9,13 @@ class CustomSetting {
     name: string;
     value: string;
     where: string;
+    offMode: boolean;
     button: HTMLElement;
 
-    constructor(name: string, defaultValue: string, where: string = "custom", dataValidation: () => void = undefined) {
+    constructor(name: string, defaultValue: string, where: string = "custom", dataValidation: () => void = undefined, offMode: boolean = false) {
         this.name = name;
         this.where = where;
+        this.offMode = offMode;
         this.dataValidation = dataValidation;
 
         if(localStorage.getItem(name) != null)
@@ -28,7 +32,10 @@ class CustomSetting {
     }
 
     createButton(where: string): void {
-        document.getElementById(where).innerHTML += `<button class="editable" id="customSetting-${this.name}">${this.name}: <span>${this.value}</span></button>`;
+        if(this.value == "0" && this.offMode == true) 
+            this.value = "OFF";
+
+        document.getElementById(where).innerHTML += `<button class="editable" id="customSetting-${this.name}">${this.name}: <span><span style="color:${this.color()}">${this.value}</span></span></button>`;
     }
 
     getButton(): void {
@@ -37,7 +44,8 @@ class CustomSetting {
 
     displayValue(): void {
         this.getButton();
-        this.button.querySelector("span").textContent = this.value;
+
+        this.button.querySelector("span").innerHTML = `<span style="color:${this.color()}">${this.value}</span>`;
     }
 
     setValue(value: string): void {
@@ -51,7 +59,17 @@ class CustomSetting {
         if(this.dataValidation != undefined)
             this.dataValidation();
 
+        if(this.value == "0" && this.offMode == true) 
+            this.setValue("OFF");
+
         localStorage.setItem(this.name, this.value);
+    }
+
+    color(): string {
+        if(this.value == "OFF" && this.offMode == true)
+            return "red";
+        else
+            return "green";
     }
 }
 class CustomSettingBoolean extends CustomSetting {
@@ -59,8 +77,7 @@ class CustomSettingBoolean extends CustomSetting {
         super(name, defaultValue, where);
     }
 
-    createButton(): void {
-        
+    createButton(): void { 
         document.getElementById(this.where).innerHTML += `<button class="editable-boolean" id="customSetting-${this.name}">${this.name}: <span><span style="color:${this.color()}">${this.value}</span></span></button>`;
     }
 
@@ -99,7 +116,20 @@ export function customGamemode(): void {
         { 
             if(Number(settings[0].value) > Number(settings[1].value)) 
                 settings[1].setValue(settings[0].value); 
-        })
+        }),
+        new CustomSettingBoolean("more/less","true","custom"),
+        new CustomSetting("time","0","custom", () => 
+        {
+            if(Number(settings[3].value) < 0) {
+                settings[3].setValue("0");
+            }
+        }, true),
+        new CustomSetting("max attempts","0","custom", () => 
+        {
+            if(Number(settings[4].value) < 0) {
+                settings[4].setValue("0");
+            }
+        }, true)
     ];
 
     const settingsHint: CustomSettingBoolean[] =
@@ -110,6 +140,7 @@ export function customGamemode(): void {
         new CustomSettingBoolean("Prime", "false", "custom-hints"),
         new CustomSettingBoolean("Fibonacci Sequence", "false", "custom-hints"),
     ];
+
 
     let editingButton: CustomSetting;
     let firstChar: boolean = false;
@@ -164,7 +195,13 @@ export function customGamemode(): void {
         if(buttons[index].classList.contains("editable-boolean") == false) return;
 
         if(e.key == 'Enter') {
-            settingsHint[index].swapValue();
+            if(menuChosen == 'custom') {
+                //@ts-ignore
+                settings[index].swapValue();
+            }
+            else if(menuChosen == 'custom-hints') {
+                settingsHint[index].swapValue();
+            }
         }
     });
 

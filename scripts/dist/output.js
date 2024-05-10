@@ -1,6 +1,6 @@
 const output = document.getElementById("output");
 let timeout;
-export function setOutput(text) {
+export function set(text) {
     clearTimeout(timeout);
     output.classList.remove("outputApperance");
     output.textContent = text;
@@ -9,4 +9,7 @@ export function setOutput(text) {
         output.classList.remove("outputApperance");
     }, 1000);
 }
+export const TOO_SMALL = "TOO SMALL!";
+export const TOO_BIG = "TOO BIG!";
+export const INCORRECT = "INCORRECT!";
 //# sourceMappingURL=output.js.map

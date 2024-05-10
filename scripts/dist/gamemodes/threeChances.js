@@ -1,15 +1,15 @@
 import { getGuess, setGuessMaxLength, attempts, clearGuess } from "../input.js";
-import { setOutput } from "../output.js";
+import * as output from "../output.js";
 import { init, win, dead, rand, setRand } from "../game.js";
 setRand(0, 20);
 setGuessMaxLength(2);
 function threeChancesGamemode() {
     let guess = getGuess();
     if (guess > rand) {
-        setOutput("TOO BIG!");
+        output.set(output.TOO_BIG);
     }
     else if (guess < rand) {
-        setOutput("TO SMALL!");
+        output.set(output.TOO_SMALL);
     }
     else {
         win();

@@ -1,7 +1,7 @@
 const output: HTMLElement = document.getElementById("output");
 let timeout: any;
 
-export function setOutput(text: string): void {
+export function set(text: string): void {
     clearTimeout(timeout);
     output.classList.remove("outputApperance");
 
@@ -11,3 +11,7 @@ export function setOutput(text: string): void {
         output.classList.remove("outputApperance");
     }, 1000);
 }
+
+export const TOO_SMALL: string = "TOO SMALL!";
+export const TOO_BIG: string = "TOO BIG!";
+export const INCORRECT: string = "INCORRECT!";

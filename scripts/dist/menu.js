@@ -1,7 +1,7 @@
 import { customGamemode, editMode } from "./customSetup.js";
 localStorage.setItem("Custom Mode", "false");
 export let buttons = document.getElementById("main").querySelectorAll("button");
-let menuChosen = "main";
+export let menuChosen = "main";
 export let index;
 let buttonsMax = buttons.length - 1;
 let last;

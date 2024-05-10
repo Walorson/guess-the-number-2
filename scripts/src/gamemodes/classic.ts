@@ -1,5 +1,5 @@
 import { getGuess, clearGuess } from "../input.js";
-import { setOutput } from "../output.js";
+import * as output from "../output.js";
 import { init, win, rand } from "../game.js";
 
 function classicGamemode(): void
@@ -8,11 +8,11 @@ function classicGamemode(): void
 
     if(guess > rand)
     {
-        setOutput("TOO BIG!");
+        output.set(output.TOO_BIG);
     }
     else if(guess < rand)
     {
-        setOutput("TO SMALL!");
+        output.set(output.TOO_SMALL);
     }
     else win();
 

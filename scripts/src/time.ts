@@ -61,5 +61,8 @@ export const time = {
                 time.msDiv.textContent = "00";
             }
         },10);
+    },
+    displaySeconds() {
+        document.getElementById("time-seconds").textContent = String(time.s + 1);
     }
 }

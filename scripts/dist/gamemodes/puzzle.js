@@ -1,5 +1,5 @@
 import { getGuess, clearGuess } from "../input.js";
-import { setOutput } from "../output.js";
+import * as output from "../output.js";
 import { init, win, rand } from "../game.js";
 const hint = document.getElementById("hint");
 const features = {
@@ -14,7 +14,7 @@ function puzzleGamemode() {
     if (guess == rand)
         win();
     else
-        setOutput("INCORRECT");
+        output.set(output.INCORRECT);
     if (guess != rand)
         clearGuess();
 }
