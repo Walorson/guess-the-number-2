@@ -33,7 +33,7 @@ function puzzleGamemode(): void
 window.addEventListener("load", () => printHints());
 
 export function printHints(customMode: boolean = false): void {
-    if(customMode == true && localStorage.getItem("Hints") == "false" || localStorage.getItem("Hints") == "false") return;
+    if(customMode == true && localStorage.getItem("Hints") == "false") return;
 
     let half: number;
     if(customMode == true && localStorage.getItem("max") != null) {
@@ -49,6 +49,10 @@ export function printHints(customMode: boolean = false): void {
 
     if(features.even == false && features.divisibleBy3 == false)
     {
+        if(rand == 1) {
+            features.prime = false;
+            return;
+        }
         for(let i=4; i<rand; i++)
         {
             if(rand % i == 0) {
@@ -57,7 +61,9 @@ export function printHints(customMode: boolean = false): void {
             }
         }
     }
-    else features.prime = false;
+    else if(rand != 3 && rand != 2) {
+        features.prime = false;
+    }
 
     hint.innerHTML = '<span class="faint">The number is: </span>';
 
@@ -76,17 +82,19 @@ export function printHints(customMode: boolean = false): void {
     if(customMode == true && localStorage.getItem("Prime") == "true" || customMode == false)
     {
         if(features.prime == true) hint.innerHTML += "prime, &nbsp;";
+        else hint.innerHTML += "NOT prime, &nbsp;";
     }
 
     if(customMode == true && localStorage.getItem("Fibonacci Sequence") == "true" || customMode == false)
     {
         if(features.inFibonacciSequence == true) hint.innerHTML += "in Fibonacci Sequence, &nbsp;";
+        else hint.innerHTML += "NOT in Fibonacci Sequence, &nbsp;";
     }
     
     if(customMode == true && localStorage.getItem("Greater Than Half") == "true" || customMode == false)
     {
-        if(features.graterThanHalf == true) hint.innerHTML += "greater than half,";
-        else hint.innerHTML += "less than or equal to half,";
+        if(features.graterThanHalf == true) hint.innerHTML += "greater than half, &nbsp;";
+        else hint.innerHTML += "less than or equal to half, &nbsp;";
     }
 
     hint.innerHTML = hint.innerHTML.slice(0, hint.innerHTML.length-8)+".";
