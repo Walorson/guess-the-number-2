@@ -51,6 +51,7 @@ button:hover {
 }
 .back-button {
     margin-top: 35px;
+    width: 100%;
 }
 #gamemodes {
     top: 180px;
@@ -59,7 +60,14 @@ button:hover {
 .edit {
     animation: edit 0.8s infinite linear;
 }
-
+.double-menu {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+}
+.double-menu button {
+    width: 25vw;
+}
 
 @keyframes hover-button {
     0% {
