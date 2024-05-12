@@ -33,7 +33,7 @@ function puzzleGamemode(): void
 window.addEventListener("load", () => printHints());
 
 export function printHints(customMode: boolean = false): void {
-    if(customMode == true && localStorage.getItem("Hints") == "false") return;
+    if(localStorage.getItem("Hints") == "false" && localStorage.getItem("Custom Mode") == "true") return;
 
     let half: number;
     if(customMode == true && localStorage.getItem("max") != null) {
@@ -53,7 +53,7 @@ export function printHints(customMode: boolean = false): void {
             features.prime = false;
             return;
         }
-        for(let i=4; i<rand; i++)
+        for(let i=4; i<=Math.floor(Math.sqrt(rand)); i++)
         {
             if(rand % i == 0) {
                 features.prime = false;

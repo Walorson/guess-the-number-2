@@ -20,7 +20,7 @@ function puzzleGamemode() {
 }
 window.addEventListener("load", () => printHints());
 export function printHints(customMode = false) {
-    if (customMode == true && localStorage.getItem("Hints") == "false")
+    if (localStorage.getItem("Hints") == "false" && localStorage.getItem("Custom Mode") == "true")
         return;
     let half;
     if (customMode == true && localStorage.getItem("max") != null) {
@@ -40,7 +40,7 @@ export function printHints(customMode = false) {
             features.prime = false;
             return;
         }
-        for (let i = 4; i < rand; i++) {
+        for (let i = 4; i <= Math.floor(Math.sqrt(rand)); i++) {
             if (rand % i == 0) {
                 features.prime = false;
                 break;

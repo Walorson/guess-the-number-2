@@ -3,14 +3,14 @@ body {
 }
 .title {
     text-align: center;
-    font-size: 2rem;
+    font-size: 1.7vw;
     font-family: milker;
     color: rgb(182, 23, 23);
     text-shadow: 0px 0px 22px rgb(137,16,16);
     letter-spacing: 5px;
 }
 .big-letter {
-    font-size: 5.6rem;
+    font-size: 4.7vw;
 }
 .rotated {
     display: inline-block;
@@ -30,8 +30,8 @@ body {
 #main { display: flex; }
 button {
     display: block;
-    padding: 15px 0;
-    width: 600px;
+    padding: 1.5vh 0;
+    width: 31vw;
     border: 4px solid rgb(137, 16, 16);
     background-color: rgb(25, 21, 21);
     font-family: typewriter;
@@ -59,6 +59,7 @@ button:hover {
 .edit {
     animation: edit 0.8s infinite linear;
 }
+
 
 @keyframes hover-button {
     0% {
