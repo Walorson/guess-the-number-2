@@ -95,4 +95,9 @@ export function gameEvents() {
         }
     });
 }
+//@ts-ignore
+export function setAnimation(object, name, duration) {
+    object.classList.add(name);
+    setTimeout(() => { object.classList.remove(name); }, duration * 1000);
+}
 //# sourceMappingURL=game.js.map

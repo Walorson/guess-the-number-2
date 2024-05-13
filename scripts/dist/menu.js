@@ -3,6 +3,7 @@ localStorage.setItem("Custom Mode", "false");
 export let buttons = document.getElementById("main").querySelectorAll("button");
 export let menuChosen = "main";
 export let index;
+let doubleMenu = false;
 let buttonsMax = buttons.length - 1;
 let last;
 let keyboardUse = false;
@@ -25,21 +26,37 @@ window.addEventListener("mousemove", () => {
     }
 });
 function changeButton(e) {
-    if (e.key != "ArrowUp" && e.key != "ArrowDown")
+    if (e.key != "ArrowUp" && e.key != "ArrowDown" && e.key != "ArrowRight" && e.key != "ArrowLeft")
         return;
     keyboardUse = true;
     if (index == undefined) {
         index = 0;
     }
     else if (e.key == 'ArrowUp') {
-        index--;
+        if (doubleMenu == false)
+            index--;
+        else
+            index -= 2;
         if (index < 0)
             index = buttonsMax;
     }
     else if (e.key == 'ArrowDown') {
+        if (doubleMenu == false || (doubleMenu == true && index == buttonsMax - 1))
+            index++;
+        else
+            index += 2;
+        if (index > buttonsMax)
+            index = 0;
+    }
+    else if (e.key == 'ArrowRight' && doubleMenu) {
         index++;
         if (index > buttonsMax)
             index = 0;
+    }
+    else if (e.key == 'ArrowLeft' && doubleMenu) {
+        index--;
+        if (index < 0)
+            index = buttonsMax;
     }
     if (last != undefined)
         last.classList.remove("hover");
@@ -53,6 +70,12 @@ function changeMenu(name) {
         document.getElementById(menuChosen).style.display = 'none';
         document.getElementById(name).style.display = 'flex';
         menuChosen = name;
+        if (document.getElementById(name).querySelector(".double-menu")) {
+            doubleMenu = true;
+        }
+        else {
+            doubleMenu = false;
+        }
         assignClickEventForButtons();
         resetButtonHoverPosition(name);
     });

@@ -122,3 +122,9 @@ export function gameEvents(): void
         }
     })
 }
+
+//@ts-ignore
+export function setAnimation(object: HTMLElement, name: string, duration: number): void {
+    object.classList.add(name);
+    setTimeout(() => { object.classList.remove(name); }, duration * 1000);
+}

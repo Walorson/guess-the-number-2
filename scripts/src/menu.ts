@@ -5,6 +5,7 @@ localStorage.setItem("Custom Mode", "false");
 export let buttons = document.getElementById("main").querySelectorAll("button");
 export let menuChosen: string = "main";
 export let index: number;
+let doubleMenu: boolean = false;
 let buttonsMax: number = buttons.length-1;
 let last: HTMLElement;
 let keyboardUse: boolean = false;
@@ -35,7 +36,7 @@ window.addEventListener("mousemove", () => {
 
 function changeButton(e: KeyboardEvent): void
 {
-    if(e.key != "ArrowUp" && e.key != "ArrowDown") return;
+    if(e.key != "ArrowUp" && e.key != "ArrowDown" && e.key != "ArrowRight" && e.key != "ArrowLeft") return;
 
     keyboardUse = true;
 
@@ -45,13 +46,29 @@ function changeButton(e: KeyboardEvent): void
     }
     else if(e.key == 'ArrowUp')
     {
-        index--;
+        if(doubleMenu == false)
+            index--;
+        else
+            index -= 2;
+
         if(index < 0) index = buttonsMax;
     }
     else if(e.key == 'ArrowDown')
     {
+        if(doubleMenu == false || (doubleMenu == true && index == buttonsMax - 1))
+            index++;
+        else
+            index += 2;
+
+        if(index > buttonsMax) index = 0;
+    }
+    else if(e.key == 'ArrowRight' && doubleMenu) {
         index++;
         if(index > buttonsMax) index = 0;
+    }
+    else if(e.key == 'ArrowLeft' && doubleMenu) {
+        index--;
+        if(index < 0) index = buttonsMax;
     }
 
     if(last != undefined)
@@ -71,6 +88,13 @@ function changeMenu(name: string): void
         document.getElementById(menuChosen).style.display = 'none';
         document.getElementById(name).style.display = 'flex';
         menuChosen = name;
+
+        if(document.getElementById(name).querySelector(".double-menu")) {
+            doubleMenu = true;
+        }
+        else {
+            doubleMenu = false;
+        }
     
         assignClickEventForButtons();
         resetButtonHoverPosition(name);

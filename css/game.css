@@ -16,6 +16,8 @@ body {
     transform: translate(-50%,-50%);
     font-family: monospace;
     font-size: 9rem;
+    width: 100%;
+    text-align: center;
 }
 .lastGuess {
     position: absolute;
@@ -170,4 +172,18 @@ body {
         transform: rotate(calc(50 * 0.01turn));
         background-color: red;
     }
+}
+
+@keyframes correctEffect {
+    0%, 100% {
+        transform: translate(-50%, -50%) translateZ(-50px);
+        color: rgb(217, 29, 29);
+    }
+    50% {
+        transform: translate(-50%, -50%) translateZ(50px);
+        color: green;
+    }
+}
+.correctEffect {
+    animation: correctEffect 0.75s linear;
 }
