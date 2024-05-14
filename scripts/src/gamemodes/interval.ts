@@ -11,7 +11,7 @@ const max: number = Math.floor(Math.random()*300) + min;
 let isMinGuess: boolean = false;
 
 setRand(min, max);
-console.log(min, max)
+
 hintDiv.textContent = rand+" is in the interval <???, ???>";
 
 function intervalGamemode(): void

@@ -36,7 +36,7 @@ class CustomSetting {
     applySetting() {
         if (this.dataValidation != undefined)
             this.dataValidation();
-        if (this.value == "0" && this.offMode == true)
+        if ((this.value == "0" || this.value == "") && this.offMode == true)
             this.setValue("OFF");
         localStorage.setItem(this.name, this.value);
     }

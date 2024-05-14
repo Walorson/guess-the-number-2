@@ -2,7 +2,7 @@ import { customGamemode, editMode } from "./customSetup.js"
 
 localStorage.setItem("Custom Mode", "false");
 
-export let buttons = document.getElementById("main").querySelectorAll("button");
+export let buttons: NodeListOf<HTMLButtonElement> = document.getElementById("main").querySelectorAll("button");
 export let menuChosen: string = "main";
 export let index: number;
 let doubleMenu: boolean = false;

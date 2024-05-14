@@ -1,7 +1,7 @@
 import { getGuess, setGuessMaxLength } from "../input.js";
 import { init, win, dead, rand, setRand } from "../game.js";
 
-const hint = document.getElementById("hint");
+const hint: HTMLElement = document.getElementById("hint");
 
 setRand(0, 10);
 setGuessMaxLength(2);
@@ -15,7 +15,7 @@ else
 
 function oneChanceGamemode(): void
 {
-    let guess = getGuess();
+    let guess: number = getGuess();
 
     if(guess == rand) win();
     else dead();

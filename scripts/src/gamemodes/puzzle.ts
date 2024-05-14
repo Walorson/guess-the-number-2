@@ -22,7 +22,7 @@ const features: Features = {
 
 function puzzleGamemode(): void
 {
-    let guess = getGuess();
+    let guess: number = getGuess();
 
     if(guess == rand) win();
     else output.set(output.INCORRECT);

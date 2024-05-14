@@ -1,5 +1,5 @@
 const output: HTMLElement = document.getElementById("output");
-let timeout: any;
+let timeout: NodeJS.Timeout;
 
 export function set(text: string): void {
     clearTimeout(timeout);

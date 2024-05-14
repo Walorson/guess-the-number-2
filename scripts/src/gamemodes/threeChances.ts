@@ -7,7 +7,7 @@ setGuessMaxLength(2);
 
 function threeChancesGamemode(): void
 {
-    let guess = getGuess();
+    let guess: number = getGuess();
 
     if(guess > rand)
     {

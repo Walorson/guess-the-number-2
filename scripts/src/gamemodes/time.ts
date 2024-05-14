@@ -9,7 +9,7 @@ time.forceStopTimerIf(0, "<");
 
 function timeGamemode(): void
 {
-    let guess = getGuess();
+    let guess: number = getGuess();
 
     if(guess > rand)
     {

@@ -4,7 +4,7 @@ import { init, win, rand } from "../game.js";
 
 function hardcoreGamemode(): void
 {
-    let guess = getGuess();
+    let guess: number = getGuess();
 
     if(guess == rand) win();
     else output.set(output.INCORRECT);

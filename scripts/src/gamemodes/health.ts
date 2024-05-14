@@ -12,7 +12,7 @@ hint.textContent = `You have only ${health} HP. Be careful with your guesses.`;
 
 function healthGamemode(): void
 {
-    let guess = getGuess();
+    let guess: number = getGuess();
 
     if(guess > rand)
     {

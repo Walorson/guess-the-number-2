@@ -8,7 +8,6 @@ const min = Math.floor(Math.random() * 150);
 const max = Math.floor(Math.random() * 300) + min;
 let isMinGuess = false;
 setRand(min, max);
-console.log(min, max);
 hintDiv.textContent = rand + " is in the interval <???, ???>";
 function intervalGamemode() {
     let guess = getGuess();

@@ -6,17 +6,17 @@ import { time } from "../time.js";
 
 localStorage.setItem("Custom Mode", "true");
 
-const min = localStorage.getItem("min");
-const max = localStorage.getItem("max");
+const min: number = Number(localStorage.getItem("min"));
+const max: number = Number(localStorage.getItem("max"));
 
 const seconds = Number(localStorage.getItem("time"));
 const maxAttempts = Number(localStorage.getItem("max attempts"));
 
-const quest = document.getElementById("quest");
+const quest: HTMLElement = document.getElementById("quest");
 quest.textContent = `Guess a number from ${min} to ${max}`;
 
-setRand(Number(min), Number(max));
-setGuessMaxLength(max.length);
+setRand(min, max);
+setGuessMaxLength(String(max).length);
 
 if(!isNaN(seconds)) {
     time.setTimerDir(-1);
@@ -29,7 +29,7 @@ window.addEventListener("load", () => { printHints(true); });
 
 function customGamemode(): void
 {
-    let guess = getGuess();
+    let guess: number = getGuess();
 
     if(guess == rand) {
         win();

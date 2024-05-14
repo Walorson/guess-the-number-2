@@ -9,7 +9,7 @@ const guide: HTMLElement = document.getElementById("guide");
 let isGameEnd: boolean = false;
 export let timerDir: number = 1; //1 or -1
 
-export let rand = Math.floor(Math.random()*101); // THE CORE OF THE GAME
+export let rand: number = Math.floor(Math.random()*101); // THE CORE OF THE GAME
 
 export function setRand(min: number, max: number): void
 {
