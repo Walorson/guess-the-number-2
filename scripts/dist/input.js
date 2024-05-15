@@ -1,8 +1,9 @@
 import { time } from './time.js';
 const input = document.getElementById("input");
-const lastGuess = document.getElementById("lastGuess");
+const lastGuessDiv = document.getElementById("lastGuess");
 const attemptsDiv = document.getElementById("attempts");
 export let guess = "0";
+let lastGuess = guess;
 let guessMaxLength = 3;
 export let attempts = 0;
 export function setGuessMaxLength(value) {
@@ -22,6 +23,10 @@ export function writeGuess(e) {
             guess = "0";
         input.textContent = guess;
     }
+    else if (e.key == 'ArrowUp') {
+        input.textContent = lastGuess;
+        guess = lastGuess;
+    }
 }
 window.addEventListener("keydown", writeGuess);
 export function getGuess() {
@@ -29,10 +34,11 @@ export function getGuess() {
         time.startTimer();
     attempts++;
     attemptsDiv.textContent = "Attempts: " + attempts;
+    lastGuess = guess;
     return Number(guess);
 }
 export function clearGuess() {
-    lastGuess.textContent = guess;
+    lastGuessDiv.textContent = lastGuess;
     guess = "0";
     input.textContent = "0";
 }

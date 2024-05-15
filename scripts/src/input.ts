@@ -1,10 +1,11 @@
 import { time } from './time.js'
 
 const input: HTMLElement = document.getElementById("input");
-const lastGuess: HTMLElement = document.getElementById("lastGuess");
+const lastGuessDiv: HTMLElement = document.getElementById("lastGuess");
 const attemptsDiv: HTMLElement = document.getElementById("attempts");
 
 export let guess: string = "0";
+let lastGuess: string = guess;
 let guessMaxLength: number = 3;
 export let attempts: number = 0;
 
@@ -34,6 +35,11 @@ export function writeGuess(e: KeyboardEvent): void
 
         input.textContent = guess;
     }
+    else if(e.key == 'ArrowUp')
+    {
+        input.textContent = lastGuess;
+        guess = lastGuess;
+    }
 }
 window.addEventListener("keydown", writeGuess);
 
@@ -43,10 +49,11 @@ export function getGuess(): number {
 
     attempts++;
     attemptsDiv.textContent = "Attempts: "+attempts;
+    lastGuess = guess;
     return Number(guess);
 }
 export function clearGuess(): void {
-    lastGuess.textContent = guess; 
+    lastGuessDiv.textContent = lastGuess; 
     guess = "0"; 
     input.textContent = "0";
 }

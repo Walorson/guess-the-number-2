@@ -20,8 +20,7 @@ body {
     text-align: center;
 }
 .lastGuess {
-    position: absolute;
-    left: 50%; top: 60%;
+    margin-top: 80px;
     font-size: 3rem;
     opacity: 0.5;
 }
