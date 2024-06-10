@@ -68,18 +68,11 @@ button:hover {
 .double-menu button {
     width: 25vw;
 }
-.servers-list {
-    width: 450px;
-    height: 500px;
-    border: 3px solid rgb(137, 16, 16);
-    background-color: #040404;
-    overflow-y: auto;
-}
 .server {
     display: flex;
     justify-content: space-between;
-    padding: 20px 25px;
-    background-color: #111;
+    padding-left: 30px;
+    padding-right: 30px;
 }
 .server:hover {
     cursor: pointer;
@@ -98,11 +91,12 @@ button:hover {
     background-color: #111;
     z-index: 10;
     font-size: 2rem;
+    display: none;
 }
 #ping {
     position: absolute;
-    right: 15px;
-    bottom: 15px;
+    right: 30px;
+    bottom: 60px;
 }
 ::-webkit-scrollbar {
     width: 6px;

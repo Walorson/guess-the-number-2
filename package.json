@@ -2,16 +2,29 @@
   "name": "guess-the-number-2",
   "version": "1.0.0",
   "description": "Remake of my old game from 2020. Better gameplay, UI and fun :D",
-  "main": "index.js",
+  "main": "server.js",
   "type": "module",
   "scripts": {
-    "build": "tsc"
+    "devStart": "nodemon ./src/scripts/dist/server.js",
+    "start": "snowpack dev",
+    "build": "snowpack build"
   },
-  "keywords": ["game", "guess the number", "number", "random"],
+  "keywords": [
+    "game",
+    "guess the number",
+    "number",
+    "random"
+  ],
   "author": "Szymon Gniadek",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.12.7",
+    "snowpack": "^3.8.8",
     "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "nodemon": "^3.1.3",
+    "socket.io": "^4.7.5",
+    "socket.io-client": "^4.7.5"
   }
 }

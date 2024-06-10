@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="css/menu.css">
 
     <script type="module" src="scripts/dist/menu.js" defer></script>
+    <script type="module" src="scripts/dist/menu-client.js" defer></script>
 </head>
 <body>
     <div class="title"><h1><span class="big-letter">G</span>uess <span class="big-letter">T</span>he <span class="big-letter">N</span>umber <span class="big-letter rotated">2</span></h1></div>
@@ -45,15 +46,16 @@
     </div>
 
     <div class="menu" id="multiplayer">
-        <div id="ping">Ping: 0ms</div>
         <div id="connecting-to-server">Connecting to the server...</div>
         <div class="servers-list">
-            <div class="server"><span>Pedały</span> <span class="slots">1/2</span></div>
-            <div class="server"><span>Pedały! 2</span> <span class="slots">1/2</span></div>
+            <button class="server"><span>Sex</span> <span>1/2</span></button>
         </div>
         <button class="back-button" data-click="changeMenu('main')">Back</button>
     </div>
+
     <div class="menu" id="custom"></div>
     <div class="menu" id="custom-hints"></div>
+
+    <div id="ping">Ping: 0ms</div>
 </body>
 </html>
