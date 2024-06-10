@@ -5,7 +5,7 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "devStart": "nodemon ./src/scripts/dist/server.js",
+    "server": "nodemon server.js",
     "start": "snowpack dev",
     "build": "snowpack build"
   },

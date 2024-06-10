@@ -1,6 +1,4 @@
-import { SecureContext } from "tls";
 import { buttons, index, menuChosen } from "./menu.js"
-import { off } from "process";
 
 const customMenu: HTMLElement = document.getElementById("custom");
 export let editMode: boolean = false;
