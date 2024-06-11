@@ -81,7 +81,7 @@ button:hover {
 .server:nth-of-type(2n) {
     background-color: #1a1a1a;
 }
-#connecting-to-server {
+.message-box {
     position: absolute;
     top: 50%; left: 50%;
     transform: translate(-50%,-50%);
