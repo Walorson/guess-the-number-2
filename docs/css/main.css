@@ -1,0 +1,35 @@
+@font-face {
+    font-family: milker;
+    src: url("../fonts/Milker.otf");
+}
+@font-face {
+    font-family: typewriter;
+    src: url("../fonts/JMH Typewriter.otf");
+}
+
+body {
+    perspective: 500px;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    height: 100vh;
+    overflow: hidden;
+    color: #f0f0f0;
+    user-select: none;
+
+    /* Background pattern from Toptal Subtle Patterns */
+    background-image: url("../img/background.webp");
+}
+
+#guide {
+    position: absolute;
+    left: 10px;
+    bottom: 45px;
+    opacity: 0.6;
+    color: white;
+}
+.outline {
+    border: 2px solid rgba(255,255,255,0.5);
+    border-radius: 5px;
+    padding: 5px 9px;
+}

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess The Number 2</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="../img/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../img/favicon/favicon-16x16.png">
+    <link rel="manifest" href="../img/favicon/site.webmanifest">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/game.css">
+
+    <script type="module" src="../scripts/dist/gamemodes/health.js" defer></script>
+</head>
+<body>
+    <div id="guide"></div>
+    <h1 class="quest">Guess a number from 0 to 100</h1>
+    <div id="hint"></div>
+    <div id="input" class="input">0</div>
+    <div id="lastGuess" class="lastGuess"></div>
+    <div id="output" class="output quest"></div>
+    <div class="top-nav">
+        <div id="health"></div>
+        <div id="attempts">Attempts: 0</div>
+        <div id="time">Time: <span id="time-seconds">0</span>,<span id="time-miliseconds">00</span></div>
+        <div class="gamemode-info">Health</div>
+    </div>
+    <div class="progressCircle" id="circleLoad"></div>
+</body>
+</html>
