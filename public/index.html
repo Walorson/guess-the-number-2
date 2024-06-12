@@ -23,7 +23,7 @@
     </div>
     <div class="menu" id="main">
         <button data-click="changeMenu('gamemodes')">Singleplayer</button>
-        <button data-click="changeMenu('multiplayer')">Multiplayer</button>
+        <button data-click="changeMenu('set-nickname')">Multiplayer</button>
         <button>Options</button>
         <button data-click="window.close()">Quit</button>
     </div>
@@ -45,12 +45,12 @@
         <button class="back-button" data-click="changeMenu('main')">Back</button>
     </div>
 
-    <div class="menu" id="multiplayer">
-        <div class="message-box">
+    <div class="menu" id="set-nickname"></div>
 
-        </div>
+    <div class="menu" id="multiplayer">
         <div class="message-box" id="connecting-to-server">Connecting to the server...</div>
         <div class="servers-list">
+            
         </div>
         <button class="back-button" data-click="changeMenu('main')">Back</button>
     </div>

@@ -1,7 +1,7 @@
 import { buttons, index, menuChosen } from "./menu.js";
 const customMenu = document.getElementById("custom");
 export let editMode = false;
-class CustomSetting {
+export class CustomSetting {
     constructor(name, defaultValue, where = "custom", dataValidation = undefined, offMode = false) {
         this.name = name;
         this.where = where;

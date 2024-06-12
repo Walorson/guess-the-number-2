@@ -6,6 +6,6 @@
         "sourceMap": true,
         "outDir": "./src/scripts/dist"
     },
-    "include": ["./src/scripts/src/**/*", "server.ts"],
+    "include": ["./src/scripts/src/**/*"],
     "exclude": ["node_modules"]
 }
