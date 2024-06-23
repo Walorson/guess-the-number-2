@@ -1,10 +1,12 @@
 import { io } from "socket.io-client";
 import { gameSetup } from "./customSetup.js";
+import { menuChosen } from "./menu.js";
 
 let socket: any;
 let nickname: string;
 const connectInfo: HTMLElement = document.getElementById("connecting-to-server");
 const waitingRoom: HTMLElement = document.getElementById("waiting-room-players");
+const serversList: HTMLElement = document.getElementById("servers-list");
 const pingDiv: HTMLElement = document.getElementById("ping");
 
 export function connectToServer(): void {
@@ -19,9 +21,17 @@ export function connectToServer(): void {
 
         nickname = localStorage.getItem("Nickname");
         gameSetup[0].setValue(nickname+"'s room");
+        gameSetup[0].applySetting();
 
         socket.emit("join", nickname);
         setInterval(ping, 1000);
+        setInterval(getServersList, 1000);
+    });
+
+    socket.on("getServersList", (list: any[]) => {
+        for(let i=0; i<list.length; i++) {
+            serversList.innerHTML += `<button>${list[i].name}</button>`;
+        }
     });
 }
 
@@ -37,6 +47,13 @@ export function createLobby(): void {
     {
         waitingRoom.innerHTML += `<button>.</button>`;
     }
+
+    socket.emit("createLobby", localStorage.getItem("Room Name"), nickname);
+}
+
+function getServersList(): void {
+    socket.emit("getServersList");
+    serversList.innerHTML = ``;
 }
 
 function ping(): void {

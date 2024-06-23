@@ -4,6 +4,7 @@ let socket;
 let nickname;
 const connectInfo = document.getElementById("connecting-to-server");
 const waitingRoom = document.getElementById("waiting-room-players");
+const serversList = document.getElementById("servers-list");
 const pingDiv = document.getElementById("ping");
 export function connectToServer() {
     socket = io("http://127.0.0.1:3000");
@@ -15,8 +16,15 @@ export function connectToServer() {
         clearTimeout(timer);
         nickname = localStorage.getItem("Nickname");
         gameSetup[0].setValue(nickname + "'s room");
+        gameSetup[0].applySetting();
         socket.emit("join", nickname);
         setInterval(ping, 1000);
+        setInterval(getServersList, 1000);
+    });
+    socket.on("getServersList", (list) => {
+        for (let i = 0; i < list.length; i++) {
+            serversList.innerHTML += `<button>${list[i].name}</button>`;
+        }
     });
 }
 export function createLobby() {
@@ -28,6 +36,11 @@ export function createLobby() {
     for (let i = 1; i < playersCount; i++) {
         waitingRoom.innerHTML += `<button>.</button>`;
     }
+    socket.emit("createLobby", localStorage.getItem("Room Name"), nickname);
+}
+function getServersList() {
+    socket.emit("getServersList");
+    serversList.innerHTML = ``;
 }
 function ping() {
     let time = 0;
