@@ -1,11 +1,13 @@
 import { buttons, index, menuChosen } from "./menu.js";
 const customMenu = document.getElementById("custom");
+const setNicknameMenu = document.getElementById("set-nickname");
 export let editMode = false;
 export class CustomSetting {
     constructor(name, defaultValue, where = "custom", dataValidation = undefined, offMode = false) {
         this.name = name;
         this.where = where;
         this.offMode = offMode;
+        this.onlyNumbers = true;
         this.dataValidation = dataValidation;
         if (localStorage.getItem(name) != null) {
             this.value = localStorage.getItem(name);
@@ -76,6 +78,8 @@ class CustomSettingBoolean extends CustomSetting {
     }
 }
 export function customGamemode() {
+    const setNickname = new CustomSetting("Nickname", "noob", "set-nickname");
+    setNickname.onlyNumbers = false;
     const settings = [
         new CustomSetting("min", "0", "custom", () => {
             if (Number(settings[0].value) > Number(settings[1].value))
@@ -115,7 +119,10 @@ export function customGamemode() {
             if (buttons[index].classList.contains("edit") == false) {
                 editMode = true;
                 buttons[index].classList.add("edit");
-                editingButton = settings[index];
+                if (menuChosen == 'custom')
+                    editingButton = settings[index];
+                else if (menuChosen == 'set-nickname')
+                    editingButton = setNickname;
             }
             else {
                 editMode = false;
@@ -126,7 +133,7 @@ export function customGamemode() {
             }
         }
         if (editingButton != undefined) {
-            if (!isNaN(Number(e.key))) {
+            if (!isNaN(Number(e.key)) && editingButton.onlyNumbers == true || isAlphanumeric(e.key) && editingButton.onlyNumbers == false) {
                 if (firstChar == false) {
                     editingButton.value = '';
                     firstChar = true;
@@ -159,6 +166,13 @@ export function customGamemode() {
     <button class="button" data-click="changeMenu('custom-hints')">Hints...</button>
     <button class="back-button" data-click="location.href = 'gamemodes/custom.html'">Play</button>
     <button data-click="changeMenu('gamemodes')">Back</button>`;
+    setNicknameMenu.innerHTML += `
+    <button class="back-button" data-click="changeMenu('multiplayer')">Apply</button>
+    <button data-click="changeMenu('main')">Back</button>
+    `;
     document.getElementById("custom-hints").innerHTML += `<button class="back-button" data-click="changeMenu('custom')">Back</button>`;
+}
+function isAlphanumeric(char) {
+    return /^[a-zA-Z0-9]$/.test(char);
 }
 //# sourceMappingURL=customSetup.js.map

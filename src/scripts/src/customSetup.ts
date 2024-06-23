@@ -218,7 +218,7 @@ export function customGamemode(): void {
     <button data-click="changeMenu('gamemodes')">Back</button>`;
 
     setNicknameMenu.innerHTML += `
-    <button class="back-button" data-click="changeMenu('multiplayer')">Apply</button>
+    <button class="back-button" data-click="changeMenu('multiplayer')" connectToServer>Apply</button>
     <button data-click="changeMenu('main')">Back</button>
     `;
 

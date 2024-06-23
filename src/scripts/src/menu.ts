@@ -1,4 +1,5 @@
 import { customGamemode, editMode } from "./customSetup.js"
+import { connectToServer } from "./menu-client.js"
 
 localStorage.setItem("Custom Mode", "false");
 
@@ -22,6 +23,11 @@ window.addEventListener("keydown", (e: KeyboardEvent) =>
 window.addEventListener("keydown", (e: KeyboardEvent) => {
     if(e.key == "Enter") {
         eval(buttons[index].getAttribute("data-click"));
+
+        if(buttons[index].hasAttribute("connecttoserver")) {
+            console.log("sex")
+            connectToServer();
+        }
     }
 });
 

@@ -167,7 +167,7 @@ export function customGamemode() {
     <button class="back-button" data-click="location.href = 'gamemodes/custom.html'">Play</button>
     <button data-click="changeMenu('gamemodes')">Back</button>`;
     setNicknameMenu.innerHTML += `
-    <button class="back-button" data-click="changeMenu('multiplayer')">Apply</button>
+    <button class="back-button" data-click="changeMenu('multiplayer')" connectToServer>Apply</button>
     <button data-click="changeMenu('main')">Back</button>
     `;
     document.getElementById("custom-hints").innerHTML += `<button class="back-button" data-click="changeMenu('custom')">Back</button>`;
