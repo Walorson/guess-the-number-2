@@ -1,3 +1,4 @@
+import { gameEvents } from "./game.js";
 import { buttons, index, menuChosen } from "./menu.js"
 
 const customMenu: HTMLElement = document.getElementById("custom");
@@ -105,9 +106,22 @@ class CustomSettingBoolean extends CustomSetting {
     }
 }
 
+export const gameSetup: CustomSetting[] =
+[
+    new CustomSetting("Room Name", localStorage.getItem("Nickname")+"'s room", "host"),
+    new CustomSetting("Players Count", "2", "host", () => {
+        if(Number(gameSetup[0].value) < 2)
+            gameSetup[1].setValue("2");
+        else if(Number(gameSetup[0].value) > 4)
+            gameSetup[1].setValue("4");
+    })
+];
+
 export function customGamemode(): void {
     const setNickname = new CustomSetting("Nickname", "noob", "set-nickname");
     setNickname.onlyNumbers = false;
+
+    gameSetup[0].onlyNumbers = false;
 
     const settings: CustomSetting[] = 
     [
@@ -164,6 +178,8 @@ export function customGamemode(): void {
                     editingButton = settings[index];
                 else if(menuChosen == 'set-nickname')
                     editingButton = setNickname;
+                else if(menuChosen == 'host')
+                    editingButton = gameSetup[index];
             }
             else
             {
@@ -223,6 +239,9 @@ export function customGamemode(): void {
     `;
 
     document.getElementById("custom-hints").innerHTML += `<button class="back-button" data-click="changeMenu('custom')">Back</button>`;
+    document.getElementById("host").innerHTML += `
+    <button class="back-button" data-click="changeMenu('waiting-room')" createlobby>Host</button>
+    <button data-click="changeMenu('multiplayer')">Back</button>`;
 }
 
 function isAlphanumeric(char: string): boolean {

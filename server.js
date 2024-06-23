@@ -5,7 +5,13 @@ const io = new Server(3000, {
 });
 console.log("se")
 io.on("connection", socket => {
+
     socket.on("join", (nickname) => {
         console.log(nickname);
     });
+
+    socket.on("ping", () => {
+        socket.emit("pong");
+    })
+
 });
