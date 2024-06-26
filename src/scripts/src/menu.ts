@@ -87,7 +87,7 @@ function changeButton(e: KeyboardEvent): void
     last = buttons[index];
 }
 
-function changeMenu(name: string): void
+export function changeMenu(name: string): void
 {
     setTimeout(() => 
     {

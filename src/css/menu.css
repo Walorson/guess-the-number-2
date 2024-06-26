@@ -98,6 +98,9 @@ button:hover {
     right: 30px;
     bottom: 60px;
 }
+#start-game-button {
+    display: none;
+}
 ::-webkit-scrollbar {
     width: 6px;
 }

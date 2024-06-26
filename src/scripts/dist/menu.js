@@ -70,7 +70,7 @@ function changeButton(e) {
     buttons[index].classList.add("hover");
     last = buttons[index];
 }
-function changeMenu(name) {
+export function changeMenu(name) {
     setTimeout(() => {
         if (last != undefined)
             last.classList.remove("hover");

@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 import { gameSetup } from "./customSetup.js";
-import { menuChosen } from "./menu.js";
+import { menuChosen, changeMenu, buttons } from "./menu.js";
 
 let socket: any;
 let nickname: string;
@@ -8,6 +8,8 @@ const connectInfo: HTMLElement = document.getElementById("connecting-to-server")
 const waitingRoom: HTMLElement = document.getElementById("waiting-room-players");
 const serversList: HTMLElement = document.getElementById("servers-list");
 const pingDiv: HTMLElement = document.getElementById("ping");
+const SERVER_LIST_REFRESH_TIME = 1500;
+const PING_REFRESH_TIME = 1000;
 
 export function connectToServer(): void {
     socket = io("http://127.0.0.1:3000");
@@ -24,14 +26,26 @@ export function connectToServer(): void {
         gameSetup[0].applySetting();
 
         socket.emit("join", nickname);
-        setInterval(ping, 1000);
-        setInterval(getServersList, 1000);
+        setInterval(ping, PING_REFRESH_TIME);
+        setInterval(getServersList, SERVER_LIST_REFRESH_TIME);
     });
 
     socket.on("getServersList", (list: any[]) => {
         for(let i=0; i<list.length; i++) {
-            serversList.innerHTML += `<button>${list[i].name}</button>`;
+            serversList.innerHTML += `<button owner="${list[i].ownerID}">${list[i].name}</button>`;
         }
+
+        serversList.querySelectorAll("button").forEach((button: HTMLButtonElement) => {
+            button.onclick = () => {
+                connectTo(button.getAttribute('owner'));
+            }
+        });
+    });
+
+    socket.on("addPlayerToWaitingRoom", (newPlayer: string) => {
+        const emptySlot: HTMLButtonElement = waitingRoom.querySelector(".empty-slot");
+        emptySlot.textContent = newPlayer;
+        emptySlot.removeAttribute("class");
     });
 }
 
@@ -45,10 +59,11 @@ export function createLobby(): void {
 
     for(let i=1; i<playersCount; i++)
     {
-        waitingRoom.innerHTML += `<button>.</button>`;
+        waitingRoom.innerHTML += `<button class="empty-slot">.</button>`;
     }
 
-    socket.emit("createLobby", localStorage.getItem("Room Name"), nickname);
+    document.getElementById("start-game-button").style.display = 'block';
+    socket.emit("createLobby", localStorage.getItem("Room Name"), playersCount);
 }
 
 function getServersList(): void {
@@ -64,5 +79,24 @@ function ping(): void {
         clearInterval(timer);
         pingDiv.textContent = "Ping: "+time+"ms";
         time = 0;
+    });
+}
+
+function connectTo(ownerID: string): void {
+    socket.emit("connectTo", ownerID);
+    socket.on("connectTo", (lobby: any) => {
+        changeMenu("waiting-room");
+        for(let i=0; i<lobby.maxPlayers; i++) 
+        {
+            if(lobby.members[i] != undefined)
+            {
+                if(i == 0)
+                    waitingRoom.innerHTML += `<button><span style="color:gold">${lobby.members[i]}</span></button>`;
+                else            
+                    waitingRoom.innerHTML += `<button>${lobby.members[i]}</button>`;
+            }
+            else
+                waitingRoom.innerHTML += `<button class="empty-slot">.</button>`;
+        }
     });
 }
