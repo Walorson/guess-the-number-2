@@ -41,4 +41,8 @@ io.on("connection", socket => {
         socket.emit("connectTo", lobby);
         socket.to(ownerID).emit("addPlayerToWaitingRoom", nicknames[socket.id]);
     });
+
+    socket.on("startGame", ownerID => {
+        io.to(ownerID).emit("startGame");
+    });
 });

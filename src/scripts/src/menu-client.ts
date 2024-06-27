@@ -11,6 +11,11 @@ const pingDiv: HTMLElement = document.getElementById("ping");
 const SERVER_LIST_REFRESH_TIME = 1500;
 const PING_REFRESH_TIME = 1000;
 
+window.addEventListener("load", () => {
+    sessionStorage.removeItem("lobby");
+    sessionStorage.removeItem("multiplayer");
+});
+
 export function connectToServer(): void {
     socket = io("http://127.0.0.1:3000");
     let timer: NodeJS.Timeout = setTimeout(() => {
@@ -47,6 +52,11 @@ export function connectToServer(): void {
         emptySlot.textContent = newPlayer;
         emptySlot.removeAttribute("class");
     });
+
+    socket.on("startGame", () => {
+        sessionStorage.setItem("multiplayer", "true");
+        location.href = "gamemodes/classic.html";
+    })
 }
 
 export function createLobby(): void {
@@ -64,6 +74,7 @@ export function createLobby(): void {
 
     document.getElementById("start-game-button").style.display = 'block';
     socket.emit("createLobby", localStorage.getItem("Room Name"), playersCount);
+    sessionStorage.setItem("lobby", socket.id);
 }
 
 function getServersList(): void {
@@ -84,6 +95,7 @@ function ping(): void {
 
 function connectTo(ownerID: string): void {
     socket.emit("connectTo", ownerID);
+    sessionStorage.setItem("lobby", ownerID);
     socket.on("connectTo", (lobby: any) => {
         changeMenu("waiting-room");
         for(let i=0; i<lobby.maxPlayers; i++) 
@@ -99,4 +111,8 @@ function connectTo(ownerID: string): void {
                 waitingRoom.innerHTML += `<button class="empty-slot">.</button>`;
         }
     });
+}
+
+export function startGame(): void {
+    socket.emit("startGame", socket.id);
 }

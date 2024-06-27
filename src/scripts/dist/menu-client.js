@@ -9,6 +9,10 @@ const serversList = document.getElementById("servers-list");
 const pingDiv = document.getElementById("ping");
 const SERVER_LIST_REFRESH_TIME = 1500;
 const PING_REFRESH_TIME = 1000;
+window.addEventListener("load", () => {
+    sessionStorage.removeItem("lobby");
+    sessionStorage.removeItem("multiplayer");
+});
 export function connectToServer() {
     socket = io("http://127.0.0.1:3000");
     let timer = setTimeout(() => {
@@ -39,6 +43,10 @@ export function connectToServer() {
         emptySlot.textContent = newPlayer;
         emptySlot.removeAttribute("class");
     });
+    socket.on("startGame", () => {
+        sessionStorage.setItem("multiplayer", "true");
+        location.href = "gamemodes/classic.html";
+    });
 }
 export function createLobby() {
     waitingRoom.innerHTML =
@@ -51,6 +59,7 @@ export function createLobby() {
     }
     document.getElementById("start-game-button").style.display = 'block';
     socket.emit("createLobby", localStorage.getItem("Room Name"), playersCount);
+    sessionStorage.setItem("lobby", socket.id);
 }
 function getServersList() {
     socket.emit("getServersList");
@@ -68,6 +77,7 @@ function ping() {
 }
 function connectTo(ownerID) {
     socket.emit("connectTo", ownerID);
+    sessionStorage.setItem("lobby", ownerID);
     socket.on("connectTo", (lobby) => {
         changeMenu("waiting-room");
         for (let i = 0; i < lobby.maxPlayers; i++) {
@@ -81,5 +91,8 @@ function connectTo(ownerID) {
                 waitingRoom.innerHTML += `<button class="empty-slot">.</button>`;
         }
     });
+}
+export function startGame() {
+    socket.emit("startGame", socket.id);
 }
 //# sourceMappingURL=menu-client.js.map

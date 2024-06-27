@@ -1,5 +1,5 @@
 import { customGamemode, editMode } from "./customSetup.js";
-import { connectToServer, createLobby } from "./menu-client.js";
+import { connectToServer, createLobby, startGame } from "./menu-client.js";
 localStorage.setItem("Custom Mode", "false");
 export let buttons = document.getElementById("main").querySelectorAll("button");
 export let menuChosen = "main";
@@ -22,6 +22,9 @@ window.addEventListener("keydown", (e) => {
         }
         if (buttons[index].hasAttribute("createlobby")) {
             createLobby();
+        }
+        if (buttons[index].hasAttribute("startgame")) {
+            startGame();
         }
     }
 });
