@@ -38,7 +38,7 @@ export function connectToServer(): void {
 
     socket.on("getServersList", (list: any[]) => {
         for(let i=0; i<list.length; i++) {
-            serversList.innerHTML += `<button owner="${list[i].ownerID}">${list[i].name}</button>`;
+            serversList.innerHTML += `<button owner="${list[i].gameID}">${list[i].name}</button>`;
         }
 
         serversList.querySelectorAll("button").forEach((button: HTMLButtonElement) => {
@@ -57,7 +57,11 @@ export function connectToServer(): void {
     socket.on("startGame", () => {
         sessionStorage.setItem("multiplayer", "true");
         location.href = "gamemodes/classic.html";
-    })
+    });
+
+    socket.on("rejoin", (id: string) => {
+        alert(id+" WYJEBALO!")
+    });
 }
 
 export function createLobby(): void {

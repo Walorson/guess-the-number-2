@@ -245,5 +245,6 @@ export function customGamemode(): void {
 }
 
 function isAlphanumeric(char: string): boolean {
-    return /^[a-zA-Z0-9]$/.test(char);
+    console.log(/^[a-zA-Z0-9]$/.test(char))
+    if(/^[a-zA-Z0-9]$/.test(char)) return true;
 }

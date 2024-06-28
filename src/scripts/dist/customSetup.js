@@ -188,6 +188,8 @@ export function customGamemode() {
     <button data-click="changeMenu('multiplayer')">Back</button>`;
 }
 function isAlphanumeric(char) {
-    return /^[a-zA-Z0-9]$/.test(char);
+    console.log(/^[a-zA-Z0-9]$/.test(char));
+    if (/^[a-zA-Z0-9]$/.test(char))
+        return true;
 }
 //# sourceMappingURL=customSetup.js.map

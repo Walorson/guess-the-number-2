@@ -29,7 +29,7 @@ window.addEventListener("keydown", (e) => {
     }
 });
 window.addEventListener("mousemove", () => {
-    if (keyboardUse == true) {
+    if (keyboardUse == true && editMode == false) {
         keyboardUse = false;
         buttons[index].classList.remove('hover');
         index = undefined;
@@ -103,6 +103,15 @@ function assignClickEventForButtons() {
     buttons.forEach((button) => {
         button.onclick = () => {
             eval(button.getAttribute("data-click"));
+            if (button.hasAttribute("connecttoserver")) {
+                connectToServer();
+            }
+            if (button.hasAttribute("createlobby")) {
+                createLobby();
+            }
+            if (button.hasAttribute("startgame")) {
+                startGame();
+            }
         };
     });
 }

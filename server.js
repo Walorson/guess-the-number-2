@@ -9,6 +9,11 @@ const nicknames = {};
 
 io.on("connection", socket => {
 
+    socket.on("disconnect", () => {
+        console.log(socket.id+" disconnected.");
+        io.emit("rejoin", socket.id);
+    });
+
     socket.on("join", (nickname) => {
         nicknames[socket.id] = nickname;
     });
@@ -21,7 +26,7 @@ io.on("connection", socket => {
 
         serversList.push({
             name: nameLobby, 
-            ownerID: socket.id, 
+            gameID: socket.id, 
             maxPlayers: maxPlayersCount, 
             members: [nicknames[socket.id]]
         });
@@ -35,7 +40,7 @@ io.on("connection", socket => {
 
     socket.on("connectTo", ownerID => {
         socket.join(ownerID);
-        const lobby = serversList.find(obj => obj.ownerID == ownerID);
+        const lobby = serversList.find(obj => obj.gameID == ownerID);
         lobby.members.push(nicknames[socket.id]);
 
         socket.emit("connectTo", lobby);
@@ -44,10 +49,23 @@ io.on("connection", socket => {
 
     socket.on("startGame", ownerID => {
         io.to(ownerID).emit("startGame");
+        io.socketsLeave(ownerID);
+        const lobby = serversList.find(obj => obj.gameID == ownerID);
+        lobby.members = [];
     });
 
-    socket.on("connectToGame", ownerID => {
-        socket.join(ownerID);
+    //GAME
+
+    socket.on("connectToGame", (gameID, nickname) => {
+        socket.join(gameID);
+        nicknames[socket.id] = nickname;
+
+        const lobby = serversList.find(obj => obj.gameID == gameID);
+        lobby.members.push(nicknames[socket.id]);
+
+        if(lobby.members.length == lobby.maxPlayers) {
+            io.to(gameID).emit("startMatch");
+        }
     });
 
     socket.on("multiplayerWin", (gameID, nickname) => {
