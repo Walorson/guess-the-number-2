@@ -45,4 +45,12 @@ io.on("connection", socket => {
     socket.on("startGame", ownerID => {
         io.to(ownerID).emit("startGame");
     });
+
+    socket.on("connectToGame", ownerID => {
+        socket.join(ownerID);
+    });
+
+    socket.on("multiplayerWin", (gameID, nickname) => {
+        socket.to(gameID).emit("multiplayerWin", nickname)
+    });
 });

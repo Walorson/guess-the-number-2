@@ -1,5 +1,11 @@
 import { writeGuess } from "./input.js";
 import { time } from "./time.js";
+import { connectToServer, multiplayerWin } from "./game-client.js";
+window.addEventListener("load", () => {
+    if (sessionStorage.getItem("multiplayer") == "true") {
+        connectToServer();
+    }
+});
 const input = document.getElementById("input");
 const output = document.getElementById("output");
 const circleLoad = document.getElementById("circleLoad");
@@ -38,6 +44,8 @@ export function win() {
     output.textContent = "CORRECT CORRECT CORRECT CORRECT CORRECT CORRECT CORRECT CORRECT";
     output.classList.add("scrollText");
     lastGuess.style.display = 'none';
+    if (sessionStorage.getItem("multiplayer") == "true")
+        multiplayerWin();
 }
 export function dead() {
     end();

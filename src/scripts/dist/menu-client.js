@@ -9,12 +9,13 @@ const serversList = document.getElementById("servers-list");
 const pingDiv = document.getElementById("ping");
 const SERVER_LIST_REFRESH_TIME = 1500;
 const PING_REFRESH_TIME = 1000;
+const SERVER_URL = "http://127.0.0.1:3000";
 window.addEventListener("load", () => {
     sessionStorage.removeItem("lobby");
     sessionStorage.removeItem("multiplayer");
 });
 export function connectToServer() {
-    socket = io("http://127.0.0.1:3000");
+    socket = io(SERVER_URL);
     let timer = setTimeout(() => {
         connectInfo.textContent = "Connection failed.";
     }, 5000);

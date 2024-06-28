@@ -1,5 +1,13 @@
 import { writeGuess } from "./input.js";
 import { time } from "./time.js";
+import { connectToServer, multiplayerWin } from "./game-client.js";
+
+window.addEventListener("load", () => {
+    if(sessionStorage.getItem("multiplayer") == "true")
+    {
+        connectToServer();
+    }
+});
 
 const input: HTMLElement = document.getElementById("input");
 const output: HTMLElement = document.getElementById("output");
@@ -50,6 +58,8 @@ export function win(): void
     output.textContent = "CORRECT CORRECT CORRECT CORRECT CORRECT CORRECT CORRECT CORRECT";
     output.classList.add("scrollText");
     lastGuess.style.display = 'none';
+
+    if(sessionStorage.getItem("multiplayer") == "true") multiplayerWin();
 }
 
 export function dead(): void 
