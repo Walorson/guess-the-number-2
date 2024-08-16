@@ -64,7 +64,8 @@ io.on("connection", socket => {
         lobby.members.push(nicknames[socket.id]);
 
         if(lobby.members.length == lobby.maxPlayers) {
-            io.to(gameID).emit("startMatch");
+            io.to(gameID).emit("startMatch", lobby.members);
+            console.log(lobby.members)
         }
     });
 

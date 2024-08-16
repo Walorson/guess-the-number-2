@@ -24,6 +24,18 @@ export function setRand(min: number, max: number): void
     rand = Math.floor(Math.random() * (max + 1 - min)) + min;
 }
 
+export function freezeGame(): void
+{
+    window.removeEventListener("keydown", writeGuess);
+    isGameEnd = true;
+}
+
+export function unfreezeGame(): void
+{
+    window.addEventListener("keydown", writeGuess);
+    isGameEnd = false;
+}
+
 export function init(game: Function): void
 {
     window.addEventListener("keydown", (e: KeyboardEvent) => 
@@ -44,8 +56,7 @@ export function init(game: Function): void
 }
 
 function end(): void {
-    isGameEnd = true;
-    window.removeEventListener("keydown", writeGuess);
+    freezeGame(); 
     output.style.opacity = '1';
     time.stopTimer();
     guide.style.bottom = "95px";

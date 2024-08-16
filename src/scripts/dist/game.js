@@ -17,6 +17,14 @@ export let rand = Math.floor(Math.random() * 101); // THE CORE OF THE GAME
 export function setRand(min, max) {
     rand = Math.floor(Math.random() * (max + 1 - min)) + min;
 }
+export function freezeGame() {
+    window.removeEventListener("keydown", writeGuess);
+    isGameEnd = true;
+}
+export function unfreezeGame() {
+    window.addEventListener("keydown", writeGuess);
+    isGameEnd = false;
+}
 export function init(game) {
     window.addEventListener("keydown", (e) => {
         if (e.key == 'Enter' && isGameEnd == false) {
@@ -32,8 +40,7 @@ export function init(game) {
     `;
 }
 function end() {
-    isGameEnd = true;
-    window.removeEventListener("keydown", writeGuess);
+    freezeGame();
     output.style.opacity = '1';
     time.stopTimer();
     guide.style.bottom = "95px";
