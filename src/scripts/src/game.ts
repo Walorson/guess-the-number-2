@@ -24,6 +24,16 @@ export function setRand(min: number, max: number): void
     rand = Math.floor(Math.random() * (max + 1 - min)) + min;
 }
 
+export function returnRand(min: number, max: number): number
+{
+    return Math.floor(Math.random() * (max + 1 - min)) + min;
+}
+
+export function forceRand(number: number) 
+{
+    rand = number;
+}
+
 export function freezeGame(): void
 {
     window.removeEventListener("keydown", writeGuess);
@@ -73,11 +83,11 @@ export function win(): void
     if(sessionStorage.getItem("multiplayer") == "true") multiplayerWin();
 }
 
-export function dead(): void 
+export function dead(text: string = "YOU ARE DEAD"): void 
 {
     end();
     input.classList.add("dead");
-    output.innerHTML = "YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp;";
+    output.innerHTML = `${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp;`;
     output.classList.add("scrollTextDead");
     lastGuess.textContent = `It was ${rand}`;
     lastGuess.style.marginTop = "40px";

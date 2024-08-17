@@ -1,23 +1,35 @@
 import { io } from "socket.io-client";
-import { freezeGame, unfreezeGame } from "./game.js";
+import { freezeGame, unfreezeGame, dead, forceRand } from "./game.js";
 let socket;
 const nickname = localStorage.getItem("Nickname");
 const gameID = sessionStorage.getItem("lobby");
 const scoreboard = [];
 window.addEventListener("load", () => {
-    freezeGame();
+    if (sessionStorage.getItem("multiplayer") == "true")
+        freezeGame();
 });
 export function connectToServer() {
     socket = io("http://127.0.0.1:3000");
     socket.on("connect", () => {
         socket.emit("connectToGame", gameID, nickname);
     });
-    socket.on("multiplayerWin", (nickname) => {
-        alert(nickname + " wygrał i był przed tobą! Jesteś do dupy!");
+    socket.on("multiplayerWin", (nickname, scoreboard) => {
+        dead(nickname.toUpperCase() + " WON THE ROUND");
+        updateScoreboard(scoreboard);
+        setTimeout(() => {
+            showScoreboard();
+        }, 1000);
     });
     socket.on("startMatch", (members) => {
         loadScoreboard(members);
         timerStart();
+    });
+    socket.on("getRandomNumber", (randomNumber) => {
+        forceRand(randomNumber);
+    });
+    socket.on("startNewRound", () => {
+        sessionStorage.setItem("multiplayer", "true");
+        location.href = "./classic.html";
     });
 }
 export function multiplayerWin() {
@@ -31,7 +43,7 @@ function loadScoreboard(members) {
     div.setAttribute("id", "scoreboard");
     for (let key in scoreboard) {
         div.innerHTML += `
-            <div class="row">
+            <div class="row" id="scoreboard-${key}">
                 <div>${key}</div>
                 <div class="point"></div>
                 <div class="point"></div>
@@ -49,6 +61,14 @@ function hideScoreboard() {
 }
 function showScoreboard() {
     document.getElementById("scoreboard").style.display = '';
+}
+function updateScoreboard(scoreboard) {
+    for (let key in scoreboard) {
+        const points = document.getElementById("scoreboard-" + key).querySelectorAll(".point");
+        for (let i = 0; i < scoreboard[key]; i++) {
+            points[i].classList.add("win");
+        }
+    }
 }
 let timer;
 let time = 8;

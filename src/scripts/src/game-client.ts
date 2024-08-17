@@ -1,5 +1,5 @@
 import { io } from "socket.io-client";
-import { freezeGame, unfreezeGame } from "./game.js";
+import { freezeGame, unfreezeGame, dead, forceRand } from "./game.js";
 
 let socket: any;
 const nickname: string = localStorage.getItem("Nickname");
@@ -7,7 +7,8 @@ const gameID: string = sessionStorage.getItem("lobby");
 const scoreboard: any = [];
 
 window.addEventListener("load", () => {
-    freezeGame();
+    if(sessionStorage.getItem("multiplayer") == "true")
+        freezeGame();
 });
 
 export function connectToServer(): void
@@ -17,13 +18,29 @@ export function connectToServer(): void
         socket.emit("connectToGame", gameID, nickname);
     });
 
-    socket.on("multiplayerWin", (nickname: string) => {
-        alert(nickname+" wygrał i był przed tobą! Jesteś do dupy!");
+    socket.on("multiplayerWin", (nickname: string, scoreboard: number[]) => {
+        dead(nickname.toUpperCase() + " WON THE ROUND");
+    
+        updateScoreboard(scoreboard);     
+
+        setTimeout(() => {
+            showScoreboard();
+        },1000);
     });
 
     socket.on("startMatch", (members: string[]) => {
         loadScoreboard(members);
         timerStart();
+    });
+
+    socket.on("getRandomNumber", (randomNumber: number) => 
+    {
+        forceRand(randomNumber);
+    });
+
+    socket.on("startNewRound", () => {
+        sessionStorage.setItem("multiplayer", "true");
+        location.href = "./classic.html";
     });
 }
 
@@ -44,7 +61,7 @@ function loadScoreboard(members: string[]): void
     for(let key in scoreboard)
     {
         div.innerHTML += `
-            <div class="row">
+            <div class="row" id="scoreboard-${key}">
                 <div>${key}</div>
                 <div class="point"></div>
                 <div class="point"></div>
@@ -66,6 +83,19 @@ function hideScoreboard(): void {
 
 function showScoreboard(): void {
     document.getElementById("scoreboard").style.display = '';
+}
+
+function updateScoreboard(scoreboard: number[]): void 
+{
+    for(let key in scoreboard)
+    {
+        const points = document.getElementById("scoreboard-"+key).querySelectorAll(".point");
+
+        for(let i=0; i<scoreboard[key]; i++)
+        {
+            points[i].classList.add("win");
+        }
+    }
 }
 
 let timer: NodeJS.Timeout;

@@ -28,8 +28,11 @@ io.on("connection", socket => {
             name: nameLobby, 
             gameID: socket.id, 
             maxPlayers: maxPlayersCount, 
-            members: [nicknames[socket.id]]
+            members: [nicknames[socket.id]],
+            points: {}
         });
+
+        serversList[serversList.length-1].points[nicknames[socket.id]] = 0;
 
         socket.join(socket.id);
     });
@@ -42,6 +45,7 @@ io.on("connection", socket => {
         socket.join(ownerID);
         const lobby = serversList.find(obj => obj.gameID == ownerID);
         lobby.members.push(nicknames[socket.id]);
+        lobby.points[nicknames[socket.id]] = 0;
 
         socket.emit("connectTo", lobby);
         socket.to(ownerID).emit("addPlayerToWaitingRoom", nicknames[socket.id]);
@@ -61,15 +65,30 @@ io.on("connection", socket => {
         nicknames[socket.id] = nickname;
 
         const lobby = serversList.find(obj => obj.gameID == gameID);
+        if(lobby == undefined) {
+            console.log("CONNECTION FAILED");
+            return;
+        }
         lobby.members.push(nicknames[socket.id]);
 
         if(lobby.members.length == lobby.maxPlayers) {
             io.to(gameID).emit("startMatch", lobby.members);
+            io.to(gameID).emit("getRandomNumber", Math.floor(Math.random()*101));
             console.log(lobby.members)
         }
     });
 
     socket.on("multiplayerWin", (gameID, nickname) => {
-        socket.to(gameID).emit("multiplayerWin", nickname)
+        const lobby = serversList.find(obj => obj.gameID == gameID);
+        lobby.points[nickname] += 1;
+        socket.to(gameID).emit("multiplayerWin", nickname, lobby.points);
+
+        setTimeout(() => {
+
+            io.to(gameID).emit("startNewRound");
+            io.socketsLeave(gameID);
+            lobby.members = [];
+
+        },5000);
     });
 });
