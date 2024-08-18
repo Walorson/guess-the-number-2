@@ -7,8 +7,9 @@ const connectInfo = document.getElementById("connecting-to-server");
 const waitingRoom = document.getElementById("waiting-room-players");
 const serversList = document.getElementById("servers-list");
 const pingDiv = document.getElementById("ping");
-const SERVER_LIST_REFRESH_TIME = 1500;
-const PING_REFRESH_TIME = 1000;
+//CONFIG//
+const SERVER_LIST_REFRESH_TIME = 1;
+const PING_REFRESH_TIME = 1;
 const SERVER_URL = "http://127.0.0.1:3000";
 window.addEventListener("load", () => {
     sessionStorage.removeItem("lobby");
@@ -26,8 +27,8 @@ export function connectToServer() {
         gameSetup[0].setValue(nickname + "'s room");
         gameSetup[0].applySetting();
         socket.emit("join", nickname);
-        setInterval(ping, PING_REFRESH_TIME);
-        setInterval(getServersList, SERVER_LIST_REFRESH_TIME);
+        setInterval(ping, PING_REFRESH_TIME * 1000);
+        setInterval(getServersList, SERVER_LIST_REFRESH_TIME * 1000);
     });
     socket.on("getServersList", (list) => {
         for (let i = 0; i < list.length; i++) {

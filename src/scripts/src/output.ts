@@ -11,6 +11,9 @@ export function set(text: string): void {
         output.classList.remove("outputApperance");
     }, 1000);
 }
+export function setText(text: string): void {
+    output.textContent = `${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp;`;
+}
 
 export const TOO_SMALL: string = "TOO SMALL!";
 export const TOO_BIG: string = "TOO BIG!";

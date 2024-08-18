@@ -9,6 +9,9 @@ export function set(text) {
         output.classList.remove("outputApperance");
     }, 1000);
 }
+export function setText(text) {
+    output.textContent = `${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp;`;
+}
 export const TOO_SMALL = "TOO SMALL!";
 export const TOO_BIG = "TOO BIG!";
 export const INCORRECT = "INCORRECT!";

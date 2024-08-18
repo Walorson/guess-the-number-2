@@ -1,9 +1,19 @@
 import { io } from "socket.io-client";
 import { freezeGame, unfreezeGame, dead, forceRand } from "./game.js";
+import { setText } from "./output.js";
 
 let socket: any;
+let endGame: boolean = false;
+let yourPoints: number;
 const nickname: string = localStorage.getItem("Nickname");
 const gameID: string = sessionStorage.getItem("lobby");
+
+//CONFIG//
+const pointsToWin: number = 3;
+const preRoundTime: number = 3;
+const postRoundTime: number = 5;
+const preScoreboardTime: number = 1;
+//////////
 
 window.addEventListener("load", () => {
     if(sessionStorage.getItem("multiplayer") == "true")
@@ -40,11 +50,21 @@ export function connectToServer(): void
     socket.on("updateScoreboard", (scoreboardLobby: number[]) => {
         updateScoreboard(scoreboardLobby)
     });
+
+    socket.on("endGame", (winner: string) => {
+        updateScoreboardInfo(winner + " WON THE GAME!");
+        setText(winner + " WON THE GAME!");
+    });
 }
 
-export function multiplayerWin(): void {
+export function multiplayerWin(): void 
+{
     roundEnd();
-    socket.emit("multiplayerWin", gameID, nickname, postRoundTime);
+
+    if(yourPoints < pointsToWin - 1)
+        socket.emit("multiplayerWin", gameID, nickname, postRoundTime);
+    else
+        socket.emit("multiplayerWin", gameID, nickname, postRoundTime, true);
 }
 
 function loadScoreboard(scoreboard: number[]): void
@@ -73,18 +93,19 @@ function loadScoreboard(scoreboard: number[]): void
     updateScoreboard(scoreboard);
 }
 
-function hideScoreboard(): void {
+function hideScoreboard(): void 
+{
     document.getElementById("scoreboard").style.opacity = '0';
 }
 
-function showScoreboard(): void {
+function showScoreboard(): void 
+{
     document.getElementById("scoreboard").style.opacity = '';
-    document.getElementById("scoreboard-info").textContent = "NEXT ROUND WILL START SOON";
+    updateScoreboardInfo("NEXT ROUND WILL START SOON");
 }
 
 function updateScoreboard(scoreboard: number[]): void 
 {
-    console.log(scoreboard)
     for(let key in scoreboard)
     {
         const points = document.getElementById("scoreboard-"+key).querySelectorAll(".point");
@@ -92,17 +113,15 @@ function updateScoreboard(scoreboard: number[]): void
         for(let i=0; i<scoreboard[key]; i++)
         {
             points[i].classList.add("win");
-
-            if(i >= 2) {
-                alert(nickname + " won the game");
-            }
         }
     }
+
+    console.log(scoreboard);
+    yourPoints = scoreboard[nickname];
+    console.log(yourPoints)
 }
 
 let timer: NodeJS.Timeout;
-const preRoundTime: number = 8;
-const postRoundTime: number = 5;
 function timerStart(): void 
 {
     let time: number = preRoundTime;
@@ -129,5 +148,10 @@ function roundEnd(): void {
     freezeGame();
     setTimeout(() => {
         showScoreboard();
-    }, 1500);
+    }, preScoreboardTime * 1000);
+}
+
+function updateScoreboardInfo(text: string) 
+{
+    document.getElementById("scoreboard-info").textContent = text;
 }

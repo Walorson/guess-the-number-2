@@ -1,8 +1,17 @@
 import { io } from "socket.io-client";
 import { freezeGame, unfreezeGame, dead, forceRand } from "./game.js";
+import { setText } from "./output.js";
 let socket;
+let endGame = false;
+let yourPoints;
 const nickname = localStorage.getItem("Nickname");
 const gameID = sessionStorage.getItem("lobby");
+//CONFIG//
+const pointsToWin = 3;
+const preRoundTime = 3;
+const postRoundTime = 5;
+const preScoreboardTime = 1;
+//////////
 window.addEventListener("load", () => {
     if (sessionStorage.getItem("multiplayer") == "true")
         freezeGame();
@@ -30,10 +39,17 @@ export function connectToServer() {
     socket.on("updateScoreboard", (scoreboardLobby) => {
         updateScoreboard(scoreboardLobby);
     });
+    socket.on("endGame", (winner) => {
+        updateScoreboardInfo(winner + " WON THE GAME!");
+        setText(winner + " WON THE GAME!");
+    });
 }
 export function multiplayerWin() {
     roundEnd();
-    socket.emit("multiplayerWin", gameID, nickname, postRoundTime);
+    if (yourPoints < pointsToWin - 1)
+        socket.emit("multiplayerWin", gameID, nickname, postRoundTime);
+    else
+        socket.emit("multiplayerWin", gameID, nickname, postRoundTime, true);
 }
 function loadScoreboard(scoreboard) {
     const div = document.createElement("div");
@@ -59,23 +75,20 @@ function hideScoreboard() {
 }
 function showScoreboard() {
     document.getElementById("scoreboard").style.opacity = '';
-    document.getElementById("scoreboard-info").textContent = "NEXT ROUND WILL START SOON";
+    updateScoreboardInfo("NEXT ROUND WILL START SOON");
 }
 function updateScoreboard(scoreboard) {
-    console.log(scoreboard);
     for (let key in scoreboard) {
         const points = document.getElementById("scoreboard-" + key).querySelectorAll(".point");
         for (let i = 0; i < scoreboard[key]; i++) {
             points[i].classList.add("win");
-            if (i >= 2) {
-                alert(nickname + " won the game");
-            }
         }
     }
+    console.log(scoreboard);
+    yourPoints = scoreboard[nickname];
+    console.log(yourPoints);
 }
 let timer;
-const preRoundTime = 8;
-const postRoundTime = 5;
 function timerStart() {
     let time = preRoundTime;
     timer = setInterval(() => {
@@ -96,6 +109,9 @@ function roundEnd() {
     freezeGame();
     setTimeout(() => {
         showScoreboard();
-    }, 1500);
+    }, preScoreboardTime * 1000);
+}
+function updateScoreboardInfo(text) {
+    document.getElementById("scoreboard-info").textContent = text;
 }
 //# sourceMappingURL=game-client.js.map

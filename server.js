@@ -78,18 +78,25 @@ io.on("connection", socket => {
         }
     });
 
-    socket.on("multiplayerWin", (gameID, nickname, postRoundTime) => {
+    socket.on("multiplayerWin", (gameID, nickname, postRoundTime, isGameEnd) => {
         const lobby = serversList.find(obj => obj.gameID == gameID);
         lobby.points[nickname] += 1;
         socket.to(gameID).emit("multiplayerWin", nickname, lobby.points);
 
-        setTimeout(() => {
+        if(isGameEnd != true)
+        {
+            setTimeout(() => {
 
-            io.to(gameID).emit("startNewRound");
-            io.socketsLeave(gameID);
-            lobby.members = [];
-
-        }, postRoundTime * 1000);
+                io.to(gameID).emit("startNewRound");
+                io.socketsLeave(gameID);
+                lobby.members = [];
+    
+            }, postRoundTime * 1000);
+        }
+        else
+        {
+            io.to(gameID).emit("endGame", nickname);
+        }
     });
 
     socket.on("updateScoreboard", gameID => {
