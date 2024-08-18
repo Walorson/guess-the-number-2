@@ -4,7 +4,6 @@ import { freezeGame, unfreezeGame, dead, forceRand } from "./game.js";
 let socket: any;
 const nickname: string = localStorage.getItem("Nickname");
 const gameID: string = sessionStorage.getItem("lobby");
-const scoreboard: any = [];
 
 window.addEventListener("load", () => {
     if(sessionStorage.getItem("multiplayer") == "true")
@@ -18,18 +17,13 @@ export function connectToServer(): void
         socket.emit("connectToGame", gameID, nickname);
     });
 
-    socket.on("multiplayerWin", (nickname: string, scoreboard: number[]) => {
+    socket.on("multiplayerWin", (nickname: string) => {
+        roundEnd();
         dead(nickname.toUpperCase() + " WON THE ROUND");
-    
-        updateScoreboard(scoreboard);     
-
-        setTimeout(() => {
-            showScoreboard();
-        },1000);
     });
 
-    socket.on("startMatch", (members: string[]) => {
-        loadScoreboard(members);
+    socket.on("startMatch", (scoreboard: number[]) => {
+        loadScoreboard(scoreboard);
         timerStart();
     });
 
@@ -40,21 +34,21 @@ export function connectToServer(): void
 
     socket.on("startNewRound", () => {
         sessionStorage.setItem("multiplayer", "true");
-        location.href = "./classic.html";
+        location.reload();
+    });
+
+    socket.on("updateScoreboard", (scoreboardLobby: number[]) => {
+        updateScoreboard(scoreboardLobby)
     });
 }
 
 export function multiplayerWin(): void {
-    socket.emit("multiplayerWin", gameID, nickname);
+    roundEnd();
+    socket.emit("multiplayerWin", gameID, nickname, postRoundTime);
 }
 
-function loadScoreboard(members: string[]): void
-{
-    for(let i=0; i<members.length; i++)
-    {
-        scoreboard[members[i]] = 0;
-    }
-    
+function loadScoreboard(scoreboard: number[]): void
+{   
     const div: HTMLElement = document.createElement("div");
     div.setAttribute("id","scoreboard");
     
@@ -75,18 +69,22 @@ function loadScoreboard(members: string[]): void
         </div>`;
 
     document.body.appendChild(div);
+
+    updateScoreboard(scoreboard);
 }
 
 function hideScoreboard(): void {
-    document.getElementById("scoreboard").style.display = 'none';
+    document.getElementById("scoreboard").style.opacity = '0';
 }
 
 function showScoreboard(): void {
-    document.getElementById("scoreboard").style.display = '';
+    document.getElementById("scoreboard").style.opacity = '';
+    document.getElementById("scoreboard-info").textContent = "NEXT ROUND WILL START SOON";
 }
 
 function updateScoreboard(scoreboard: number[]): void 
 {
+    console.log(scoreboard)
     for(let key in scoreboard)
     {
         const points = document.getElementById("scoreboard-"+key).querySelectorAll(".point");
@@ -94,13 +92,20 @@ function updateScoreboard(scoreboard: number[]): void
         for(let i=0; i<scoreboard[key]; i++)
         {
             points[i].classList.add("win");
+
+            if(i >= 2) {
+                alert(nickname + " won the game");
+            }
         }
     }
 }
 
 let timer: NodeJS.Timeout;
-let time: number = 8;
-function timerStart(): void {
+const preRoundTime: number = 8;
+const postRoundTime: number = 5;
+function timerStart(): void 
+{
+    let time: number = preRoundTime;
     timer = setInterval(() => 
     {
         time -= 1;
@@ -117,4 +122,12 @@ function timerStart(): void {
 function roundStart(): void {
     unfreezeGame();
     hideScoreboard();
+}
+
+function roundEnd(): void {
+    socket.emit("updateScoreboard", gameID);
+    freezeGame();
+    setTimeout(() => {
+        showScoreboard();
+    }, 1500);
 }

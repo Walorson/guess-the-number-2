@@ -72,13 +72,13 @@ io.on("connection", socket => {
         lobby.members.push(nicknames[socket.id]);
 
         if(lobby.members.length == lobby.maxPlayers) {
-            io.to(gameID).emit("startMatch", lobby.members);
+            io.to(gameID).emit("startMatch", lobby.points);
             io.to(gameID).emit("getRandomNumber", Math.floor(Math.random()*101));
             console.log(lobby.members)
         }
     });
 
-    socket.on("multiplayerWin", (gameID, nickname) => {
+    socket.on("multiplayerWin", (gameID, nickname, postRoundTime) => {
         const lobby = serversList.find(obj => obj.gameID == gameID);
         lobby.points[nickname] += 1;
         socket.to(gameID).emit("multiplayerWin", nickname, lobby.points);
@@ -89,6 +89,11 @@ io.on("connection", socket => {
             io.socketsLeave(gameID);
             lobby.members = [];
 
-        },5000);
+        }, postRoundTime * 1000);
+    });
+
+    socket.on("updateScoreboard", gameID => {
+        const lobby = serversList.find(obj => obj.gameID == gameID);
+        io.to(gameID).emit("updateScoreboard", lobby.points);
     });
 });

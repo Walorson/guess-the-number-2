@@ -8,6 +8,8 @@
     width: 400px;
     font-size: 2rem;
     padding: 25px;
+    border-radius: 15px;
+    transition: opacity 0.25s;
 }
 .row {
     display: flex;
