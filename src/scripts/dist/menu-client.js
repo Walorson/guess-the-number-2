@@ -1,16 +1,13 @@
 import { io } from "socket.io-client";
 import { gameSetup } from "./customSetup.js";
 import { changeMenu } from "./menu.js";
+import { SERVER_URL, SERVER_LIST_REFRESH_TIME, PING_REFRESH_TIME } from "./multiplayer-config.js";
 let socket;
 let nickname;
 const connectInfo = document.getElementById("connecting-to-server");
 const waitingRoom = document.getElementById("waiting-room-players");
 const serversList = document.getElementById("servers-list");
 const pingDiv = document.getElementById("ping");
-//CONFIG//
-const SERVER_LIST_REFRESH_TIME = 1;
-const PING_REFRESH_TIME = 1;
-const SERVER_URL = "https://guess-the-number-2.onrender.com/";
 window.addEventListener("load", () => {
     sessionStorage.removeItem("lobby");
     sessionStorage.removeItem("multiplayer");
@@ -49,9 +46,9 @@ export function connectToServer() {
         sessionStorage.setItem("multiplayer", "true");
         location.href = "gamemodes/classic.html";
     });
-    socket.on("rejoin", (id) => {
-        alert(id + " WYJEBALO!");
-    });
+    //socket.on("rejoin", (id: string) => {
+    //    
+    //});
 }
 export function createLobby() {
     waitingRoom.innerHTML =

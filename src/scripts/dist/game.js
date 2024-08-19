@@ -1,8 +1,9 @@
 import { writeGuess } from "./input.js";
 import { time } from "./time.js";
 import { connectToServer, multiplayerWin } from "./game-client.js";
+import { isMultiplayer } from "./multiplayer-config.js";
 window.addEventListener("load", () => {
-    if (sessionStorage.getItem("multiplayer") == "true") {
+    if (isMultiplayer()) {
         connectToServer();
     }
 });
@@ -105,7 +106,7 @@ export function gameEvents() {
         }
     });
     window.addEventListener("keyup", (e) => {
-        if (e.key === 'r' || e.key === 'R') {
+        if ((e.key === 'r' || e.key === 'R') && (isMultiplayer() == false)) {
             e.preventDefault();
             clearTimeout(reloadPage);
             ReadyForReloadPage = false;

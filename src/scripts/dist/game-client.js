@@ -1,23 +1,18 @@
 import { io } from "socket.io-client";
 import { freezeGame, unfreezeGame, dead, forceRand } from "./game.js";
 import { setText } from "./output.js";
+import { SERVER_URL, POINTS_TO_WIN, PRE_ROUND_TIME, POST_ROUND_TIME, SCOREBOARD_DELAY_TIME, isMultiplayer } from "./multiplayer-config.js";
 let socket;
 let endGame = false;
 let yourPoints;
 const nickname = localStorage.getItem("Nickname");
 const gameID = sessionStorage.getItem("lobby");
-//CONFIG//
-const pointsToWin = 3;
-const preRoundTime = 6;
-const postRoundTime = 5;
-const preScoreboardTime = 1;
-//////////
 window.addEventListener("load", () => {
-    if (sessionStorage.getItem("multiplayer") == "true")
+    if (isMultiplayer())
         freezeGame();
 });
 export function connectToServer() {
-    socket = io("https://guess-the-number-2.onrender.com/");
+    socket = io(SERVER_URL);
     socket.on("connect", () => {
         socket.emit("connectToGame", gameID, nickname);
     });
@@ -43,13 +38,19 @@ export function connectToServer() {
         updateScoreboardInfo(winner + " WON THE GAME!");
         setText(winner + " WON THE GAME!");
     });
+    socket.on("GTFO", () => {
+        location.href = "/";
+    });
+    socket.on("playerLeftTheGame", (nickname) => {
+        alert(nickname + " left the game.");
+    });
 }
 export function multiplayerWin() {
     roundEnd();
-    if (yourPoints < pointsToWin - 1)
-        socket.emit("multiplayerWin", gameID, nickname, postRoundTime);
+    if (yourPoints < POINTS_TO_WIN - 1)
+        socket.emit("multiplayerWin", gameID, nickname, POST_ROUND_TIME);
     else
-        socket.emit("multiplayerWin", gameID, nickname, postRoundTime, true);
+        socket.emit("multiplayerWin", gameID, nickname, POST_ROUND_TIME, true);
 }
 function loadScoreboard(scoreboard) {
     const div = document.createElement("div");
@@ -58,9 +59,11 @@ function loadScoreboard(scoreboard) {
         div.innerHTML += `
             <div class="row" id="scoreboard-${key}">
                 <div>${key}</div>
-                <div class="point"></div>
-                <div class="point"></div>
-                <div class="point"></div>
+                <div class="points-row">
+                    <div class="point"></div>
+                    <div class="point"></div>
+                    <div class="point"></div>
+                <div>
             </div>
         `;
     }
@@ -87,7 +90,7 @@ function updateScoreboard(scoreboard) {
 }
 let timer;
 function timerStart() {
-    let time = preRoundTime;
+    let time = PRE_ROUND_TIME;
     timer = setInterval(() => {
         time -= 1;
         document.getElementById("scoreboard-info").textContent = time + "...";
@@ -107,7 +110,7 @@ function roundEnd() {
     freezeGame();
     setTimeout(() => {
         showScoreboard();
-    }, preScoreboardTime * 1000);
+    }, SCOREBOARD_DELAY_TIME * 1000);
 }
 function updateScoreboardInfo(text) {
     document.getElementById("scoreboard-info").textContent = text;
