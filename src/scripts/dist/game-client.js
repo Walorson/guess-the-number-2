@@ -28,7 +28,6 @@ export function connectToServer() {
         forceRand(randomNumber);
     });
     socket.on("startNewRound", () => {
-        sessionStorage.setItem("multiplayer", "true");
         location.reload();
     });
     socket.on("updateScoreboard", (scoreboardLobby) => {
@@ -37,6 +36,8 @@ export function connectToServer() {
     socket.on("endGame", (winner) => {
         updateScoreboardInfo(winner + " WON THE GAME!");
         setText(winner + " WON THE GAME!");
+        if (nickname.toUpperCase() == winner.toUpperCase())
+            socket.emit("terminateLobby", gameID);
     });
     socket.on("GTFO", () => {
         location.href = "/";

@@ -30,7 +30,8 @@ io.on("connection", socket => {
             maxPlayers: maxPlayersCount, 
             members: [nicknames[socket.id]],
             points: {},
-            inGame: false
+            inGame: false,
+            isRoundEnd: false
         });
 
         serversList[serversList.length-1].points[nicknames[socket.id]] = 0;
@@ -60,7 +61,7 @@ io.on("connection", socket => {
         lobby.inGame = true;
     });
 
-    //GAME
+    /////GAME/////
 
     socket.on("connectToGame", (gameID, nickname) => {
         const lobby = serversList.find(obj => obj.gameID == gameID);
@@ -82,14 +83,18 @@ io.on("connection", socket => {
         if(lobby.members.length == lobby.maxPlayers) {
             io.to(gameID).emit("startMatch", lobby.points);
             io.to(gameID).emit("getRandomNumber", Math.floor(Math.random()*101));
-            console.log(lobby.members)
         }
-
-        console.log(lobby);
     });
 
     socket.on("multiplayerWin", (gameID, nickname, postRoundTime, isGameEnd) => {
+
         const lobby = serversList.find(obj => obj.gameID == gameID);
+        
+        if(lobby.isRoundEnd == true)
+            return;
+        else
+            lobby.isRoundEnd = true;
+
         lobby.points[nickname] += 1;
         socket.to(gameID).emit("multiplayerWin", nickname, lobby.points);
 
@@ -97,6 +102,7 @@ io.on("connection", socket => {
         {
             setTimeout(() => {
 
+                lobby.isRoundEnd = false;
                 io.to(gameID).emit("startNewRound");
                 io.socketsLeave(gameID);
                 lobby.members = [];
@@ -108,6 +114,14 @@ io.on("connection", socket => {
             io.to(gameID).emit("endGame", nickname.toUpperCase());
         }
     });
+
+    socket.on("terminateLobby", gameID => {
+        const lobby = serversList.find(obj => obj.gameID == gameID);
+        delete serversList[serversList.indexOf(lobby)];
+
+        console.log(serversList.length + "<- after treminate");
+        console.log(serversList)
+    })
 
     socket.on("updateScoreboard", gameID => {
         const lobby = serversList.find(obj => obj.gameID == gameID);

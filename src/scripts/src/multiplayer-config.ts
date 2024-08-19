@@ -5,7 +5,7 @@ export const SERVER_LIST_REFRESH_TIME: number = 1.5;
 export const PING_REFRESH_TIME: number = 1;
 
 export const POINTS_TO_WIN: number = 3;
-export const PRE_ROUND_TIME: number = 60;
+export const PRE_ROUND_TIME: number = 6;
 export const POST_ROUND_TIME: number = 5;
 export const SCOREBOARD_DELAY_TIME: number = 1;
 

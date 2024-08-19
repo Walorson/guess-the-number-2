@@ -1,5 +1,5 @@
 import { io } from "socket.io-client";
-import { freezeGame, unfreezeGame, dead, forceRand } from "./game.js";
+import { freezeGame, unfreezeGame, dead, forceRand, win } from "./game.js";
 import { setText } from "./output.js";
 import { SERVER_URL, POINTS_TO_WIN, PRE_ROUND_TIME, POST_ROUND_TIME, SCOREBOARD_DELAY_TIME, isMultiplayer } from "./multiplayer-config.js";
 
@@ -38,7 +38,6 @@ export function connectToServer(): void
     });
 
     socket.on("startNewRound", () => {
-        sessionStorage.setItem("multiplayer", "true");
         location.reload();
     });
 
@@ -49,6 +48,9 @@ export function connectToServer(): void
     socket.on("endGame", (winner: string) => {
         updateScoreboardInfo(winner + " WON THE GAME!");
         setText(winner + " WON THE GAME!");
+
+        if(nickname.toUpperCase() == winner.toUpperCase())
+            socket.emit("terminateLobby", gameID);
     });
 
     socket.on("GTFO", () => {
