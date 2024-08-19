@@ -1,0 +1,34 @@
+#scoreboard {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background-color: black;
+    z-index: 10;
+    width: 400px;
+    font-size: 2rem;
+    padding: 25px;
+    border-radius: 15px;
+    transition: opacity 0.25s;
+}
+.row {
+    display: flex;
+    justify-content: space-between;
+}
+.row:first-of-type {
+    margin-bottom: 35px;
+}
+.point {
+    border: 5px solid rgb(67, 67, 67);
+    width: 25px;
+    height: 25px;
+    border-radius: 15px;
+}
+.win {
+    background-color: green;
+}
+.info {
+    font-size: 1.2rem;
+    justify-content: center;
+    margin-top: 25px;
+}

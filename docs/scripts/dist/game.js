@@ -1,5 +1,11 @@
 import { writeGuess } from "./input.js";
 import { time } from "./time.js";
+import { connectToServer, multiplayerWin } from "./game-client.js";
+window.addEventListener("load", () => {
+    if (sessionStorage.getItem("multiplayer") == "true") {
+        connectToServer();
+    }
+});
 const input = document.getElementById("input");
 const output = document.getElementById("output");
 const circleLoad = document.getElementById("circleLoad");
@@ -10,6 +16,20 @@ export let timerDir = 1; //1 or -1
 export let rand = Math.floor(Math.random() * 101); // THE CORE OF THE GAME
 export function setRand(min, max) {
     rand = Math.floor(Math.random() * (max + 1 - min)) + min;
+}
+export function returnRand(min, max) {
+    return Math.floor(Math.random() * (max + 1 - min)) + min;
+}
+export function forceRand(number) {
+    rand = number;
+}
+export function freezeGame() {
+    window.removeEventListener("keydown", writeGuess);
+    isGameEnd = true;
+}
+export function unfreezeGame() {
+    window.addEventListener("keydown", writeGuess);
+    isGameEnd = false;
 }
 export function init(game) {
     window.addEventListener("keydown", (e) => {
@@ -26,8 +46,7 @@ export function init(game) {
     `;
 }
 function end() {
-    isGameEnd = true;
-    window.removeEventListener("keydown", writeGuess);
+    freezeGame();
     output.style.opacity = '1';
     time.stopTimer();
     guide.style.bottom = "95px";
@@ -38,11 +57,13 @@ export function win() {
     output.textContent = "CORRECT CORRECT CORRECT CORRECT CORRECT CORRECT CORRECT CORRECT";
     output.classList.add("scrollText");
     lastGuess.style.display = 'none';
+    if (sessionStorage.getItem("multiplayer") == "true")
+        multiplayerWin();
 }
-export function dead() {
+export function dead(text = "YOU ARE DEAD") {
     end();
     input.classList.add("dead");
-    output.innerHTML = "YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp; YOU ARE DEAD &nbsp;";
+    output.innerHTML = `${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp;`;
     output.classList.add("scrollTextDead");
     lastGuess.textContent = `It was ${rand}`;
     lastGuess.style.marginTop = "40px";

@@ -1,11 +1,13 @@
 import {buttons, index, menuChosen} from "./menu.js";
 const customMenu = document.getElementById("custom");
+const setNicknameMenu = document.getElementById("set-nickname");
 export let editMode = false;
-class CustomSetting {
+export class CustomSetting {
   constructor(name, defaultValue, where = "custom", dataValidation = void 0, offMode = false) {
     this.name = name;
     this.where = where;
     this.offMode = offMode;
+    this.onlyNumbers = true;
     this.dataValidation = dataValidation;
     if (localStorage.getItem(name) != null) {
       this.value = localStorage.getItem(name);
@@ -74,7 +76,19 @@ class CustomSettingBoolean extends CustomSetting {
       return "red";
   }
 }
+export const gameSetup = [
+  new CustomSetting("Room Name", localStorage.getItem("Nickname") + "'s room", "host"),
+  new CustomSetting("Players Count", "2", "host", () => {
+    if (Number(gameSetup[0].value) < 2)
+      gameSetup[1].setValue("2");
+    else if (Number(gameSetup[0].value) > 4)
+      gameSetup[1].setValue("4");
+  })
+];
 export function customGamemode() {
+  const setNickname = new CustomSetting("Nickname", "noob", "set-nickname");
+  setNickname.onlyNumbers = false;
+  gameSetup[0].onlyNumbers = false;
   const settings = [
     new CustomSetting("min", "0", "custom", () => {
       if (Number(settings[0].value) > Number(settings[1].value))
@@ -114,7 +128,12 @@ export function customGamemode() {
       if (buttons[index].classList.contains("edit") == false) {
         editMode = true;
         buttons[index].classList.add("edit");
-        editingButton = settings[index];
+        if (menuChosen == "custom")
+          editingButton = settings[index];
+        else if (menuChosen == "set-nickname")
+          editingButton = setNickname;
+        else if (menuChosen == "host")
+          editingButton = gameSetup[index];
       } else {
         editMode = false;
         buttons[index].classList.remove("edit");
@@ -124,7 +143,7 @@ export function customGamemode() {
       }
     }
     if (editingButton != void 0) {
-      if (!isNaN(Number(e.key))) {
+      if (!isNaN(Number(e.key)) && editingButton.onlyNumbers == true || isAlphanumeric(e.key) && editingButton.onlyNumbers == false) {
         if (firstChar == false) {
           editingButton.value = "";
           firstChar = true;
@@ -155,5 +174,17 @@ export function customGamemode() {
     <button class="button" data-click="changeMenu('custom-hints')">Hints...</button>
     <button class="back-button" data-click="location.href = 'gamemodes/custom.html'">Play</button>
     <button data-click="changeMenu('gamemodes')">Back</button>`;
+  setNicknameMenu.innerHTML += `
+    <button class="back-button" data-click="changeMenu('multiplayer')" connectToServer>Apply</button>
+    <button data-click="changeMenu('main')">Back</button>
+    `;
   document.getElementById("custom-hints").innerHTML += `<button class="back-button" data-click="changeMenu('custom')">Back</button>`;
+  document.getElementById("host").innerHTML += `
+    <button class="back-button" data-click="changeMenu('waiting-room')" createlobby>Host</button>
+    <button data-click="changeMenu('multiplayer')">Back</button>`;
+}
+function isAlphanumeric(char) {
+  console.log(/^[a-zA-Z0-9]$/.test(char));
+  if (/^[a-zA-Z0-9]$/.test(char))
+    return true;
 }

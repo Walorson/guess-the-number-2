@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="css/menu.css">
 
     <script type="module" src="scripts/dist/menu.js" defer></script>
-    <script type="module" src="scripts/dist/menu-client.js" defer></script>
+    <script type="module" src="scripts/dist/menu-client.js"></script>
 </head>
 <body>
     <div class="title"><h1><span class="big-letter">G</span>uess <span class="big-letter">T</span>he <span class="big-letter">N</span>umber <span class="big-letter rotated">2</span></h1></div>
@@ -23,7 +23,7 @@
     </div>
     <div class="menu" id="main">
         <button data-click="changeMenu('gamemodes')">Singleplayer</button>
-        <button data-click="changeMenu('multiplayer')">Multiplayer</button>
+        <button data-click="changeMenu('set-nickname')">Multiplayer</button>
         <button>Options</button>
         <button data-click="window.close()">Quit</button>
     </div>
@@ -45,16 +45,22 @@
         <button class="back-button" data-click="changeMenu('main')">Back</button>
     </div>
 
+    <div class="menu" id="set-nickname"></div>
+
     <div class="menu" id="multiplayer">
-        <div class="message-box">
+        <div class="message-box" id="connecting-to-server">Connecting to the server...</div>
+        <div class="servers-list" id="servers-list">
 
         </div>
-        <div class="message-box" id="connecting-to-server">Connecting to the server...</div>
-        <div class="servers-list">
-        </div>
-        <button class="back-button" data-click="changeMenu('main')">Back</button>
+        <button class="back-button" data-click="changeMenu('host')">Host the game</button>
+        <button data-click="changeMenu('main')">Back</button>
     </div>
 
+    <div class="menu" id="host"></div>
+    <div class="menu" id="waiting-room">
+        <div id="waiting-room-players"></div>
+        <button class="back-button" id="start-game-button" startgame>Start</button>
+    </div>
     <div class="menu" id="custom"></div>
     <div class="menu" id="custom-hints"></div>
 

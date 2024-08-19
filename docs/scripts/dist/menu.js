@@ -1,4 +1,5 @@
 import { customGamemode, editMode } from "./customSetup.js";
+import { connectToServer, createLobby, startGame } from "./menu-client.js";
 localStorage.setItem("Custom Mode", "false");
 export let buttons = document.getElementById("main").querySelectorAll("button");
 export let menuChosen = "main";
@@ -16,10 +17,19 @@ window.addEventListener("keydown", (e) => {
 window.addEventListener("keydown", (e) => {
     if (e.key == "Enter") {
         eval(buttons[index].getAttribute("data-click"));
+        if (buttons[index].hasAttribute("connecttoserver")) {
+            connectToServer();
+        }
+        if (buttons[index].hasAttribute("createlobby")) {
+            createLobby();
+        }
+        if (buttons[index].hasAttribute("startgame")) {
+            startGame();
+        }
     }
 });
 window.addEventListener("mousemove", () => {
-    if (keyboardUse == true) {
+    if (keyboardUse == true && editMode == false) {
         keyboardUse = false;
         buttons[index].classList.remove('hover');
         index = undefined;
@@ -63,7 +73,7 @@ function changeButton(e) {
     buttons[index].classList.add("hover");
     last = buttons[index];
 }
-function changeMenu(name) {
+export function changeMenu(name) {
     setTimeout(() => {
         if (last != undefined)
             last.classList.remove("hover");
@@ -93,6 +103,15 @@ function assignClickEventForButtons() {
     buttons.forEach((button) => {
         button.onclick = () => {
             eval(button.getAttribute("data-click"));
+            if (button.hasAttribute("connecttoserver")) {
+                connectToServer();
+            }
+            if (button.hasAttribute("createlobby")) {
+                createLobby();
+            }
+            if (button.hasAttribute("startgame")) {
+                startGame();
+            }
         };
     });
 }
