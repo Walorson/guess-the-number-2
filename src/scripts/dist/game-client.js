@@ -8,7 +8,7 @@ const nickname = localStorage.getItem("Nickname");
 const gameID = sessionStorage.getItem("lobby");
 //CONFIG//
 const pointsToWin = 3;
-const preRoundTime = 3;
+const preRoundTime = 6;
 const postRoundTime = 5;
 const preScoreboardTime = 1;
 //////////
@@ -17,7 +17,7 @@ window.addEventListener("load", () => {
         freezeGame();
 });
 export function connectToServer() {
-    socket = io("http://127.0.0.1:3000");
+    socket = io("https://guess-the-number-2.onrender.com/");
     socket.on("connect", () => {
         socket.emit("connectToGame", gameID, nickname);
     });
@@ -75,7 +75,6 @@ function hideScoreboard() {
 }
 function showScoreboard() {
     document.getElementById("scoreboard").style.opacity = '';
-    updateScoreboardInfo("NEXT ROUND WILL START SOON");
 }
 function updateScoreboard(scoreboard) {
     for (let key in scoreboard) {
@@ -84,9 +83,7 @@ function updateScoreboard(scoreboard) {
             points[i].classList.add("win");
         }
     }
-    console.log(scoreboard);
     yourPoints = scoreboard[nickname];
-    console.log(yourPoints);
 }
 let timer;
 function timerStart() {
@@ -105,6 +102,7 @@ function roundStart() {
     hideScoreboard();
 }
 function roundEnd() {
+    updateScoreboardInfo("NEXT ROUND WILL START SOON");
     socket.emit("updateScoreboard", gameID);
     freezeGame();
     setTimeout(() => {

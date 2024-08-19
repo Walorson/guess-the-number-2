@@ -12,7 +12,8 @@ export function set(text: string): void {
     }, 1000);
 }
 export function setText(text: string): void {
-    output.textContent = `${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp;`;
+    text = text.toUpperCase();
+    output.innerHTML = `${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp;`;
 }
 
 export const TOO_SMALL: string = "TOO SMALL!";

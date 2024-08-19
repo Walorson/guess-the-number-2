@@ -10,7 +10,8 @@ export function set(text) {
     }, 1000);
 }
 export function setText(text) {
-    output.textContent = `${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp;`;
+    text = text.toUpperCase();
+    output.innerHTML = `${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp;`;
 }
 export const TOO_SMALL = "TOO SMALL!";
 export const TOO_BIG = "TOO BIG!";

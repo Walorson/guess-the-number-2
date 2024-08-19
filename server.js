@@ -95,7 +95,7 @@ io.on("connection", socket => {
         }
         else
         {
-            io.to(gameID).emit("endGame", nickname);
+            io.to(gameID).emit("endGame", nickname.toUpperCase());
         }
     });
 

@@ -10,7 +10,7 @@ const gameID: string = sessionStorage.getItem("lobby");
 
 //CONFIG//
 const pointsToWin: number = 3;
-const preRoundTime: number = 3;
+const preRoundTime: number = 6;
 const postRoundTime: number = 5;
 const preScoreboardTime: number = 1;
 //////////
@@ -22,7 +22,7 @@ window.addEventListener("load", () => {
 
 export function connectToServer(): void
 {
-    socket = io("http://127.0.0.1:3000");
+    socket = io("https://guess-the-number-2.onrender.com/");
     socket.on("connect", () => {
         socket.emit("connectToGame", gameID, nickname);
     });
@@ -101,7 +101,6 @@ function hideScoreboard(): void
 function showScoreboard(): void 
 {
     document.getElementById("scoreboard").style.opacity = '';
-    updateScoreboardInfo("NEXT ROUND WILL START SOON");
 }
 
 function updateScoreboard(scoreboard: number[]): void 
@@ -116,9 +115,7 @@ function updateScoreboard(scoreboard: number[]): void
         }
     }
 
-    console.log(scoreboard);
     yourPoints = scoreboard[nickname];
-    console.log(yourPoints)
 }
 
 let timer: NodeJS.Timeout;
@@ -144,6 +141,7 @@ function roundStart(): void {
 }
 
 function roundEnd(): void {
+    updateScoreboardInfo("NEXT ROUND WILL START SOON");
     socket.emit("updateScoreboard", gameID);
     freezeGame();
     setTimeout(() => {

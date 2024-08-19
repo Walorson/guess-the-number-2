@@ -12,7 +12,7 @@ const pingDiv: HTMLElement = document.getElementById("ping");
 //CONFIG//
 const SERVER_LIST_REFRESH_TIME: number = 1;
 const PING_REFRESH_TIME: number = 1;
-const SERVER_URL: string = "http://127.0.0.1:3000";
+const SERVER_URL: string = "https://guess-the-number-2.onrender.com/";
 
 window.addEventListener("load", () => {
     sessionStorage.removeItem("lobby");

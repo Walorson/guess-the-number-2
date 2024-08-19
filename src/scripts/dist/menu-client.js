@@ -10,7 +10,7 @@ const pingDiv = document.getElementById("ping");
 //CONFIG//
 const SERVER_LIST_REFRESH_TIME = 1;
 const PING_REFRESH_TIME = 1;
-const SERVER_URL = "http://127.0.0.1:3000";
+const SERVER_URL = "https://guess-the-number-2.onrender.com/";
 window.addEventListener("load", () => {
     sessionStorage.removeItem("lobby");
     sessionStorage.removeItem("multiplayer");
