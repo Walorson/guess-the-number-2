@@ -37,3 +37,13 @@
     justify-content: center;
     margin-top: 25px;
 }
+.playersCount {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    opacity: 0.5;
+}
+.lobby-button {
+    position: relative;
+}

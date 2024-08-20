@@ -10,7 +10,7 @@ export const POST_ROUND_TIME: number = 5;
 export const SCOREBOARD_DELAY_TIME: number = 1;
 
 export const ROOM_MIN_PLAYERS_COUNT: number = 2;
-export const ROOM_MAX_PLAYERS_COUNT: number = 2;
+export const ROOM_MAX_PLAYERS_COUNT: number = 6;
 export const ROOM_NAME_MAX_LENGTH: number = 20;
 export const ROOM_NAME_MIN_LENGTH: number = 3;
 

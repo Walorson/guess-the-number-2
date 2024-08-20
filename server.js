@@ -4,14 +4,17 @@ const io = new Server(3000, {
     cors: { origin: "*" }
 });
 
-const serversList = [];
+let serversList = [];
 const nicknames = {};
 
 io.on("connection", socket => {
 
     socket.on("disconnect", () => {
         console.log(socket.id+" disconnected.");
-        io.emit("rejoin", socket.id);
+
+        const lobby = serversList.find(obj => obj.gameID == socket.id);
+        if(lobby != undefined && lobby.inGame == false)
+            terminateLobby(socket.id);
     });
 
     socket.on("join", (nickname) => {
@@ -43,11 +46,14 @@ io.on("connection", socket => {
         socket.emit("getServersList", serversList.filter(obj => obj.inGame == false));
     });
 
-    socket.on("connectTo", ownerID => {
-        socket.join(ownerID);
+    socket.on("connectTo", ownerID => {   
         const lobby = serversList.find(obj => obj.gameID == ownerID);
+
+        if(lobby.members.length >= lobby.maxPlayers) return;
+
         lobby.members.push(nicknames[socket.id]);
         lobby.points[nicknames[socket.id]] = 0;
+        socket.join(ownerID);
 
         socket.emit("connectTo", lobby);
         socket.to(ownerID).emit("addPlayerToWaitingRoom", nicknames[socket.id]);
@@ -115,13 +121,20 @@ io.on("connection", socket => {
         }
     });
 
-    socket.on("terminateLobby", gameID => {
+    function terminateLobby(gameID) 
+    {
         const lobby = serversList.find(obj => obj.gameID == gameID);
-        delete serversList[serversList.indexOf(lobby)];
+        if(lobby == undefined) return;
 
-        console.log(serversList.length + "<- after treminate");
-        console.log(serversList)
-    })
+        delete serversList[serversList.indexOf(lobby)];
+        serversList = serversList.filter(obj => obj != undefined);
+        io.to(gameID).emit("GTFO");
+    }
+
+    socket.on("terminateLobby", gameID => 
+    {
+        terminateLobby(gameID);
+    });
 
     socket.on("updateScoreboard", gameID => {
         const lobby = serversList.find(obj => obj.gameID == gameID);

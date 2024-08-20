@@ -28,8 +28,9 @@ export function connectToServer() {
         setInterval(getServersList, SERVER_LIST_REFRESH_TIME * 1000);
     });
     socket.on("getServersList", (list) => {
+        serversList.innerHTML = ``;
         for (let i = 0; i < list.length; i++) {
-            serversList.innerHTML += `<button owner="${list[i].gameID}">${list[i].name}</button>`;
+            serversList.innerHTML += `<button owner="${list[i].gameID}" class="lobby-button">${list[i].name} <div class="playersCount">${list[i].members.length}/${list[i].maxPlayers}</div></button>`;
         }
         serversList.querySelectorAll("button").forEach((button) => {
             button.onclick = () => {
@@ -46,9 +47,9 @@ export function connectToServer() {
         sessionStorage.setItem("multiplayer", "true");
         location.href = "gamemodes/classic.html";
     });
-    //socket.on("rejoin", (id: string) => {
-    //    
-    //});
+    socket.on("GTFO", () => {
+        location.reload();
+    });
 }
 export function createLobby() {
     waitingRoom.innerHTML =
@@ -65,7 +66,6 @@ export function createLobby() {
 }
 function getServersList() {
     socket.emit("getServersList");
-    serversList.innerHTML = ``;
 }
 function ping() {
     let time = 0;
