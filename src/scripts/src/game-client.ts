@@ -1,7 +1,7 @@
 import { io } from "socket.io-client";
 import { freezeGame, unfreezeGame, dead, forceRand, win } from "./game.js";
 import { setText } from "./output.js";
-import { SERVER_URL, POINTS_TO_WIN, PRE_ROUND_TIME, POST_ROUND_TIME, SCOREBOARD_DELAY_TIME, isMultiplayer } from "./multiplayer-config.js";
+import { SERVER_URL, POINTS_TO_WIN, PRE_ROUND_TIME, POST_ROUND_TIME, SCOREBOARD_DELAY_TIME, PING_REFRESH_TIME, isMultiplayer } from "./multiplayer-config.js";
 
 let socket: any;
 let endGame: boolean = false;
@@ -20,6 +20,14 @@ export function connectToServer(): void
     socket = io(SERVER_URL);
     socket.on("connect", () => {
         socket.emit("connectToGame", gameID, nickname);
+
+        const div = document.createElement("div");
+        div.setAttribute("id","ping");
+        div.style.display = 'block';
+        div.innerHTML = "Ping: 0ms";
+        document.body.appendChild(div);
+
+        setInterval(ping, PING_REFRESH_TIME * 1000);
     });
 
     socket.on("multiplayerWin", (nickname: string) => {
@@ -159,4 +167,15 @@ function roundEnd(): void {
 function updateScoreboardInfo(text: string) 
 {
     document.getElementById("scoreboard-info").textContent = text;
+}
+
+function ping(): void {
+    let time: number = 0;
+    let timer: NodeJS.Timeout = setInterval(() => { time++; }, 1);
+    socket.emit("ping");
+    socket.on("pong", () => {
+        clearInterval(timer);
+        document.getElementById("ping").textContent = "Ping: "+time+"ms";
+        time = 0;
+    });
 }

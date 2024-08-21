@@ -8,6 +8,7 @@ const connectInfo = document.getElementById("connecting-to-server");
 const waitingRoom = document.getElementById("waiting-room-players");
 const serversList = document.getElementById("servers-list");
 const pingDiv = document.getElementById("ping");
+const onlinePlayersDiv = document.getElementById("online-players");
 window.addEventListener("load", () => {
     sessionStorage.removeItem("lobby");
     sessionStorage.removeItem("multiplayer");
@@ -19,12 +20,15 @@ export function connectToServer() {
     }, 5000);
     socket.on("connect", () => {
         connectInfo.style.display = 'none';
+        pingDiv.style.display = 'block';
+        onlinePlayersDiv.style.display = 'block';
         clearTimeout(timer);
         nickname = localStorage.getItem("Nickname");
         gameSetup[0].setValue(nickname + "'s room");
         gameSetup[0].applySetting();
         socket.emit("join", nickname);
         setInterval(ping, PING_REFRESH_TIME * 1000);
+        setInterval(onlinePlayers, PING_REFRESH_TIME * 1000);
         setInterval(getServersList, SERVER_LIST_REFRESH_TIME * 1000);
     });
     socket.on("getServersList", (list) => {
@@ -75,6 +79,12 @@ function ping() {
         clearInterval(timer);
         pingDiv.textContent = "Ping: " + time + "ms";
         time = 0;
+    });
+}
+function onlinePlayers() {
+    socket.emit("getOnlinePlayers");
+    socket.on("getOnlinePlayers", (onlinePlayers) => {
+        onlinePlayersDiv.textContent = "Online: " + onlinePlayers;
     });
 }
 function connectTo(ownerID) {

@@ -94,11 +94,6 @@ button:hover {
     font-size: 2rem;
     text-align: center;
 }
-#ping {
-    position: absolute;
-    right: 30px;
-    bottom: 60px;
-}
 #start-game-button {
     display: none;
 }

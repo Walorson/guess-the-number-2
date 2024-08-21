@@ -47,3 +47,17 @@
 .lobby-button {
     position: relative;
 }
+#ping {
+    position: absolute;
+    right: 30px;
+    bottom: 60px;
+    display: none;
+    opacity: 0.8;
+    color: white;
+}
+#online-players {
+    position: absolute;
+    right: 30px;
+    bottom: 90px;
+    display: none;
+}

@@ -9,6 +9,7 @@ const connectInfo: HTMLElement = document.getElementById("connecting-to-server")
 const waitingRoom: HTMLElement = document.getElementById("waiting-room-players");
 const serversList: HTMLElement = document.getElementById("servers-list");
 const pingDiv: HTMLElement = document.getElementById("ping");
+const onlinePlayersDiv: HTMLElement = document.getElementById("online-players");
 
 window.addEventListener("load", () => {
     sessionStorage.removeItem("lobby");
@@ -23,6 +24,8 @@ export function connectToServer(): void {
 
     socket.on("connect", () => {
         connectInfo.style.display = 'none';
+        pingDiv.style.display = 'block';
+        onlinePlayersDiv.style.display = 'block';
         clearTimeout(timer);
 
         nickname = localStorage.getItem("Nickname");
@@ -31,6 +34,7 @@ export function connectToServer(): void {
 
         socket.emit("join", nickname);
         setInterval(ping, PING_REFRESH_TIME * 1000);
+        setInterval(onlinePlayers, PING_REFRESH_TIME * 1000);
         setInterval(getServersList, SERVER_LIST_REFRESH_TIME * 1000);
     });
 
@@ -93,6 +97,13 @@ function ping(): void {
         clearInterval(timer);
         pingDiv.textContent = "Ping: "+time+"ms";
         time = 0;
+    });
+}
+
+function onlinePlayers(): void {
+    socket.emit("getOnlinePlayers");
+    socket.on("getOnlinePlayers", (onlinePlayers: number) => {
+        onlinePlayersDiv.textContent = "Online: "+onlinePlayers;
     });
 }
 

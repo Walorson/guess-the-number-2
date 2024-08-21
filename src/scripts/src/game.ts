@@ -91,7 +91,7 @@ export function dead(text: string = "YOU ARE DEAD"): void
     output.innerHTML = `${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp;`;
     output.classList.add("scrollTextDead");
     lastGuess.textContent = `It was ${rand}`;
-    lastGuess.style.marginTop = "40px";
+    lastGuess.style.marginTop = "120px";
 }
 
 let ReadyForReloadPage: boolean = false;

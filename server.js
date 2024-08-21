@@ -6,6 +6,7 @@ const io = new Server(3000, {
 
 let serversList = [];
 const nicknames = {};
+let online = 0;
 
 io.on("connection", socket => {
 
@@ -15,10 +16,13 @@ io.on("connection", socket => {
         const lobby = serversList.find(obj => obj.gameID == socket.id);
         if(lobby != undefined && lobby.inGame == false)
             terminateLobby(socket.id);
+
+        online--;
     });
 
     socket.on("join", (nickname) => {
         nicknames[socket.id] = nickname;
+        online++;
     });
 
     socket.on("ping", () => {
@@ -44,6 +48,10 @@ io.on("connection", socket => {
 
     socket.on("getServersList", () => {
         socket.emit("getServersList", serversList.filter(obj => obj.inGame == false));
+    });
+
+    socket.on("getOnlinePlayers", () => {
+        socket.emit("getOnlinePlayers", online);
     });
 
     socket.on("connectTo", ownerID => {   
@@ -90,6 +98,8 @@ io.on("connection", socket => {
             io.to(gameID).emit("startMatch", lobby.points);
             io.to(gameID).emit("getRandomNumber", Math.floor(Math.random()*101));
         }
+
+        online++;
     });
 
     socket.on("multiplayerWin", (gameID, nickname, postRoundTime, isGameEnd) => {
