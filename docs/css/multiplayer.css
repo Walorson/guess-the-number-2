@@ -14,15 +14,21 @@
 .row {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
-.row:first-of-type {
-    margin-bottom: 35px;
+.row:last-of-type {
+    margin: 0;
 }
 .point {
     border: 5px solid rgb(67, 67, 67);
     width: 25px;
     height: 25px;
     border-radius: 15px;
+}
+.points-row {
+    display: flex;
+    gap: 5px;
 }
 .win {
     background-color: green;
@@ -31,4 +37,28 @@
     font-size: 1.2rem;
     justify-content: center;
     margin-top: 25px;
+}
+.playersCount {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    opacity: 0.5;
+}
+.lobby-button {
+    position: relative;
+}
+#ping {
+    position: absolute;
+    right: 30px;
+    bottom: 60px;
+    display: none;
+    opacity: 0.8;
+    color: white;
+}
+#online-players {
+    position: absolute;
+    right: 30px;
+    bottom: 90px;
+    display: none;
 }

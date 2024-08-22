@@ -1,8 +1,9 @@
 import { writeGuess } from "./input.js";
 import { time } from "./time.js";
 import { connectToServer, multiplayerWin } from "./game-client.js";
+import { isMultiplayer } from "./multiplayer-config.js";
 window.addEventListener("load", () => {
-    if (sessionStorage.getItem("multiplayer") == "true") {
+    if (isMultiplayer()) {
         connectToServer();
     }
 });
@@ -66,7 +67,7 @@ export function dead(text = "YOU ARE DEAD") {
     output.innerHTML = `${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp;`;
     output.classList.add("scrollTextDead");
     lastGuess.textContent = `It was ${rand}`;
-    lastGuess.style.marginTop = "40px";
+    lastGuess.style.marginTop = "122px";
 }
 let ReadyForReloadPage = false;
 let reloadPage;
@@ -74,12 +75,14 @@ let reloadBlock = true;
 export function gameEvents() {
     window.addEventListener("load", () => {
         setTimeout(() => { reloadBlock = false; }, 1000);
-        setTimeout(() => { window.scrollTo(0, 0); }, 50);
+        setTimeout(() => { window.scrollTo(0, 0); }, 40);
         if (localStorage.getItem("isGuideVisible") == 'false') {
             guide.style.display = 'none';
         }
     });
     window.addEventListener("keydown", (e) => {
+        if (window.scrollY > 0)
+            window.scrollTo(0, 0);
         if (e.key == 'Escape') {
             location.href = '../index.html';
         }
@@ -105,7 +108,7 @@ export function gameEvents() {
         }
     });
     window.addEventListener("keyup", (e) => {
-        if (e.key === 'r' || e.key === 'R') {
+        if ((e.key === 'r' || e.key === 'R') && (isMultiplayer() == false)) {
             e.preventDefault();
             clearTimeout(reloadPage);
             ReadyForReloadPage = false;
@@ -116,7 +119,6 @@ export function gameEvents() {
         }
     });
 }
-//@ts-ignore
 export function setAnimation(object, name, duration) {
     object.classList.add(name);
     setTimeout(() => { object.classList.remove(name); }, duration * 1000);
