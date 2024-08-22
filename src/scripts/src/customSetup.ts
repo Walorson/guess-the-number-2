@@ -1,5 +1,6 @@
 import { gameEvents } from "./game.js";
 import { buttons, index, menuChosen } from "./menu.js"
+import * as mp from "./multiplayer-config.js"
 
 const customMenu: HTMLElement = document.getElementById("custom");
 const setNicknameMenu: HTMLElement = document.getElementById("set-nickname");
@@ -108,17 +109,37 @@ class CustomSettingBoolean extends CustomSetting {
 
 export const gameSetup: CustomSetting[] =
 [
-    new CustomSetting("Room Name", localStorage.getItem("Nickname")+"'s room", "host"),
+    new CustomSetting("Room Name", localStorage.getItem("Nickname")+"'s room", "host", () => {
+        if(gameSetup[0].value.length > mp.ROOM_NAME_MAX_LENGTH) {
+            gameSetup[0].setValue(gameSetup[0].value.slice(0, 16));
+        }
+        else if(gameSetup[0].value.length < mp.ROOM_NAME_MIN_LENGTH) {
+            gameSetup[0].setValue("Roo");
+        }
+    }),
     new CustomSetting("Players Count", "2", "host", () => {
-        if(Number(gameSetup[0].value) < 2)
-            gameSetup[1].setValue("2");
-        else if(Number(gameSetup[0].value) > 4)
-            gameSetup[1].setValue("4");
+        if(Number(gameSetup[1].value) < mp.ROOM_MIN_PLAYERS_COUNT)
+        {
+            gameSetup[1].setValue(mp.ROOM_MIN_PLAYERS_COUNT+"");
+        }
+        else if(Number(gameSetup[1].value) > mp.ROOM_MAX_PLAYERS_COUNT)
+        {
+            gameSetup[1].setValue(mp.ROOM_MAX_PLAYERS_COUNT+"");
+        }
     })
 ];
 
 export function customGamemode(): void {
-    const setNickname = new CustomSetting("Nickname", "noob", "set-nickname");
+    const setNickname = new CustomSetting("Nickname", "noob", "set-nickname", () => {
+        if(setNickname.value.length > mp.NICKNAME_MAX_LENGTH)
+        {
+            setNickname.setValue(setNickname.value.slice(0, mp.NICKNAME_MAX_LENGTH));
+        }
+        else if(setNickname.value.length < mp.NICKNAME_MIN_LENGTH)
+        {
+            setNickname.setValue("Bob");
+        }
+    });
     setNickname.onlyNumbers = false;
 
     gameSetup[0].onlyNumbers = false;

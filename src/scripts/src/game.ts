@@ -1,9 +1,10 @@
 import { writeGuess } from "./input.js";
 import { time } from "./time.js";
 import { connectToServer, multiplayerWin } from "./game-client.js";
+import { isMultiplayer } from "./multiplayer-config.js";
 
 window.addEventListener("load", () => {
-    if(sessionStorage.getItem("multiplayer") == "true")
+    if(isMultiplayer())
     {
         connectToServer();
     }
@@ -90,7 +91,7 @@ export function dead(text: string = "YOU ARE DEAD"): void
     output.innerHTML = `${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp;`;
     output.classList.add("scrollTextDead");
     lastGuess.textContent = `It was ${rand}`;
-    lastGuess.style.marginTop = "40px";
+    lastGuess.style.marginTop = "122px";
 }
 
 let ReadyForReloadPage: boolean = false;
@@ -101,7 +102,7 @@ export function gameEvents(): void
 {
     window.addEventListener("load",() => {
         setTimeout(() => { reloadBlock = false }, 1000);
-        setTimeout(() => { window.scrollTo(0, 0); }, 50);
+        setTimeout(() => { window.scrollTo(0, 0); }, 40);
 
         if(localStorage.getItem("isGuideVisible") == 'false') 
         {
@@ -110,6 +111,7 @@ export function gameEvents(): void
     });
 
     window.addEventListener("keydown", (e: KeyboardEvent) => {
+        if(window.scrollY > 0) window.scrollTo(0, 0);
         if(e.key == 'Escape')
         {
             location.href = '../index.html';     
@@ -141,7 +143,7 @@ export function gameEvents(): void
     });
 
     window.addEventListener("keyup", (e: KeyboardEvent) => {
-        if(e.key === 'r' || e.key === 'R')
+        if((e.key === 'r' || e.key === 'R') && (isMultiplayer() == false))
         {
             e.preventDefault();
             clearTimeout(reloadPage);
@@ -154,7 +156,6 @@ export function gameEvents(): void
     })
 }
 
-//@ts-ignore
 export function setAnimation(object: HTMLElement, name: string, duration: number): void {
     object.classList.add(name);
     setTimeout(() => { object.classList.remove(name); }, duration * 1000);
