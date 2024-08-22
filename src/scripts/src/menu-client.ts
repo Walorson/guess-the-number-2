@@ -65,6 +65,16 @@ export function connectToServer(): void {
     socket.on("GTFO", () => {
         location.reload();
     });
+
+    socket.on("removePlayerFromWaitingRoom", (nickname: string) => {
+        waitingRoom.querySelectorAll("button").forEach((button: HTMLElement) => {
+            if(button.textContent == nickname) {
+                button.textContent = '.';
+                button.setAttribute("class","empty-slot");
+                return;
+            }
+        });
+    });
 }
 
 export function createLobby(): void {

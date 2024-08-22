@@ -91,7 +91,7 @@ export function dead(text: string = "YOU ARE DEAD"): void
     output.innerHTML = `${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp;`;
     output.classList.add("scrollTextDead");
     lastGuess.textContent = `It was ${rand}`;
-    lastGuess.style.marginTop = "120px";
+    lastGuess.style.marginTop = "122px";
 }
 
 let ReadyForReloadPage: boolean = false;
@@ -102,7 +102,7 @@ export function gameEvents(): void
 {
     window.addEventListener("load",() => {
         setTimeout(() => { reloadBlock = false }, 1000);
-        setTimeout(() => { window.scrollTo(0, 0); }, 50);
+        setTimeout(() => { window.scrollTo(0, 0); }, 40);
 
         if(localStorage.getItem("isGuideVisible") == 'false') 
         {
@@ -111,6 +111,7 @@ export function gameEvents(): void
     });
 
     window.addEventListener("keydown", (e: KeyboardEvent) => {
+        if(window.scrollY > 0) window.scrollTo(0, 0);
         if(e.key == 'Escape')
         {
             location.href = '../index.html';     
@@ -155,7 +156,6 @@ export function gameEvents(): void
     })
 }
 
-//@ts-ignore
 export function setAnimation(object: HTMLElement, name: string, duration: number): void {
     object.classList.add(name);
     setTimeout(() => { object.classList.remove(name); }, duration * 1000);

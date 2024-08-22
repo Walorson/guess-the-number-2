@@ -13,9 +13,21 @@ io.on("connection", socket => {
     socket.on("disconnect", () => {
         console.log(socket.id+" disconnected.");
 
-        const lobby = serversList.find(obj => obj.gameID == socket.id);
+        let lobby = serversList.find(obj => obj.gameID == socket.id);
         if(lobby != undefined && lobby.inGame == false)
             terminateLobby(socket.id);
+
+        lobby = serversList.find(obj => obj.members.includes(nicknames[socket.id]));
+        
+        if(lobby != undefined && lobby.inGame == false)
+        {
+            let playerIndex = lobby.members.indexOf(nicknames[socket.id]);
+            delete lobby.members[playerIndex];
+            delete lobby.points[nicknames[socket.id]];
+            lobby.members = lobby.members.filter(obj => obj != undefined);
+
+            io.to(lobby.gameID).emit("removePlayerFromWaitingRoom", nicknames[socket.id]);
+        }
 
         online--;
     });

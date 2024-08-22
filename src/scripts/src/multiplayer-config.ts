@@ -8,6 +8,7 @@ export const POINTS_TO_WIN: number = 3;
 export const PRE_ROUND_TIME: number = 6;
 export const POST_ROUND_TIME: number = 5;
 export const SCOREBOARD_DELAY_TIME: number = 1;
+export const TERMINATE_LOBBY_DELAY: number = 15;
 
 export const ROOM_MIN_PLAYERS_COUNT: number = 2;
 export const ROOM_MAX_PLAYERS_COUNT: number = 6;

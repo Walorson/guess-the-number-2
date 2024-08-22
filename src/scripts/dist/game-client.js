@@ -1,7 +1,7 @@
 import { io } from "socket.io-client";
 import { freezeGame, unfreezeGame, dead, forceRand } from "./game.js";
 import { setText } from "./output.js";
-import { SERVER_URL, POINTS_TO_WIN, PRE_ROUND_TIME, POST_ROUND_TIME, SCOREBOARD_DELAY_TIME, PING_REFRESH_TIME, isMultiplayer } from "./multiplayer-config.js";
+import { SERVER_URL, POINTS_TO_WIN, PRE_ROUND_TIME, POST_ROUND_TIME, SCOREBOARD_DELAY_TIME, PING_REFRESH_TIME, isMultiplayer, TERMINATE_LOBBY_DELAY } from "./multiplayer-config.js";
 let socket;
 let endGame = false;
 let yourPoints;
@@ -28,7 +28,7 @@ export function connectToServer() {
     });
     socket.on("startMatch", (scoreboard) => {
         loadScoreboard(scoreboard);
-        timerStart();
+        timerStart(PRE_ROUND_TIME, roundStart);
     });
     socket.on("getRandomNumber", (randomNumber) => {
         forceRand(randomNumber);
@@ -42,8 +42,12 @@ export function connectToServer() {
     socket.on("endGame", (winner) => {
         updateScoreboardInfo(winner + " WON THE GAME!");
         setText(winner + " WON THE GAME!");
-        if (nickname.toUpperCase() == winner.toUpperCase())
-            socket.emit("terminateLobby", gameID);
+        if (nickname.toUpperCase() == winner.toUpperCase()) {
+            setTimeout(() => {
+                socket.emit("terminateLobby", gameID);
+            }, TERMINATE_LOBBY_DELAY * 1000);
+        }
+        timerStart(TERMINATE_LOBBY_DELAY, noop, "Return to lobby in ");
     });
     socket.on("GTFO", () => {
         location.href = "/";
@@ -96,14 +100,14 @@ function updateScoreboard(scoreboard) {
     yourPoints = scoreboard[nickname];
 }
 let timer;
-function timerStart() {
-    let time = PRE_ROUND_TIME;
+function timerStart(initialTime, executeFunction, text = "") {
+    let time = initialTime;
     timer = setInterval(() => {
         time -= 1;
-        document.getElementById("scoreboard-info").textContent = time + "...";
+        document.getElementById("scoreboard-info").textContent = text + time + "...";
         if (time <= 0) {
             clearInterval(timer);
-            roundStart();
+            executeFunction();
         }
     }, 1000);
 }
@@ -132,4 +136,5 @@ function ping() {
         time = 0;
     });
 }
+function noop() { }
 //# sourceMappingURL=game-client.js.map
