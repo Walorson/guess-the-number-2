@@ -1,25 +1,26 @@
 import { io } from "../../_snowpack/pkg/socket.io-client.js";
 import { freezeGame, unfreezeGame, dead, forceRand } from "./game.js";
 import { setText } from "./output.js";
+import { SERVER_URL, POINTS_TO_WIN, PRE_ROUND_TIME, POST_ROUND_TIME, SCOREBOARD_DELAY_TIME, PING_REFRESH_TIME, isMultiplayer, TERMINATE_LOBBY_DELAY } from "./multiplayer-config.js";
 let socket;
 let endGame = false;
 let yourPoints;
 const nickname = localStorage.getItem("Nickname");
 const gameID = sessionStorage.getItem("lobby");
-//CONFIG//
-const pointsToWin = 3;
-const preRoundTime = 6;
-const postRoundTime = 5;
-const preScoreboardTime = 1;
-//////////
 window.addEventListener("load", () => {
-    if (sessionStorage.getItem("multiplayer") == "true")
+    if (isMultiplayer())
         freezeGame();
 });
 export function connectToServer() {
-    socket = io("https://guess-the-number-2.onrender.com/");
+    socket = io(SERVER_URL);
     socket.on("connect", () => {
         socket.emit("connectToGame", gameID, nickname);
+        const div = document.createElement("div");
+        div.setAttribute("id", "ping");
+        div.style.display = 'block';
+        div.innerHTML = "Ping: 0ms";
+        document.body.appendChild(div);
+        setInterval(ping, PING_REFRESH_TIME * 1000);
     });
     socket.on("multiplayerWin", (nickname) => {
         roundEnd();
@@ -27,13 +28,12 @@ export function connectToServer() {
     });
     socket.on("startMatch", (scoreboard) => {
         loadScoreboard(scoreboard);
-        timerStart();
+        timerStart(PRE_ROUND_TIME, roundStart);
     });
     socket.on("getRandomNumber", (randomNumber) => {
         forceRand(randomNumber);
     });
     socket.on("startNewRound", () => {
-        sessionStorage.setItem("multiplayer", "true");
         location.reload();
     });
     socket.on("updateScoreboard", (scoreboardLobby) => {
@@ -42,14 +42,26 @@ export function connectToServer() {
     socket.on("endGame", (winner) => {
         updateScoreboardInfo(winner + " WON THE GAME!");
         setText(winner + " WON THE GAME!");
+        if (nickname.toUpperCase() == winner.toUpperCase()) {
+            setTimeout(() => {
+                socket.emit("terminateLobby", gameID);
+            }, TERMINATE_LOBBY_DELAY * 1000);
+        }
+        timerStart(TERMINATE_LOBBY_DELAY, noop, "Return to lobby in ");
+    });
+    socket.on("GTFO", () => {
+        location.href = "/";
+    });
+    socket.on("playerLeftTheGame", (nickname) => {
+        alert(nickname + " left the game.");
     });
 }
 export function multiplayerWin() {
     roundEnd();
-    if (yourPoints < pointsToWin - 1)
-        socket.emit("multiplayerWin", gameID, nickname, postRoundTime);
+    if (yourPoints < POINTS_TO_WIN - 1)
+        socket.emit("multiplayerWin", gameID, nickname, POST_ROUND_TIME);
     else
-        socket.emit("multiplayerWin", gameID, nickname, postRoundTime, true);
+        socket.emit("multiplayerWin", gameID, nickname, POST_ROUND_TIME, true);
 }
 function loadScoreboard(scoreboard) {
     const div = document.createElement("div");
@@ -58,9 +70,11 @@ function loadScoreboard(scoreboard) {
         div.innerHTML += `
             <div class="row" id="scoreboard-${key}">
                 <div>${key}</div>
-                <div class="point"></div>
-                <div class="point"></div>
-                <div class="point"></div>
+                <div class="points-row">
+                    <div class="point"></div>
+                    <div class="point"></div>
+                    <div class="point"></div>
+                <div>
             </div>
         `;
     }
@@ -86,14 +100,14 @@ function updateScoreboard(scoreboard) {
     yourPoints = scoreboard[nickname];
 }
 let timer;
-function timerStart() {
-    let time = preRoundTime;
+function timerStart(initialTime, executeFunction, text = "") {
+    let time = initialTime;
     timer = setInterval(() => {
         time -= 1;
-        document.getElementById("scoreboard-info").textContent = time + "...";
+        document.getElementById("scoreboard-info").textContent = text + time + "...";
         if (time <= 0) {
             clearInterval(timer);
-            roundStart();
+            executeFunction();
         }
     }, 1000);
 }
@@ -107,9 +121,20 @@ function roundEnd() {
     freezeGame();
     setTimeout(() => {
         showScoreboard();
-    }, preScoreboardTime * 1000);
+    }, SCOREBOARD_DELAY_TIME * 1000);
 }
 function updateScoreboardInfo(text) {
     document.getElementById("scoreboard-info").textContent = text;
 }
+function ping() {
+    let time = 0;
+    let timer = setInterval(() => { time++; }, 1);
+    socket.emit("ping");
+    socket.on("pong", () => {
+        clearInterval(timer);
+        document.getElementById("ping").textContent = "Ping: " + time + "ms";
+        time = 0;
+    });
+}
+function noop() { }
 //# sourceMappingURL=game-client.js.map

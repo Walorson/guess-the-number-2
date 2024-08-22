@@ -1,16 +1,14 @@
 import { io } from "../../_snowpack/pkg/socket.io-client.js";
 import { gameSetup } from "./customSetup.js";
 import { changeMenu } from "./menu.js";
+import { SERVER_URL, SERVER_LIST_REFRESH_TIME, PING_REFRESH_TIME } from "./multiplayer-config.js";
 let socket;
 let nickname;
 const connectInfo = document.getElementById("connecting-to-server");
 const waitingRoom = document.getElementById("waiting-room-players");
 const serversList = document.getElementById("servers-list");
 const pingDiv = document.getElementById("ping");
-//CONFIG//
-const SERVER_LIST_REFRESH_TIME = 1;
-const PING_REFRESH_TIME = 1;
-const SERVER_URL = "https://guess-the-number-2.onrender.com/";
+const onlinePlayersDiv = document.getElementById("online-players");
 window.addEventListener("load", () => {
     sessionStorage.removeItem("lobby");
     sessionStorage.removeItem("multiplayer");
@@ -22,17 +20,21 @@ export function connectToServer() {
     }, 5000);
     socket.on("connect", () => {
         connectInfo.style.display = 'none';
+        pingDiv.style.display = 'block';
+        onlinePlayersDiv.style.display = 'block';
         clearTimeout(timer);
         nickname = localStorage.getItem("Nickname");
         gameSetup[0].setValue(nickname + "'s room");
         gameSetup[0].applySetting();
         socket.emit("join", nickname);
         setInterval(ping, PING_REFRESH_TIME * 1000);
+        setInterval(onlinePlayers, PING_REFRESH_TIME * 1000);
         setInterval(getServersList, SERVER_LIST_REFRESH_TIME * 1000);
     });
     socket.on("getServersList", (list) => {
+        serversList.innerHTML = ``;
         for (let i = 0; i < list.length; i++) {
-            serversList.innerHTML += `<button owner="${list[i].gameID}">${list[i].name}</button>`;
+            serversList.innerHTML += `<button owner="${list[i].gameID}" class="lobby-button">${list[i].name} <div class="playersCount">${list[i].members.length}/${list[i].maxPlayers}</div></button>`;
         }
         serversList.querySelectorAll("button").forEach((button) => {
             button.onclick = () => {
@@ -49,8 +51,17 @@ export function connectToServer() {
         sessionStorage.setItem("multiplayer", "true");
         location.href = "gamemodes/classic.html";
     });
-    socket.on("rejoin", (id) => {
-        alert(id + " WYJEBALO!");
+    socket.on("GTFO", () => {
+        location.reload();
+    });
+    socket.on("removePlayerFromWaitingRoom", (nickname) => {
+        waitingRoom.querySelectorAll("button").forEach((button) => {
+            if (button.textContent == nickname) {
+                button.textContent = '.';
+                button.setAttribute("class", "empty-slot");
+                return;
+            }
+        });
     });
 }
 export function createLobby() {
@@ -68,7 +79,6 @@ export function createLobby() {
 }
 function getServersList() {
     socket.emit("getServersList");
-    serversList.innerHTML = ``;
 }
 function ping() {
     let time = 0;
@@ -78,6 +88,12 @@ function ping() {
         clearInterval(timer);
         pingDiv.textContent = "Ping: " + time + "ms";
         time = 0;
+    });
+}
+function onlinePlayers() {
+    socket.emit("getOnlinePlayers");
+    socket.on("getOnlinePlayers", (onlinePlayers) => {
+        onlinePlayersDiv.textContent = "Online: " + onlinePlayers;
     });
 }
 function connectTo(ownerID) {
