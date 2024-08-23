@@ -1,11 +1,11 @@
 import { io } from "socket.io-client";
 import { freezeGame, unfreezeGame, dead, forceRand } from "./game.js";
 import { setText } from "./output.js";
-import { SERVER_URL, POINTS_TO_WIN, PRE_ROUND_TIME, POST_ROUND_TIME, SCOREBOARD_DELAY_TIME, PING_REFRESH_TIME, isMultiplayer, TERMINATE_LOBBY_DELAY } from "./multiplayer-config.js";
+import { SERVER_URL, PRE_ROUND_TIME, POST_ROUND_TIME, SCOREBOARD_DELAY_TIME, PING_REFRESH_TIME, isMultiplayer, TERMINATE_LOBBY_DELAY } from "./multiplayer-config.js";
 
 let socket: any;
-let endGame: boolean = false;
 let yourPoints: number;
+let pointsToWin: number;
 const nickname: string = localStorage.getItem("Nickname");
 const gameID: string = sessionStorage.getItem("lobby");
 
@@ -35,7 +35,8 @@ export function connectToServer(): void
         dead(nickname.toUpperCase() + " WON THE ROUND");
     });
 
-    socket.on("startMatch", (scoreboard: number[]) => {
+    socket.on("startMatch", (scoreboard: number[], pointsToWinCount: number) => {
+        pointsToWin = pointsToWinCount;
         loadScoreboard(scoreboard);
         timerStart(PRE_ROUND_TIME, roundStart);
     });
@@ -68,7 +69,7 @@ export function connectToServer(): void
     });
 
     socket.on("GTFO", () => {
-        location.href = "/";
+        location.href = "../../";
     });
 
     socket.on("playerLeftTheGame", (nickname: string) => {
@@ -80,7 +81,7 @@ export function multiplayerWin(): void
 {
     roundEnd();
 
-    if(yourPoints < POINTS_TO_WIN - 1)
+    if(yourPoints < pointsToWin - 1)
         socket.emit("multiplayerWin", gameID, nickname, POST_ROUND_TIME);
     else
         socket.emit("multiplayerWin", gameID, nickname, POST_ROUND_TIME, true);
@@ -90,16 +91,21 @@ function loadScoreboard(scoreboard: number[]): void
 {   
     const div: HTMLElement = document.createElement("div");
     div.setAttribute("id","scoreboard");
-    
+    const pointsToWin: number = Number(localStorage.getItem('Points To Win'));
+    let points = "";
+
+    for(let i=0; i<pointsToWin; i++)
+    {
+        points += '<div class="point"></div>';
+    }
+
     for(let key in scoreboard)
     {
         div.innerHTML += `
             <div class="row" id="scoreboard-${key}">
                 <div>${key}</div>
                 <div class="points-row">
-                    <div class="point"></div>
-                    <div class="point"></div>
-                    <div class="point"></div>
+                    ${points}
                 <div>
             </div>
         `;

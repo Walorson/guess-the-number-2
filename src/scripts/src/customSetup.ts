@@ -1,4 +1,3 @@
-import { gameEvents } from "./game.js";
 import { buttons, index, menuChosen } from "./menu.js"
 import * as mp from "./multiplayer-config.js"
 
@@ -107,6 +106,32 @@ class CustomSettingBoolean extends CustomSetting {
     }
 }
 
+class CustomSettingMultiple extends CustomSetting {
+    values: string[];
+    indexValue: number;
+    constructor(name: string, defaultValue: string, where: string, values: string[]) {
+        super(name, defaultValue, where);
+        this.values = values;
+        this.indexValue = this.values.indexOf(localStorage.getItem(name));
+    }
+
+    createButton(): void {
+        document.getElementById(this.where).innerHTML += `<button class="editable-boolean" id="customSetting-${this.name}">${this.name}: <span><span style="color:${this.color()}">${this.value}</span></span></button>`;
+    }
+
+    nextValue()
+    {
+        this.indexValue++;
+
+        if(this.indexValue >= this.values.length)
+            this.indexValue = 0;
+
+        this.value = this.values[this.indexValue];
+
+        this.displayValue();
+        this.applySetting();
+    }
+}
 export const gameSetup: CustomSetting[] =
 [
     new CustomSetting("Room Name", localStorage.getItem("Nickname")+"'s room", "host", () => {
@@ -126,7 +151,18 @@ export const gameSetup: CustomSetting[] =
         {
             gameSetup[1].setValue(mp.ROOM_MAX_PLAYERS_COUNT+"");
         }
-    })
+    }),
+    new CustomSetting("Points To Win", "3", "host", () => {
+        if(Number(gameSetup[2].value) < mp.POINTS_MIN_COUNT)
+        {
+            gameSetup[2].setValue(mp.POINTS_MIN_COUNT+"");
+        }
+        else if(Number(gameSetup[2].value) > mp.POINTS_MAX_COUNT)
+        {
+            gameSetup[2].setValue(mp.POINTS_MAX_COUNT+"");
+        }
+    }),
+    new CustomSettingMultiple("Gamemode", "Classic", "host", ["Classic", "Hardcore", "Puzzle", "Blind", "Interval"])
 ];
 
 export function customGamemode(): void {
@@ -245,6 +281,10 @@ export function customGamemode(): void {
             }
             else if(menuChosen == 'custom-hints') {
                 settingsHint[index].swapValue();
+            }
+            else if(menuChosen == 'host') {
+                //@ts-ignore
+                gameSetup[index].nextValue();
             }
         }
     });

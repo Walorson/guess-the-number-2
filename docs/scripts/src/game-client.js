@@ -1,10 +1,10 @@
 import {io} from "../../_snowpack/pkg/socket.io-client.js";
 import {freezeGame, unfreezeGame, dead, forceRand} from "./game.js";
 import {setText} from "./output.js";
-import {SERVER_URL, POINTS_TO_WIN, PRE_ROUND_TIME, POST_ROUND_TIME, SCOREBOARD_DELAY_TIME, PING_REFRESH_TIME, isMultiplayer, TERMINATE_LOBBY_DELAY} from "./multiplayer-config.js";
+import {SERVER_URL, PRE_ROUND_TIME, POST_ROUND_TIME, SCOREBOARD_DELAY_TIME, PING_REFRESH_TIME, isMultiplayer, TERMINATE_LOBBY_DELAY} from "./multiplayer-config.js";
 let socket;
-let endGame = false;
 let yourPoints;
+let pointsToWin;
 const nickname = localStorage.getItem("Nickname");
 const gameID = sessionStorage.getItem("lobby");
 window.addEventListener("load", () => {
@@ -26,7 +26,8 @@ export function connectToServer() {
     roundEnd();
     dead(nickname2.toUpperCase() + " WON THE ROUND");
   });
-  socket.on("startMatch", (scoreboard) => {
+  socket.on("startMatch", (scoreboard, pointsToWinCount) => {
+    pointsToWin = pointsToWinCount;
     loadScoreboard(scoreboard);
     timerStart(PRE_ROUND_TIME, roundStart);
   });
@@ -50,7 +51,7 @@ export function connectToServer() {
     timerStart(TERMINATE_LOBBY_DELAY, noop, "Return to lobby in ");
   });
   socket.on("GTFO", () => {
-    location.href = "/";
+    location.href = "../../";
   });
   socket.on("playerLeftTheGame", (nickname2) => {
     alert(nickname2 + " left the game.");
@@ -58,7 +59,7 @@ export function connectToServer() {
 }
 export function multiplayerWin() {
   roundEnd();
-  if (yourPoints < POINTS_TO_WIN - 1)
+  if (yourPoints < pointsToWin - 1)
     socket.emit("multiplayerWin", gameID, nickname, POST_ROUND_TIME);
   else
     socket.emit("multiplayerWin", gameID, nickname, POST_ROUND_TIME, true);
@@ -66,14 +67,17 @@ export function multiplayerWin() {
 function loadScoreboard(scoreboard) {
   const div = document.createElement("div");
   div.setAttribute("id", "scoreboard");
+  const pointsToWin2 = Number(localStorage.getItem("Points To Win"));
+  let points = "";
+  for (let i = 0; i < pointsToWin2; i++) {
+    points += '<div class="point"></div>';
+  }
   for (let key in scoreboard) {
     div.innerHTML += `
             <div class="row" id="scoreboard-${key}">
                 <div>${key}</div>
                 <div class="points-row">
-                    <div class="point"></div>
-                    <div class="point"></div>
-                    <div class="point"></div>
+                    ${points}
                 <div>
             </div>
         `;
