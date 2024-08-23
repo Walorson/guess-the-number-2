@@ -1,3 +1,4 @@
+import { on } from "events";
 import { Server } from "socket.io";
 
 const io = new Server(3000, {
@@ -9,6 +10,7 @@ const nicknames = {};
 let online = 0;
 
 io.on("connection", socket => {
+    online++;
 
     socket.on("disconnect", () => {
         console.log(socket.id+" disconnected.");
@@ -30,18 +32,18 @@ io.on("connection", socket => {
         }
 
         online--;
+        if(online < 0) online = 0;
     });
 
     socket.on("join", (nickname) => {
         nicknames[socket.id] = nickname;
-        online++;
     });
 
     socket.on("ping", () => {
         socket.emit("pong");
     })
 
-    socket.on("createLobby", (nameLobby, maxPlayersCount) => {
+    socket.on("createLobby", (nameLobby, maxPlayersCount, pointsToWinCount) => {
 
         serversList.push({
             name: nameLobby, 
@@ -50,7 +52,8 @@ io.on("connection", socket => {
             members: [nicknames[socket.id]],
             points: {},
             inGame: false,
-            isRoundEnd: false
+            isRoundEnd: false,
+            pointsToWin: pointsToWinCount
         });
 
         serversList[serversList.length-1].points[nicknames[socket.id]] = 0;
@@ -107,7 +110,7 @@ io.on("connection", socket => {
         lobby.members.push(nicknames[socket.id]);
 
         if(lobby.members.length == lobby.maxPlayers) {
-            io.to(gameID).emit("startMatch", lobby.points);
+            io.to(gameID).emit("startMatch", lobby.points, lobby.pointsToWin);
             io.to(gameID).emit("getRandomNumber", Math.floor(Math.random()*101));
         }
 

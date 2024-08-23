@@ -49,7 +49,7 @@ export function connectToServer() {
     });
     socket.on("startGame", () => {
         sessionStorage.setItem("multiplayer", "true");
-        location.href = "gamemodes/classic.html";
+        location.href = `gamemodes/${localStorage.getItem("Gamemode").toLowerCase()}.html`;
     });
     socket.on("GTFO", () => {
         location.reload();
@@ -74,7 +74,7 @@ export function createLobby() {
         waitingRoom.innerHTML += `<button class="empty-slot">.</button>`;
     }
     document.getElementById("start-game-button").style.display = 'block';
-    socket.emit("createLobby", localStorage.getItem("Room Name"), playersCount);
+    socket.emit("createLobby", localStorage.getItem("Room Name"), playersCount, localStorage.getItem("Points To Win"));
     sessionStorage.setItem("lobby", socket.id);
 }
 function getServersList() {

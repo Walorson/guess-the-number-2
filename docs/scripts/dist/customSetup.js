@@ -78,6 +78,24 @@ class CustomSettingBoolean extends CustomSetting {
             return "red";
     }
 }
+class CustomSettingMultiple extends CustomSetting {
+    constructor(name, defaultValue, where, values) {
+        super(name, defaultValue, where);
+        this.values = values;
+        this.indexValue = this.values.indexOf(localStorage.getItem(name));
+    }
+    createButton() {
+        document.getElementById(this.where).innerHTML += `<button class="editable-boolean" id="customSetting-${this.name}">${this.name}: <span><span style="color:${this.color()}">${this.value}</span></span></button>`;
+    }
+    nextValue() {
+        this.indexValue++;
+        if (this.indexValue >= this.values.length)
+            this.indexValue = 0;
+        this.value = this.values[this.indexValue];
+        this.displayValue();
+        this.applySetting();
+    }
+}
 export const gameSetup = [
     new CustomSetting("Room Name", localStorage.getItem("Nickname") + "'s room", "host", () => {
         if (gameSetup[0].value.length > mp.ROOM_NAME_MAX_LENGTH) {
@@ -94,7 +112,16 @@ export const gameSetup = [
         else if (Number(gameSetup[1].value) > mp.ROOM_MAX_PLAYERS_COUNT) {
             gameSetup[1].setValue(mp.ROOM_MAX_PLAYERS_COUNT + "");
         }
-    })
+    }),
+    new CustomSetting("Points To Win", "3", "host", () => {
+        if (Number(gameSetup[2].value) < mp.POINTS_MIN_COUNT) {
+            gameSetup[2].setValue(mp.POINTS_MIN_COUNT + "");
+        }
+        else if (Number(gameSetup[2].value) > mp.POINTS_MAX_COUNT) {
+            gameSetup[2].setValue(mp.POINTS_MAX_COUNT + "");
+        }
+    }),
+    new CustomSettingMultiple("Gamemode", "Classic", "host", ["Classic", "Hardcore", "Puzzle", "Blind", "Interval"])
 ];
 export function customGamemode() {
     const setNickname = new CustomSetting("Nickname", "noob", "set-nickname", () => {
@@ -188,6 +215,10 @@ export function customGamemode() {
             }
             else if (menuChosen == 'custom-hints') {
                 settingsHint[index].swapValue();
+            }
+            else if (menuChosen == 'host') {
+                //@ts-ignore
+                gameSetup[index].nextValue();
             }
         }
     });
