@@ -50,7 +50,7 @@ export function connectToServer() {
         timerStart(TERMINATE_LOBBY_DELAY, noop, "Return to lobby in ");
     });
     socket.on("GTFO", () => {
-        location.href = "/";
+        location.href = "../../";
     });
     socket.on("playerLeftTheGame", (nickname) => {
         alert(nickname + " left the game.");
