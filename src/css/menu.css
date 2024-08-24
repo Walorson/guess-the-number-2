@@ -1,3 +1,4 @@
+@import url("main.css");
 @import url("multiplayer.css");
 body {
     font-family: typewriter;
@@ -6,8 +7,8 @@ body {
     text-align: center;
     font-size: 1.7vw;
     font-family: milker;
-    color: rgb(182, 23, 23);
-    text-shadow: 0px 0px 22px rgb(137,16,16);
+    color: var(--color-title);
+    text-shadow: 0px 0px 22px var(--color-shadow2);
     letter-spacing: 5px;
 }
 .big-letter {
@@ -33,13 +34,13 @@ button {
     display: block;
     padding: 1.5vh 0;
     width: 31vw;
-    border: 4px solid rgb(137, 16, 16);
+    border: 4px solid var(--color-border);
     background-color: rgb(25, 21, 21);
     font-family: typewriter;
     letter-spacing: 2px;
     font-size: 1.2rem;
     color: inherit;
-    box-shadow: 0px 0px 22px 6px rgba(137,16,16,0.75);
+    box-shadow: 0px 0px 22px 6px var(--color-shadow2);
     transition: 0.25s;
     cursor: pointer;
     outline: none;
@@ -86,7 +87,7 @@ button:hover {
     position: absolute;
     top: 50%; left: 50%;
     transform: translate(-50%,-50%);
-    border: 4px solid rgb(137, 16, 16);
+    border: 4px solid var(--color-border);
     padding: 40px 80px;
     width: 500px;
     background-color: #111;
@@ -138,8 +139,8 @@ button:hover {
 
 @keyframes blink {
     0%, 12%, 13%, 14%, 46%, 47%, 69%, 70%, 71%, 85%, 87% {
-        color: rgb(182, 23, 23);
-        text-shadow: 0px 0px 22px rgb(137,16,16);
+        color: var(--color-title);
+        text-shadow: 0px 0px 22px var(--color-border);
     }
     12.5%, 13.5%, 46.5%, 69.5%, 70.5%, 86% {
         color: rgb(77, 10, 10);
