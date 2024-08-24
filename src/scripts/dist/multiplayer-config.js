@@ -1,4 +1,4 @@
-export const SERVER_URL = "127.0.0.1:3000";
+export const SERVER_URL = "https://guess-the-number-2.onrender.com";
 //TIME IN SECONDS//
 export const SERVER_LIST_REFRESH_TIME = 1.5;
 export const PING_REFRESH_TIME = 1;
