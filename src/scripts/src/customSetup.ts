@@ -138,7 +138,7 @@ class CustomSettingMultiple extends CustomSetting {
 }
 const options: CustomSetting[] =
 [
-    new CustomSettingMultiple("Main Color", "red", "options", ["red", "blue"])
+    new CustomSettingMultiple("Main Color", "red", "options", ["red", "blue", "green", "yellow", "purple"])
 ];
 export const gameSetup: CustomSetting[] =
 [

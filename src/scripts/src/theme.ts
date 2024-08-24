@@ -8,6 +8,15 @@ export function changeColor(color: string): void
         case "blue": {
             colorPalette("15, 161, 194","24, 177, 219","4, 121, 164","21, 118, 175","11, 65, 104, 0.75")
         } break;
+        case "green": {
+            colorPalette("14, 176, 22", "7, 185, 22", "6, 142, 16", "26, 163, 63", "32, 102, 10, 0.5");
+        } break;
+        case "yellow": {
+            colorPalette("217, 208, 29", "201, 188, 47", "179, 160, 37", "132, 126, 14", "143, 137, 17, 0.5")
+        } break;
+        case "purple": {
+            colorPalette("95, 42, 171", "122, 28, 216", "87, 20, 163", "115, 25, 190", "79, 38, 194, 0.5")
+        } break;
     }
 }
 

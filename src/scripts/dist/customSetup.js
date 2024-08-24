@@ -100,7 +100,7 @@ class CustomSettingMultiple extends CustomSetting {
     }
 }
 const options = [
-    new CustomSettingMultiple("Main Color", "red", "options", ["red", "blue"])
+    new CustomSettingMultiple("Main Color", "red", "options", ["red", "blue", "green", "yellow", "purple"])
 ];
 export const gameSetup = [
     new CustomSetting("Room Name", localStorage.getItem("Nickname") + "'s room", "host", () => {
