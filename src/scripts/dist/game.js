@@ -2,7 +2,9 @@ import { writeGuess } from "./input.js";
 import { time } from "./time.js";
 import { connectToServer, multiplayerWin } from "./game-client.js";
 import { isMultiplayer } from "./multiplayer-config.js";
+import { changeColor } from "./theme.js";
 window.addEventListener("load", () => {
+    changeColor(localStorage.getItem("Main Color"));
     if (isMultiplayer()) {
         connectToServer();
     }

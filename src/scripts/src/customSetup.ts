@@ -1,8 +1,10 @@
 import { buttons, index, menuChosen } from "./menu.js"
+import { changeColor } from "./theme.js";
 import * as mp from "./multiplayer-config.js"
 
 const customMenu: HTMLElement = document.getElementById("custom");
 const setNicknameMenu: HTMLElement = document.getElementById("set-nickname");
+const optionsMenu: HTMLElement = document.getElementById("options");
 export let editMode: boolean = false;
 
 export class CustomSetting {
@@ -119,7 +121,7 @@ class CustomSettingMultiple extends CustomSetting {
         document.getElementById(this.where).innerHTML += `<button class="editable-boolean" id="customSetting-${this.name}">${this.name}: <span><span style="color:${this.color()}">${this.value}</span></span></button>`;
     }
 
-    nextValue()
+    nextValue(event: Function = () => {})
     {
         this.indexValue++;
 
@@ -130,8 +132,14 @@ class CustomSettingMultiple extends CustomSetting {
 
         this.displayValue();
         this.applySetting();
+
+        event(this.value);
     }
 }
+const options: CustomSetting[] =
+[
+    new CustomSettingMultiple("Main Color", "red", "options", ["red", "blue", "green", "yellow", "purple"])
+];
 export const gameSetup: CustomSetting[] =
 [
     new CustomSetting("Room Name", localStorage.getItem("Nickname")+"'s room", "host", () => {
@@ -286,6 +294,10 @@ export function customGamemode(): void {
                 //@ts-ignore
                 gameSetup[index].nextValue();
             }
+            else if(menuChosen == 'options') {
+                //@ts-ignore
+                options[index].nextValue(changeColor);
+            }
         }
     });
 
@@ -298,6 +310,8 @@ export function customGamemode(): void {
     <button class="back-button" data-click="changeMenu('multiplayer')" connectToServer>Apply</button>
     <button data-click="changeMenu('main')">Back</button>
     `;
+
+    optionsMenu.innerHTML += ` <button class="back-button" data-click="changeMenu('main')">Apply and Back</button>`;
 
     document.getElementById("custom-hints").innerHTML += `<button class="back-button" data-click="changeMenu('custom')">Back</button>`;
     document.getElementById("host").innerHTML += `

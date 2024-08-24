@@ -1,14 +1,15 @@
+@import url("main.css");
 body {
     font-family: typewriter;
-    color: rgb(217, 29, 29);
-    text-shadow: 0px 0px 22px rgb(175, 21, 21);
+    color: var(--color-main);
+    text-shadow: 0px 0px 22px var(--color-shadow);
 }
 .quest {
     text-align: center;
     font-size: 3rem;
     letter-spacing: 5px;
-    color: rgb(182, 23, 23);
-    text-shadow: 0px 0px 22px rgb(137,16,16);
+    color: var(--color-title);
+    text-shadow: 0px 0px 22px var(--color-border);
 }
 .input, .lastGuess {
     position: absolute;
@@ -27,7 +28,7 @@ body {
 .correct {
     font-size: 15rem;
     font-weight: 900;
-    color: rgb(217, 29, 29);
+    color: var(--color-main);
     animation: rainbow 1s infinite linear, zoomInZoomOut 1s infinite linear;
 }
 .output {
@@ -81,7 +82,8 @@ body {
     font-size: 1.2rem;
 }
 .faint, .gamemode-info {
-    color: rgb(170, 24, 24);
+    color: var(--color-main);
+    opacity: 0.75;
 }
 .gamemode-info {
     text-transform: uppercase;
@@ -176,7 +178,7 @@ body {
 @keyframes correctEffect {
     0%, 100% {
         transform: translate(-50%, -50%) translateZ(-50px);
-        color: rgb(217, 29, 29);
+        color: var(--color-main);
     }
     50% {
         transform: translate(-50%, -50%) translateZ(50px);
