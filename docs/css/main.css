@@ -7,6 +7,14 @@
     src: url("../fonts/JMH Typewriter.otf");
 }
 
+:root {
+    --color-main: rgb(217, 29, 29);
+    --color-title: rgb(182, 23, 23);
+    --color-border: rgb(137,16,16);
+    --color-shadow: rgb(175, 21, 21);
+    --color-shadow2: rgba(137,16,16, 0.75);
+}
+
 body {
     perspective: 500px;
     margin: 0;
@@ -32,4 +40,7 @@ body {
     border: 2px solid rgba(255,255,255,0.5);
     border-radius: 5px;
     padding: 5px 9px;
+}
+.thin-space {
+    margin: 0 10px;
 }
