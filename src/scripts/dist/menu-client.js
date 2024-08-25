@@ -1,5 +1,5 @@
 import { io } from "socket.io-client";
-import { gameSetup } from "./customSetup.js";
+import { gameSetup } from "./settings/gameSetup.js";
 import { changeMenu } from "./menu.js";
 import { SERVER_URL, SERVER_LIST_REFRESH_TIME, PING_REFRESH_TIME } from "./multiplayer-config.js";
 let socket;

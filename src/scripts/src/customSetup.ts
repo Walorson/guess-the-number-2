@@ -1,6 +1,9 @@
 import { buttons, index, menuChosen } from "./menu.js"
 import { changeColor } from "./theme.js";
-import * as mp from "./multiplayer-config.js"
+
+import { options } from "./settings/options.js";
+import { gameSetup } from "./settings/gameSetup.js";
+import { setNickname } from "./settings/nickname.js"
 
 const customMenu: HTMLElement = document.getElementById("custom");
 const setNicknameMenu: HTMLElement = document.getElementById("set-nickname");
@@ -76,7 +79,8 @@ export class CustomSetting {
             return "green";
     }
 }
-class CustomSettingBoolean extends CustomSetting {
+
+export class CustomSettingBoolean extends CustomSetting {
     constructor(name: string, defaultValue: string, where: string) {
         super(name, defaultValue, where);
     }
@@ -108,7 +112,7 @@ class CustomSettingBoolean extends CustomSetting {
     }
 }
 
-class CustomSettingMultiple extends CustomSetting {
+export class CustomSettingMultiple extends CustomSetting {
     values: string[];
     indexValue: number;
     constructor(name: string, defaultValue: string, where: string, values: string[]) {
@@ -136,58 +140,9 @@ class CustomSettingMultiple extends CustomSetting {
         event(this.value);
     }
 }
-const options: CustomSetting[] =
-[
-    new CustomSettingMultiple("Main Color", "red", "options", ["red", "blue", "green", "yellow", "purple"])
-];
-export const gameSetup: CustomSetting[] =
-[
-    new CustomSetting("Room Name", localStorage.getItem("Nickname")+"'s room", "host", () => {
-        if(gameSetup[0].value.length > mp.ROOM_NAME_MAX_LENGTH) {
-            gameSetup[0].setValue(gameSetup[0].value.slice(0, 16));
-        }
-        else if(gameSetup[0].value.length < mp.ROOM_NAME_MIN_LENGTH) {
-            gameSetup[0].setValue("Roo");
-        }
-    }),
-    new CustomSetting("Players Count", "2", "host", () => {
-        if(Number(gameSetup[1].value) < mp.ROOM_MIN_PLAYERS_COUNT)
-        {
-            gameSetup[1].setValue(mp.ROOM_MIN_PLAYERS_COUNT+"");
-        }
-        else if(Number(gameSetup[1].value) > mp.ROOM_MAX_PLAYERS_COUNT)
-        {
-            gameSetup[1].setValue(mp.ROOM_MAX_PLAYERS_COUNT+"");
-        }
-    }),
-    new CustomSetting("Points To Win", "3", "host", () => {
-        if(Number(gameSetup[2].value) < mp.POINTS_MIN_COUNT)
-        {
-            gameSetup[2].setValue(mp.POINTS_MIN_COUNT+"");
-        }
-        else if(Number(gameSetup[2].value) > mp.POINTS_MAX_COUNT)
-        {
-            gameSetup[2].setValue(mp.POINTS_MAX_COUNT+"");
-        }
-    }),
-    new CustomSettingMultiple("Gamemode", "Classic", "host", ["Classic", "Hardcore", "Puzzle", "Blind", "Interval"])
-];
 
-export function customGamemode(): void {
-    const setNickname = new CustomSetting("Nickname", "noob", "set-nickname", () => {
-        if(setNickname.value.length > mp.NICKNAME_MAX_LENGTH)
-        {
-            setNickname.setValue(setNickname.value.slice(0, mp.NICKNAME_MAX_LENGTH));
-        }
-        else if(setNickname.value.length < mp.NICKNAME_MIN_LENGTH)
-        {
-            setNickname.setValue("Bob");
-        }
-    });
-    setNickname.onlyNumbers = false;
-
-    gameSetup[0].onlyNumbers = false;
-
+export function customGamemode(): void 
+{
     const settings: CustomSetting[] = 
     [
         new CustomSetting("min", "0", "custom", () => 
@@ -320,6 +275,5 @@ export function customGamemode(): void {
 }
 
 function isAlphanumeric(char: string): boolean {
-    console.log(/^[a-zA-Z0-9]$/.test(char))
     if(/^[a-zA-Z0-9]$/.test(char)) return true;
 }

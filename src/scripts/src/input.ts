@@ -24,7 +24,7 @@ export function writeGuess(e: KeyboardEvent): void
         if(guess[0] != '0' && guess.length < guessMaxLength)
             guess += e.key;
 
-        input.textContent = guess;
+        input.innerHTML = guess.thousandSeparator();
     }
     else if(e.key == 'Backspace')
     {
@@ -33,11 +33,11 @@ export function writeGuess(e: KeyboardEvent): void
         if(guess.length <= 0)
             guess = "0";
 
-        input.textContent = guess;
+        input.innerHTML = guess.thousandSeparator();
     }
     else if(e.key == 'ArrowUp')
     {
-        input.textContent = lastGuess;
+        input.innerHTML = lastGuess.thousandSeparator();
         guess = lastGuess;
     }
 }
@@ -53,8 +53,18 @@ export function getGuess(): number {
     return Number(guess);
 }
 export function clearGuess(): void {
-    lastGuessDiv.textContent = lastGuess; 
+    lastGuessDiv.innerHTML = lastGuess.thousandSeparator(); 
     guess = "0"; 
     input.textContent = "0";
 }
 
+String.prototype.thousandSeparator = function(): string
+{
+    return this.replace(/\B(?=(\d{3})+(?!\d))/g, "<span class='thin-space'></span>");
+}
+
+declare global {
+    interface String {
+        thousandSeparator() : string;
+    }
+}
