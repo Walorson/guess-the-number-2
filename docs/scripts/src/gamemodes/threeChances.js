@@ -1,6 +1,7 @@
 import {getGuess, setGuessMaxLength, attempts, clearGuess} from "../input.js";
 import * as output from "../output.js";
-import {init, win, dead, rand, setRand} from "../game.js";
+import {init, win, dead} from "../game.js";
+import {rand, setRand} from "../random.js";
 setRand(0, 20);
 setGuessMaxLength(2);
 function threeChancesGamemode() {

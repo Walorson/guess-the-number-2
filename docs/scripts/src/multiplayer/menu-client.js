@@ -1,7 +1,8 @@
-import {io} from "../../_snowpack/pkg/socket.io-client.js";
-import {gameSetup} from "./settings/gameSetup.js";
-import {changeMenu} from "./menu.js";
+import {io} from "../../../_snowpack/pkg/socket.io-client.js";
+import {gameSetup} from "../settings/gameSetup.js";
+import {changeMenu} from "../menu.js";
 import {SERVER_URL, SERVER_LIST_REFRESH_TIME, PING_REFRESH_TIME} from "./multiplayer-config.js";
+import {ping} from "./ping.js";
 let socket;
 let nickname;
 const connectInfo = document.getElementById("connecting-to-server");
@@ -9,6 +10,7 @@ const waitingRoom = document.getElementById("waiting-room-players");
 const serversList = document.getElementById("servers-list");
 const pingDiv = document.getElementById("ping");
 const onlinePlayersDiv = document.getElementById("online-players");
+const disconnectButton = document.getElementById("disconnect-button");
 window.addEventListener("load", () => {
   sessionStorage.removeItem("lobby");
   sessionStorage.removeItem("multiplayer");
@@ -16,7 +18,7 @@ window.addEventListener("load", () => {
 export function connectToServer() {
   socket = io(SERVER_URL);
   let timer = setTimeout(() => {
-    connectInfo.textContent = "Connection failed.";
+    connectInfo.textContent = "Connection failed. Try Again later...";
   }, 5e3);
   socket.on("connect", () => {
     connectInfo.style.display = "none";
@@ -27,7 +29,9 @@ export function connectToServer() {
     gameSetup[0].setValue(nickname + "'s room");
     gameSetup[0].applySetting();
     socket.emit("join", nickname);
-    setInterval(ping, PING_REFRESH_TIME * 1e3);
+    setInterval(() => {
+      ping(socket);
+    }, PING_REFRESH_TIME * 1e3);
     setInterval(onlinePlayers, PING_REFRESH_TIME * 1e3);
     setInterval(getServersList, SERVER_LIST_REFRESH_TIME * 1e3);
   });
@@ -47,9 +51,9 @@ export function connectToServer() {
     emptySlot.textContent = newPlayer;
     emptySlot.removeAttribute("class");
   });
-  socket.on("startGame", () => {
+  socket.on("startGame", (gamemode) => {
     sessionStorage.setItem("multiplayer", "true");
-    location.href = `gamemodes/${localStorage.getItem("Gamemode").toLowerCase()}.html`;
+    location.href = `gamemodes/${gamemode}.html`;
   });
   socket.on("GTFO", () => {
     location.reload();
@@ -73,23 +77,11 @@ export function createLobby() {
     waitingRoom.innerHTML += `<button class="empty-slot">.</button>`;
   }
   document.getElementById("start-game-button").style.display = "block";
-  socket.emit("createLobby", localStorage.getItem("Room Name"), playersCount, localStorage.getItem("Points To Win"));
+  socket.emit("createLobby", localStorage.getItem("Room Name"), playersCount, localStorage.getItem("Points To Win"), localStorage.getItem("Gamemode").toLowerCase());
   sessionStorage.setItem("lobby", socket.id);
 }
 function getServersList() {
   socket.emit("getServersList");
-}
-function ping() {
-  let time = 0;
-  let timer = setInterval(() => {
-    time++;
-  }, 1);
-  socket.emit("ping");
-  socket.on("pong", () => {
-    clearInterval(timer);
-    pingDiv.textContent = "Ping: " + time + "ms";
-    time = 0;
-  });
 }
 function onlinePlayers() {
   socket.emit("getOnlinePlayers");

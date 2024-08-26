@@ -1,7 +1,8 @@
 import { getGuess, clearGuess } from "../input.js";
 import * as output from "../output.js";
-import { init, win, rand } from "../game.js";
+import { init, win } from "../game.js";
 import { time } from "../time.js";
+import { rand } from "../random.js";
 time.setTimerDir(-1);
 time.setTime(9, 99);
 time.forceStopTimerIf(0, "<");

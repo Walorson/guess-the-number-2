@@ -1,8 +1,9 @@
 import {getGuess, clearGuess, setGuessMaxLength, attempts} from "../input.js";
 import * as output from "../output.js";
-import {init, win, rand, setRand, dead} from "../game.js";
-import {printHints} from "./puzzle.js";
+import {init, win, dead} from "../game.js";
+import {printHints} from "./utility/hints.js";
 import {time} from "../time.js";
+import {rand, setRand} from "../random.js";
 localStorage.setItem("Custom Mode", "true");
 const min = Number(localStorage.getItem("min"));
 const max = Number(localStorage.getItem("max"));
@@ -19,7 +20,7 @@ if (!isNaN(seconds)) {
   time.displaySeconds();
 }
 window.addEventListener("load", () => {
-  printHints(true);
+  printHints(rand, true);
 });
 function customGamemode() {
   let guess = getGuess();
