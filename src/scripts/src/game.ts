@@ -1,11 +1,13 @@
 import { writeGuess } from "./input.js";
 import { time } from "./time.js";
-import { connectToServer, multiplayerWin } from "./game-client.js";
-import { isMultiplayer } from "./multiplayer-config.js";
-import { changeColor } from "./theme.js";
+import { connectToServer, multiplayerWin } from "./multiplayer/game-client.js";
+import { isMultiplayer } from "./multiplayer/multiplayer-config.js";
+import { changeBackground, changeColor } from "./theme.js";
+import { rand } from "./random.js";
 
 window.addEventListener("load", () => {
-    changeColor(localStorage.getItem("Main Color"));
+    changeColor(localStorage.getItem("Color"));
+    changeBackground(localStorage.getItem("Background"));
     
     if(isMultiplayer())
     {
@@ -20,23 +22,6 @@ const lastGuess: HTMLElement = document.getElementById("lastGuess");
 const guide: HTMLElement = document.getElementById("guide");
 let isGameEnd: boolean = false;
 export let timerDir: number = 1; //1 or -1
-
-export let rand: number = Math.floor(Math.random()*101); // THE CORE OF THE GAME
-
-export function setRand(min: number, max: number): void
-{
-    rand = Math.floor(Math.random() * (max + 1 - min)) + min;
-}
-
-export function returnRand(min: number, max: number): number
-{
-    return Math.floor(Math.random() * (max + 1 - min)) + min;
-}
-
-export function forceRand(number: number) 
-{
-    rand = number;
-}
 
 export function freezeGame(): void
 {
@@ -119,7 +104,7 @@ export function gameEvents(): void
         {
             location.href = '../index.html';     
         }
-        if(e.key === 'r' || e.key === 'R')
+        if((e.key === 'r' || e.key === 'R') && (isMultiplayer() == false))
         {
             if(reloadBlock == true) return;
 

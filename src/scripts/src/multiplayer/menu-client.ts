@@ -1,7 +1,8 @@
 import { io } from "socket.io-client";
-import { gameSetup } from "./settings/gameSetup.js";
-import { changeMenu } from "./menu.js";
+import { gameSetup } from "../settings/gameSetup.js";
+import { changeMenu } from "../menu.js";
 import { SERVER_URL, SERVER_LIST_REFRESH_TIME, PING_REFRESH_TIME } from "./multiplayer-config.js";
+import { ping } from "./ping.js";
 
 let socket: any;
 let nickname: string;
@@ -10,6 +11,7 @@ const waitingRoom: HTMLElement = document.getElementById("waiting-room-players")
 const serversList: HTMLElement = document.getElementById("servers-list");
 const pingDiv: HTMLElement = document.getElementById("ping");
 const onlinePlayersDiv: HTMLElement = document.getElementById("online-players");
+const disconnectButton: HTMLElement = document.getElementById("disconnect-button");
 
 window.addEventListener("load", () => {
     sessionStorage.removeItem("lobby");
@@ -19,7 +21,7 @@ window.addEventListener("load", () => {
 export function connectToServer(): void {
     socket = io(SERVER_URL);
     let timer: NodeJS.Timeout = setTimeout(() => {
-        connectInfo.textContent = "Connection failed.";
+        connectInfo.textContent = "Connection failed. Try Again later...";
     }, 5000);
 
     socket.on("connect", () => {
@@ -33,7 +35,7 @@ export function connectToServer(): void {
         gameSetup[0].applySetting();
 
         socket.emit("join", nickname);
-        setInterval(ping, PING_REFRESH_TIME * 1000);
+        setInterval(() => { ping(socket) }, PING_REFRESH_TIME * 1000);
         setInterval(onlinePlayers, PING_REFRESH_TIME * 1000);
         setInterval(getServersList, SERVER_LIST_REFRESH_TIME * 1000);
     });
@@ -57,9 +59,9 @@ export function connectToServer(): void {
         emptySlot.removeAttribute("class");
     });
 
-    socket.on("startGame", () => {
+    socket.on("startGame", (gamemode: string) => {
         sessionStorage.setItem("multiplayer", "true");
-        location.href = `gamemodes/${localStorage.getItem("Gamemode").toLowerCase()}.html`;
+        location.href = `gamemodes/${gamemode}.html`;
     });
 
     socket.on("GTFO", () => {
@@ -91,23 +93,12 @@ export function createLobby(): void {
     }
 
     document.getElementById("start-game-button").style.display = 'block';
-    socket.emit("createLobby", localStorage.getItem("Room Name"), playersCount, localStorage.getItem("Points To Win"));
+    socket.emit("createLobby", localStorage.getItem("Room Name"), playersCount, localStorage.getItem("Points To Win"), localStorage.getItem("Gamemode").toLowerCase());
     sessionStorage.setItem("lobby", socket.id);
 }
 
 function getServersList(): void {
     socket.emit("getServersList");
-}
-
-function ping(): void {
-    let time: number = 0;
-    let timer: NodeJS.Timeout = setInterval(() => { time++; }, 1);
-    socket.emit("ping");
-    socket.on("pong", () => {
-        clearInterval(timer);
-        pingDiv.textContent = "Ping: "+time+"ms";
-        time = 0;
-    });
 }
 
 function onlinePlayers(): void {
@@ -122,6 +113,7 @@ function connectTo(ownerID: string): void {
     sessionStorage.setItem("lobby", ownerID);
     socket.on("connectTo", (lobby: any) => {
         changeMenu("waiting-room");
+
         for(let i=0; i<lobby.maxPlayers; i++) 
         {
             if(lobby.members[i] != undefined)

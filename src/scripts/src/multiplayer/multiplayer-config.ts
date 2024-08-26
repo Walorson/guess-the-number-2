@@ -1,7 +1,7 @@
 export const SERVER_URL: string = "127.0.0.1:3000";
 
 //TIME IN SECONDS//
-export const SERVER_LIST_REFRESH_TIME: number = 1.5;
+export const SERVER_LIST_REFRESH_TIME: number = 1;
 export const PING_REFRESH_TIME: number = 1;
 
 export const PRE_ROUND_TIME: number = 6;

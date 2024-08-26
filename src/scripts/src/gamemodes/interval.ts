@@ -1,18 +1,26 @@
 import { getGuess, clearGuess } from "../input.js";
 import * as output from "../output.js";
-import { init, win, rand, setRand, setAnimation } from "../game.js";
+import { init, win, setAnimation } from "../game.js";
+import { rand, setRand } from "../random.js";
+import { setHint } from "./utility/hints.js";
+import { isMultiplayer } from "../multiplayer/multiplayer-config.js";
+import { setMinMax } from "./utility/setMinMax.js";
 
 const questDiv: HTMLElement = document.getElementById("quest");
-const hintDiv: HTMLElement = document.getElementById("hint");
 const input: HTMLElement = document.getElementById("input");
-const min: number = Math.floor(Math.random()*150);
-const max: number = Math.floor(Math.random()*300) + min;
+let min: number;
+let max: number;
 
 let isMinGuess: boolean = false;
 
-setRand(min, max);
+window.addEventListener("load", () => {
+    setMinMax(Math.floor(Math.random()*150), 333);
+    console.log(min, max)
+    setRand(min, max);
 
-hintDiv.textContent = rand+" is in the interval <???, ???>";
+    if(isMultiplayer() == false)
+        setHint(rand+" is in the interval <???, ???>");
+});
 
 function intervalGamemode(): void
 {
@@ -34,7 +42,7 @@ function intervalGamemode(): void
     }
     else if(isMinGuess == false) {
         isMinGuess = true;
-        hintDiv.textContent = rand+` is in the interval <${min}, ???>`;
+        setHint(rand+` is in the interval <${min}, ???>`);
         questDiv.textContent = `Guess an interval. Guess the upper bound of the interval.`;
 
         setAnimation(input, "correctEffect", 0.75);
@@ -42,7 +50,7 @@ function intervalGamemode(): void
         output.set(output.CORRECT);
     }
     else {
-        hintDiv.textContent = rand+` is in the interval <${min}, ${max}>`;
+        setHint(rand+` is in the interval <${min}, ${max}>`);
         input.textContent = `<${min},${max}>`;
         win();
 
@@ -50,6 +58,15 @@ function intervalGamemode(): void
     }
 
     if(guess != rand) clearGuess();
+}
+
+export function setMin(num: number)
+{
+    min = num;
+}
+export function setMax(num: number)
+{
+    max = num;
 }
 
 init(intervalGamemode);

@@ -1,6 +1,7 @@
-import { on } from "events";
 import { Server } from "socket.io";
-
+import { getRandomInterval } from "./src/scripts/dist/gamemodes/utility/interval.js";
+import { returnRand } from "./src/scripts/dist/random.js";
+ 
 const io = new Server(3000, {
     cors: { origin: "*" }
 });
@@ -43,7 +44,7 @@ io.on("connection", socket => {
         socket.emit("pong");
     })
 
-    socket.on("createLobby", (nameLobby, maxPlayersCount, pointsToWinCount) => {
+    socket.on("createLobby", (nameLobby, maxPlayersCount, pointsToWinCount, gamemodeName) => {
 
         serversList.push({
             name: nameLobby, 
@@ -53,7 +54,8 @@ io.on("connection", socket => {
             points: {},
             inGame: false,
             isRoundEnd: false,
-            pointsToWin: pointsToWinCount
+            pointsToWin: pointsToWinCount,
+            gamemode: gamemodeName
         });
 
         serversList[serversList.length-1].points[nicknames[socket.id]] = 0;
@@ -83,11 +85,12 @@ io.on("connection", socket => {
     });
 
     socket.on("startGame", ownerID => {
-        io.to(ownerID).emit("startGame");
-        io.socketsLeave(ownerID);
         const lobby = serversList.find(obj => obj.gameID == ownerID);
         lobby.members = [];
         lobby.inGame = true;
+
+        io.to(ownerID).emit("startGame", lobby.gamemode);
+        io.socketsLeave(ownerID);
     });
 
     /////GAME/////
@@ -111,7 +114,21 @@ io.on("connection", socket => {
 
         if(lobby.members.length == lobby.maxPlayers) {
             io.to(gameID).emit("startMatch", lobby.points, lobby.pointsToWin);
-            io.to(gameID).emit("getRandomNumber", Math.floor(Math.random()*101));
+            
+            let rand;
+
+            if(lobby.gamemode == 'blind' || lobby.gamemode == 'interval')
+            {
+                const interval = getRandomInterval();
+                rand = returnRand(interval[0], interval[1]);
+                io.to(gameID).emit("setServerVariables", rand, lobby.gamemode, interval[0], interval[1]);
+            }
+            else 
+            {
+                rand = returnRand(0, 100);
+                io.to(gameID).emit("setServerVariables", rand, lobby.gamemode);
+            }
+            
         }
 
         online++;

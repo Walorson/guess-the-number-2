@@ -24,9 +24,10 @@ body {
     overflow: hidden;
     color: #f0f0f0;
     user-select: none;
+    background-color: black;
 
     /* Background pattern from Toptal Subtle Patterns */
-    background-image: url("../img/background.webp");
+    background: url("../img/backgrounds/default.webp");
 }
 
 #guide {

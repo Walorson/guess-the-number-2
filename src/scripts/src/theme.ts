@@ -28,3 +28,11 @@ function colorPalette(colorMain: string, colorTitle: string, colorBorder: string
     document.documentElement.style.setProperty("--color-shadow", "rgb("+colorShadow+")");
     document.documentElement.style.setProperty("--color-shadow2", "rgba("+colorShadow2+")");
 }
+
+export function changeBackground(name: string): void
+{
+    if(name != "none")
+        document.body.style.background = `url("../img/backgrounds/${name}.webp")`;
+    else
+        document.body.style.background = `black`;
+}

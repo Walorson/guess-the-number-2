@@ -1,11 +1,9 @@
 import { getGuess, clearGuess } from "../input.js";
 import * as output from "../output.js";
-import { init, win, rand, setRand } from "../game.js";
-
-const min: number = Math.floor(Math.random()*150);
-const max: number = Math.floor(Math.random()*300) + min;
-
-setRand(min, max);
+import { init, win } from "../game.js";
+import { rand, setRand } from "../random.js"
+import { getRandomInterval, revealInterval } from "./utility/interval.js";
+import { isMultiplayer } from "../multiplayer/multiplayer-config.js";
 
 function blindGamemode(): void
 {
@@ -21,10 +19,15 @@ function blindGamemode(): void
     }
     else {
         win();
-        document.getElementById("quest").textContent = `Guess a number from ${min} to ${max}`;
+
+        if(isMultiplayer() == false)
+            revealInterval(interval[0], interval[1]);
     }
 
     if(guess != rand) clearGuess();
 }
 
+const interval: number[] = getRandomInterval();
+
+setRand(interval[0], interval[1]);
 init(blindGamemode);
