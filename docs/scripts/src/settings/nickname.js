@@ -1,5 +1,5 @@
 import {CustomSetting} from "../customSetup.js";
-import {NICKNAME_MAX_LENGTH, NICKNAME_MIN_LENGTH} from "../multiplayer-config.js";
+import {NICKNAME_MAX_LENGTH, NICKNAME_MIN_LENGTH} from "../multiplayer/multiplayer-config.js";
 export let setNickname;
 window.addEventListener("load", () => {
   setNickname = new CustomSetting("Nickname", "noob", "set-nickname", () => {

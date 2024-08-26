@@ -1,6 +1,6 @@
 export const SERVER_URL = "127.0.0.1:3000";
 //TIME IN SECONDS//
-export const SERVER_LIST_REFRESH_TIME = 1.5;
+export const SERVER_LIST_REFRESH_TIME = 1;
 export const PING_REFRESH_TIME = 1;
 export const PRE_ROUND_TIME = 6;
 export const POST_ROUND_TIME = 5;

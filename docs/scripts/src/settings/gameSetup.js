@@ -1,5 +1,5 @@
 import {CustomSetting, CustomSettingMultiple} from "../customSetup.js";
-import {POINTS_MAX_COUNT, POINTS_MIN_COUNT, ROOM_MAX_PLAYERS_COUNT, ROOM_MIN_PLAYERS_COUNT, ROOM_NAME_MAX_LENGTH, ROOM_NAME_MIN_LENGTH} from "../multiplayer-config.js";
+import {POINTS_MAX_COUNT, POINTS_MIN_COUNT, ROOM_MAX_PLAYERS_COUNT, ROOM_MIN_PLAYERS_COUNT, ROOM_NAME_MAX_LENGTH, ROOM_NAME_MIN_LENGTH} from "../multiplayer/multiplayer-config.js";
 export let gameSetup;
 window.addEventListener("load", () => {
   gameSetup = [
@@ -24,7 +24,7 @@ window.addEventListener("load", () => {
         gameSetup[2].setValue(POINTS_MAX_COUNT + "");
       }
     }),
-    new CustomSettingMultiple("Gamemode", "Classic", "host", ["Classic", "Hardcore", "Puzzle", "Blind", "Interval"])
+    new CustomSettingMultiple("Gamemode", "Classic", "host", ["Classic", "Hardcore", "Puzzle", "Blind"])
   ];
   gameSetup[0].onlyNumbers = false;
 });

@@ -34,3 +34,9 @@ function colorPalette(colorMain, colorTitle, colorBorder, colorShadow, colorShad
   document.documentElement.style.setProperty("--color-shadow", "rgb(" + colorShadow + ")");
   document.documentElement.style.setProperty("--color-shadow2", "rgba(" + colorShadow2 + ")");
 }
+export function changeBackground(name) {
+  if (name != "none")
+    document.body.style.background = `url("../img/backgrounds/${name}.webp")`;
+  else
+    document.body.style.background = `black`;
+}

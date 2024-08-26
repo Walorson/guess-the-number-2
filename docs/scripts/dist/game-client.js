@@ -2,6 +2,7 @@ import { io } from "../../_snowpack/pkg/socket.io-client.js";
 import { freezeGame, unfreezeGame, dead, forceRand } from "./game.js";
 import { setText } from "./output.js";
 import { SERVER_URL, PRE_ROUND_TIME, POST_ROUND_TIME, SCOREBOARD_DELAY_TIME, PING_REFRESH_TIME, isMultiplayer, TERMINATE_LOBBY_DELAY } from "./multiplayer-config.js";
+import { printHints } from "./gamemodes/utility/hints.js";
 let socket;
 let yourPoints;
 let pointsToWin;
@@ -31,8 +32,10 @@ export function connectToServer() {
         loadScoreboard(scoreboard);
         timerStart(PRE_ROUND_TIME, roundStart);
     });
-    socket.on("getRandomNumber", (randomNumber) => {
+    socket.on("setServerVariables", (randomNumber, gamemode) => {
         forceRand(randomNumber);
+        if (gamemode == 'puzzle')
+            printHints(randomNumber);
     });
     socket.on("startNewRound", () => {
         location.reload();
@@ -51,7 +54,7 @@ export function connectToServer() {
         timerStart(TERMINATE_LOBBY_DELAY, noop, "Return to lobby in ");
     });
     socket.on("GTFO", () => {
-        location.href = "../../";
+        location.href = "../";
     });
     socket.on("playerLeftTheGame", (nickname) => {
         alert(nickname + " left the game.");
@@ -67,7 +70,6 @@ export function multiplayerWin() {
 function loadScoreboard(scoreboard) {
     const div = document.createElement("div");
     div.setAttribute("id", "scoreboard");
-    const pointsToWin = Number(localStorage.getItem('Points To Win'));
     let points = "";
     for (let i = 0; i < pointsToWin; i++) {
         points += '<div class="point"></div>';

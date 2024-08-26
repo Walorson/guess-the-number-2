@@ -1,14 +1,22 @@
 import {getGuess, clearGuess} from "../input.js";
 import * as output from "../output.js";
-import {init, win, rand, setRand, setAnimation} from "../game.js";
+import {init, win, setAnimation} from "../game.js";
+import {rand, setRand} from "../random.js";
+import {setHint} from "./utility/hints.js";
+import {isMultiplayer} from "../multiplayer/multiplayer-config.js";
+import {setMinMax} from "./utility/setMinMax.js";
 const questDiv = document.getElementById("quest");
-const hintDiv = document.getElementById("hint");
 const input = document.getElementById("input");
-const min = Math.floor(Math.random() * 150);
-const max = Math.floor(Math.random() * 300) + min;
+let min;
+let max;
 let isMinGuess = false;
-setRand(min, max);
-hintDiv.textContent = rand + " is in the interval <???, ???>";
+window.addEventListener("load", () => {
+  setMinMax(Math.floor(Math.random() * 150), 333);
+  console.log(min, max);
+  setRand(min, max);
+  if (isMultiplayer() == false)
+    setHint(rand + " is in the interval <???, ???>");
+});
 function intervalGamemode() {
   let guess = getGuess();
   let intervalBound;
@@ -22,17 +30,23 @@ function intervalGamemode() {
     output.set(output.TOO_SMALL);
   } else if (isMinGuess == false) {
     isMinGuess = true;
-    hintDiv.textContent = rand + ` is in the interval <${min}, ???>`;
+    setHint(rand + ` is in the interval <${min}, ???>`);
     questDiv.textContent = `Guess an interval. Guess the upper bound of the interval.`;
     setAnimation(input, "correctEffect", 0.75);
     output.set(output.CORRECT);
   } else {
-    hintDiv.textContent = rand + ` is in the interval <${min}, ${max}>`;
+    setHint(rand + ` is in the interval <${min}, ${max}>`);
     input.textContent = `<${min},${max}>`;
     win();
     return;
   }
   if (guess != rand)
     clearGuess();
+}
+export function setMin(num) {
+  min = num;
+}
+export function setMax(num) {
+  max = num;
 }
 init(intervalGamemode);

@@ -1,6 +1,6 @@
 import {customGamemode, editMode} from "./customSetup.js";
-import {connectToServer, createLobby, startGame} from "./menu-client.js";
-import {changeColor} from "./theme.js";
+import {connectToServer, createLobby, startGame} from "./multiplayer/menu-client.js";
+import {changeBackground, changeColor} from "./theme.js";
 localStorage.setItem("Custom Mode", "false");
 export let buttons = document.getElementById("main").querySelectorAll("button");
 export let menuChosen = "main";
@@ -12,7 +12,8 @@ let keyboardUse = false;
 window.addEventListener("load", () => {
   assignClickEventForButtons();
   customGamemode();
-  changeColor(localStorage.getItem("Main Color"));
+  changeColor(localStorage.getItem("Color"));
+  changeBackground(localStorage.getItem("Background"));
 });
 window.addEventListener("keydown", (e) => {
   if (editMode == true)

@@ -1,6 +1,7 @@
 import {getGuess, clearGuess} from "../input.js";
 import * as output from "../output.js";
-import {init, win, dead, rand} from "../game.js";
+import {init, win, dead} from "../game.js";
+import {rand} from "../random.js";
 const healthDiv = document.getElementById("health");
 const hint = document.getElementById("hint");
 let health = 80;
