@@ -1,10 +1,12 @@
 import { writeGuess } from "./input.js";
 import { time } from "./time.js";
-import { connectToServer, multiplayerWin } from "./game-client.js";
-import { isMultiplayer } from "./multiplayer-config.js";
-import { changeColor } from "./theme.js";
+import { connectToServer, multiplayerWin } from "./multiplayer/game-client.js";
+import { isMultiplayer } from "./multiplayer/multiplayer-config.js";
+import { changeBackground, changeColor } from "./theme.js";
+import { rand } from "./random.js";
 window.addEventListener("load", () => {
-    changeColor(localStorage.getItem("Main Color"));
+    changeColor(localStorage.getItem("Color"));
+    changeBackground(localStorage.getItem("Background"));
     if (isMultiplayer()) {
         connectToServer();
     }
@@ -16,16 +18,6 @@ const lastGuess = document.getElementById("lastGuess");
 const guide = document.getElementById("guide");
 let isGameEnd = false;
 export let timerDir = 1; //1 or -1
-export let rand = Math.floor(Math.random() * 101); // THE CORE OF THE GAME
-export function setRand(min, max) {
-    rand = Math.floor(Math.random() * (max + 1 - min)) + min;
-}
-export function returnRand(min, max) {
-    return Math.floor(Math.random() * (max + 1 - min)) + min;
-}
-export function forceRand(number) {
-    rand = number;
-}
 export function freezeGame() {
     window.removeEventListener("keydown", writeGuess);
     isGameEnd = true;
@@ -88,7 +80,7 @@ export function gameEvents() {
         if (e.key == 'Escape') {
             location.href = '../index.html';
         }
-        if (e.key === 'r' || e.key === 'R') {
+        if ((e.key === 'r' || e.key === 'R') && (isMultiplayer() == false)) {
             if (reloadBlock == true)
                 return;
             reloadPage = setTimeout(function () { if (ReadyForReloadPage)

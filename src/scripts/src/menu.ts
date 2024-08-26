@@ -1,6 +1,6 @@
 import { customGamemode, editMode } from "./customSetup.js"
-import { connectToServer, createLobby, startGame } from "./menu-client.js"
-import { changeColor } from "./theme.js";
+import { connectToServer, createLobby, startGame } from "./multiplayer/menu-client.js"
+import { changeBackground, changeColor } from "./theme.js";
 
 localStorage.setItem("Custom Mode", "false");
 
@@ -12,7 +12,12 @@ let buttonsMax: number = buttons.length-1;
 let last: HTMLElement;
 let keyboardUse: boolean = false;
 
-window.addEventListener("load", () => { assignClickEventForButtons(); customGamemode(); changeColor(localStorage.getItem("Main Color")); });
+window.addEventListener("load", () => { 
+    assignClickEventForButtons(); 
+    customGamemode(); 
+    changeColor(localStorage.getItem("Color"));
+    changeBackground(localStorage.getItem("Background")); 
+});
 
 window.addEventListener("keydown", (e: KeyboardEvent) => 
 {

@@ -1,11 +1,18 @@
 import { io } from "socket.io-client";
-import { freezeGame, unfreezeGame, dead, forceRand } from "./game.js";
-import { setText } from "./output.js";
+import { freezeGame, unfreezeGame, dead } from "../game.js";
+import { setText } from "../output.js";
 import { SERVER_URL, PRE_ROUND_TIME, POST_ROUND_TIME, SCOREBOARD_DELAY_TIME, PING_REFRESH_TIME, isMultiplayer, TERMINATE_LOBBY_DELAY } from "./multiplayer-config.js";
+import { printHints, setHint } from "../gamemodes/utility/hints.js";
+import { ping } from "./ping.js";
+import { revealInterval } from "../gamemodes/utility/interval.js";
+import { forceRand } from "../random.js";
 
 let socket: any;
 let yourPoints: number;
 let pointsToWin: number;
+let min: number = 0;
+let max: number = 100;
+let gamemode: string = 'classic';
 const nickname: string = localStorage.getItem("Nickname");
 const gameID: string = sessionStorage.getItem("lobby");
 
@@ -27,7 +34,7 @@ export function connectToServer(): void
         div.innerHTML = "Ping: 0ms";
         document.body.appendChild(div);
 
-        setInterval(ping, PING_REFRESH_TIME * 1000);
+        setInterval(() => { ping(socket) }, PING_REFRESH_TIME * 1000);
     });
 
     socket.on("multiplayerWin", (nickname: string) => {
@@ -37,13 +44,26 @@ export function connectToServer(): void
 
     socket.on("startMatch", (scoreboard: number[], pointsToWinCount: number) => {
         pointsToWin = pointsToWinCount;
+
         loadScoreboard(scoreboard);
         timerStart(PRE_ROUND_TIME, roundStart);
     });
 
-    socket.on("getRandomNumber", (randomNumber: number) => 
+    socket.on("setServerVariables", (randomNumber: number, gamemodeServer: string, minI: number, maxI: number) => 
     {
         forceRand(randomNumber);
+        gamemode = gamemodeServer;
+
+        if(gamemode == 'puzzle')
+            printHints(randomNumber);
+        else if(gamemode == 'blind') {
+            min = minI;
+            max = maxI;
+        }
+        /*else if(gamemode == 'interval') {
+            setHint(randomNumber+" is in the interval <???, ???>");  
+        }*/
+
     });
 
     socket.on("startNewRound", () => {
@@ -69,7 +89,7 @@ export function connectToServer(): void
     });
 
     socket.on("GTFO", () => {
-        location.href = "../../";
+        location.href = "../";
     });
 
     socket.on("playerLeftTheGame", (nickname: string) => {
@@ -91,7 +111,6 @@ function loadScoreboard(scoreboard: number[]): void
 {   
     const div: HTMLElement = document.createElement("div");
     div.setAttribute("id","scoreboard");
-    const pointsToWin: number = Number(localStorage.getItem('Points To Win'));
     let points = "";
 
     for(let i=0; i<pointsToWin; i++)
@@ -174,22 +193,14 @@ function roundEnd(): void {
     setTimeout(() => {
         showScoreboard();
     }, SCOREBOARD_DELAY_TIME * 1000);
+
+    if(gamemode == 'blind')
+        revealInterval(min, max);
 }
 
 function updateScoreboardInfo(text: string) 
 {
     document.getElementById("scoreboard-info").textContent = text;
-}
-
-function ping(): void {
-    let time: number = 0;
-    let timer: NodeJS.Timeout = setInterval(() => { time++; }, 1);
-    socket.emit("ping");
-    socket.on("pong", () => {
-        clearInterval(timer);
-        document.getElementById("ping").textContent = "Ping: "+time+"ms";
-        time = 0;
-    });
 }
 
 function noop(): void {}

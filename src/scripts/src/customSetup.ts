@@ -115,17 +115,19 @@ export class CustomSettingBoolean extends CustomSetting {
 export class CustomSettingMultiple extends CustomSetting {
     values: string[];
     indexValue: number;
-    constructor(name: string, defaultValue: string, where: string, values: string[]) {
+    event: Function;
+    constructor(name: string, defaultValue: string, where: string, values: string[], event: Function = () => {}) {
         super(name, defaultValue, where);
         this.values = values;
         this.indexValue = this.values.indexOf(localStorage.getItem(name));
+        this.event = event;
     }
 
     createButton(): void {
         document.getElementById(this.where).innerHTML += `<button class="editable-boolean" id="customSetting-${this.name}">${this.name}: <span><span style="color:${this.color()}">${this.value}</span></span></button>`;
     }
 
-    nextValue(event: Function = () => {})
+    nextValue()
     {
         this.indexValue++;
 
@@ -137,7 +139,7 @@ export class CustomSettingMultiple extends CustomSetting {
         this.displayValue();
         this.applySetting();
 
-        event(this.value);
+        this.event(this.value);
     }
 }
 
@@ -251,7 +253,7 @@ export function customGamemode(): void
             }
             else if(menuChosen == 'options') {
                 //@ts-ignore
-                options[index].nextValue(changeColor);
+                options[index].nextValue();
             }
         }
     });

@@ -1,5 +1,6 @@
 import { getGuess, setGuessMaxLength } from "../input.js";
-import { init, win, dead, rand, setRand } from "../game.js";
+import { init, win, dead } from "../game.js";
+import { rand, setRand } from "../random.js";
 
 const hint: HTMLElement = document.getElementById("hint");
 
