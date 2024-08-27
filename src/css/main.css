@@ -6,6 +6,22 @@
     font-family: typewriter;
     src: url("../fonts/JMH Typewriter.otf");
 }
+@font-face {
+    font-family: "comic sans";
+    src: url("../fonts/ComicNeueSansID.ttf");
+}
+@font-face {
+    font-family: "jetbrains mono";
+    src: url("../fonts/JetBrainsMono-Regular.ttf");
+}
+@font-face {
+    font-family: "old london";
+    src: url("../fonts/OldLondon.ttf");
+}
+@font-face {
+    font-family: "minecraft";
+    src: url("../fonts/Minecraft.ttf");
+}
 
 :root {
     --color-main: rgb(217, 29, 29);
@@ -13,6 +29,10 @@
     --color-border: rgb(137,16,16);
     --color-shadow: rgb(175, 21, 21);
     --color-shadow2: rgba(137,16,16, 0.75);
+
+    --font-main: typewriter;
+    --font-title: milker;
+    --font-input: monospace;
 }
 
 body {
@@ -24,6 +44,7 @@ body {
     overflow: hidden;
     color: #f0f0f0;
     user-select: none;
+    font-family: monospace;
     background-color: black;
 
     /* Background pattern from Toptal Subtle Patterns */

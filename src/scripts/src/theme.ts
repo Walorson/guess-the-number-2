@@ -36,3 +36,13 @@ export function changeBackground(name: string): void
     else
         document.body.style.background = `black`;
 }
+
+export function changeFont(name: string): void
+{
+    if(name == "default") 
+        name = "";
+
+    document.documentElement.style.setProperty("--font-main", name);
+    document.documentElement.style.setProperty("--font-title", name);
+    document.documentElement.style.setProperty("--font-input", name);
+}

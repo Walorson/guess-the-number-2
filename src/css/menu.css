@@ -1,12 +1,12 @@
 @import url("main.css");
 @import url("multiplayer.css");
 body {
-    font-family: typewriter;
+    font-family: var(--font-main);
 }
 .title {
     text-align: center;
     font-size: 1.7vw;
-    font-family: milker;
+    font-family: var(--font-title);
     color: var(--color-title);
     text-shadow: 0px 0px 22px var(--color-shadow2);
     letter-spacing: 5px;
@@ -36,7 +36,7 @@ button {
     width: 31vw;
     border: 4px solid var(--color-border);
     background-color: rgb(25, 21, 21);
-    font-family: typewriter;
+    font-family: var(--font-main);
     letter-spacing: 2px;
     font-size: 1.2rem;
     color: inherit;

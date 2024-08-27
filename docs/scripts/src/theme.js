@@ -40,3 +40,10 @@ export function changeBackground(name) {
   else
     document.body.style.background = `black`;
 }
+export function changeFont(name) {
+  if (name == "default")
+    name = "";
+  document.documentElement.style.setProperty("--font-main", name);
+  document.documentElement.style.setProperty("--font-title", name);
+  document.documentElement.style.setProperty("--font-input", name);
+}
