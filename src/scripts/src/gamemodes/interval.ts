@@ -10,7 +10,6 @@ const questDiv: HTMLElement = document.getElementById("quest");
 const input: HTMLElement = document.getElementById("input");
 let min: number;
 let max: number;
-
 let isMinGuess: boolean = false;
 
 window.addEventListener("load", () => {
@@ -57,7 +56,7 @@ function intervalGamemode(): void
         return;
     }
 
-    if(guess != rand) clearGuess();
+    clearGuess();
 }
 
 export function setMin(num: number)

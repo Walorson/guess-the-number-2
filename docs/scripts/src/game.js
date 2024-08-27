@@ -2,11 +2,12 @@ import {writeGuess} from "./input.js";
 import {time} from "./time.js";
 import {connectToServer, multiplayerWin} from "./multiplayer/game-client.js";
 import {isMultiplayer} from "./multiplayer/multiplayer-config.js";
-import {changeBackground, changeColor} from "./theme.js";
+import {changeBackground, changeColor, changeFont} from "./theme.js";
 import {rand} from "./random.js";
 window.addEventListener("load", () => {
   changeColor(localStorage.getItem("Color"));
   changeBackground(localStorage.getItem("Background"));
+  changeFont(localStorage.getItem("Font"));
   if (isMultiplayer()) {
     connectToServer();
   }

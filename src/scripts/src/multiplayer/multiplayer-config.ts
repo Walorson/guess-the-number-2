@@ -1,4 +1,4 @@
-export const SERVER_URL: string = "https://guess-the-number-2.onrender.com";
+export const SERVER_URL: string = "127.0.0.1:3000";
 
 //TIME IN SECONDS//
 export const SERVER_LIST_REFRESH_TIME: number = 1;

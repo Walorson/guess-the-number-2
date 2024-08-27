@@ -40,8 +40,7 @@ function intervalGamemode() {
     win();
     return;
   }
-  if (guess != rand)
-    clearGuess();
+  clearGuess();
 }
 export function setMin(num) {
   min = num;
