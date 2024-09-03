@@ -95,6 +95,24 @@ button:hover {
     font-size: 2rem;
     text-align: center;
 }
+.hover b:first-of-type, .hover b:last-of-type {
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    transform: translateY(-50%);
+    display: inline;
+    opacity: 0.5;
+}
+.hover b:last-of-type {
+    right: 5px;
+    left: initial;
+}
+.editable-boolean {
+    position: relative;
+}
+.editable-boolean b {
+    display: none;
+}
 #start-game-button {
     display: none;
 }

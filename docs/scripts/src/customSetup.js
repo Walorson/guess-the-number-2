@@ -89,12 +89,21 @@ export class CustomSettingMultiple extends CustomSetting {
     this.event = event;
   }
   createButton() {
-    document.getElementById(this.where).innerHTML += `<button class="editable-boolean" id="customSetting-${this.name}">${this.name}: <span><span style="color:${this.color()}">${this.value}</span></span></button>`;
+    document.getElementById(this.where).innerHTML += `<button class="editable-boolean" id="customSetting-${this.name}"><b><-</b>${this.name}: <span><span style="color:${this.color()}">${this.value}</span></span><b>-></b></button>`;
   }
   nextValue() {
     this.indexValue++;
     if (this.indexValue >= this.values.length)
       this.indexValue = 0;
+    this.value = this.values[this.indexValue];
+    this.displayValue();
+    this.applySetting();
+    this.event(this.value);
+  }
+  previousValue() {
+    this.indexValue--;
+    if (this.indexValue < 0)
+      this.indexValue = this.values.length - 1;
     this.value = this.values[this.indexValue];
     this.displayValue();
     this.applySetting();
@@ -184,6 +193,20 @@ export function customGamemode() {
         gameSetup[index].nextValue();
       } else if (menuChosen == "options") {
         options[index].nextValue();
+      }
+    }
+    if (e.key == "ArrowRight") {
+      if (menuChosen == "options") {
+        options[index].nextValue();
+      } else if (menuChosen == "host") {
+        gameSetup[index].nextValue();
+      }
+    }
+    if (e.key == "ArrowLeft") {
+      if (menuChosen == "options") {
+        options[index].previousValue();
+      } else if (menuChosen == "host") {
+        gameSetup[index].previousValue();
       }
     }
   });

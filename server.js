@@ -130,8 +130,6 @@ io.on("connection", socket => {
             }
             
         }
-
-        online++;
     });
 
     socket.on("multiplayerWin", (gameID, nickname, postRoundTime, isGameEnd) => {

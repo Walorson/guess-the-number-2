@@ -1,9 +1,8 @@
 import { buttons, index, menuChosen } from "./menu.js"
-import { changeColor } from "./theme.js";
-
 import { options } from "./settings/options.js";
 import { gameSetup } from "./settings/gameSetup.js";
-import { setNickname } from "./settings/nickname.js"
+import { setNickname } from "./settings/nickname.js";
+
 
 const customMenu: HTMLElement = document.getElementById("custom");
 const setNicknameMenu: HTMLElement = document.getElementById("set-nickname");
@@ -124,7 +123,7 @@ export class CustomSettingMultiple extends CustomSetting {
     }
 
     createButton(): void {
-        document.getElementById(this.where).innerHTML += `<button class="editable-boolean" id="customSetting-${this.name}">${this.name}: <span><span style="color:${this.color()}">${this.value}</span></span></button>`;
+        document.getElementById(this.where).innerHTML += `<button class="editable-boolean" id="customSetting-${this.name}"><b><-</b>${this.name}: <span><span style="color:${this.color()}">${this.value}</span></span><b>-></b></button>`;
     }
 
     nextValue()
@@ -141,10 +140,25 @@ export class CustomSettingMultiple extends CustomSetting {
 
         this.event(this.value);
     }
+
+    previousValue()
+    {
+        this.indexValue--;
+        
+        if(this.indexValue < 0)
+            this.indexValue = this.values.length - 1;
+
+        this.value = this.values[this.indexValue];
+
+        this.displayValue();
+        this.applySetting();
+
+        this.event(this.value);
+    }
 }
 
 export function customGamemode(): void 
-{
+{ 
     const settings: CustomSetting[] = 
     [
         new CustomSetting("min", "0", "custom", () => 
@@ -180,7 +194,6 @@ export function customGamemode(): void
         new CustomSettingBoolean("Prime", "false", "custom-hints"),
         new CustomSettingBoolean("Fibonacci Sequence", "false", "custom-hints"),
     ];
-
 
     let editingButton: CustomSetting;
     let firstChar: boolean = false;
@@ -254,6 +267,28 @@ export function customGamemode(): void
             else if(menuChosen == 'options') {
                 //@ts-ignore
                 options[index].nextValue();
+            }
+        }
+
+        if(e.key == 'ArrowRight') {
+            if(menuChosen == 'options') {
+                //@ts-ignore
+                options[index].nextValue();
+            }
+            else if(menuChosen == 'host') {
+                //@ts-ignore
+                gameSetup[index].nextValue();
+            }
+        }
+        
+        if(e.key == 'ArrowLeft') {
+            if(menuChosen == 'options') {
+                //@ts-ignore
+                options[index].previousValue();
+            }
+            else if(menuChosen == 'host') {
+                //@ts-ignore
+                gameSetup[index].previousValue();
             }
         }
     });
