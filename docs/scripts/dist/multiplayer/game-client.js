@@ -2,7 +2,7 @@ import { io } from "../../../_snowpack/pkg/socket.io-client.js";
 import { freezeGame, unfreezeGame, dead } from "../game.js";
 import { setText } from "../output.js";
 import { SERVER_URL, PRE_ROUND_TIME, POST_ROUND_TIME, SCOREBOARD_DELAY_TIME, PING_REFRESH_TIME, isMultiplayer, TERMINATE_LOBBY_DELAY } from "./multiplayer-config.js";
-import { printHints } from "../gamemodes/utility/hints.js";
+import { printHints, printOneChanceHint } from "../gamemodes/utility/hints.js";
 import { ping } from "./ping.js";
 import { revealInterval } from "../gamemodes/utility/interval.js";
 import { forceRand } from "../random.js";
@@ -31,7 +31,12 @@ export function connectToServer() {
     });
     socket.on("multiplayerWin", (nickname) => {
         roundEnd();
-        dead(nickname.toUpperCase() + " WON THE ROUND");
+        dead(nickname.toUpperCase() + " WON THE ROUND", false);
+    });
+    socket.on("roundDraw", () => {
+        roundEnd();
+        updateScoreboardInfo("ROUND DRAW");
+        setText("ROUND DRAW");
     });
     socket.on("startMatch", (scoreboard, pointsToWinCount) => {
         pointsToWin = pointsToWinCount;
@@ -46,6 +51,9 @@ export function connectToServer() {
         else if (gamemode == 'blind') {
             min = minI;
             max = maxI;
+        }
+        else if (gamemode == 'oneChance') {
+            printOneChanceHint(randomNumber);
         }
         /*else if(gamemode == 'interval') {
             setHint(randomNumber+" is in the interval <???, ???>");
@@ -80,6 +88,10 @@ export function multiplayerWin() {
         socket.emit("multiplayerWin", gameID, nickname, POST_ROUND_TIME);
     else
         socket.emit("multiplayerWin", gameID, nickname, POST_ROUND_TIME, true);
+}
+export function multiplayerDead() {
+    socket.emit("multiplayerDead", gameID, POST_ROUND_TIME);
+    console.log("wykonałes sie kurwa?");
 }
 function loadScoreboard(scoreboard) {
     const div = document.createElement("div");
