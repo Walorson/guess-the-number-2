@@ -1,6 +1,6 @@
 import {writeGuess} from "./input.js";
 import {time} from "./time.js";
-import {connectToServer, multiplayerWin} from "./multiplayer/game-client.js";
+import {connectToServer, multiplayerDead, multiplayerWin} from "./multiplayer/game-client.js";
 import {isMultiplayer} from "./multiplayer/multiplayer-config.js";
 import {changeBackground, changeColor, changeFont} from "./theme.js";
 import {rand} from "./random.js";
@@ -53,16 +53,18 @@ export function win() {
   output.textContent = "CORRECT CORRECT CORRECT CORRECT CORRECT CORRECT CORRECT CORRECT";
   output.classList.add("scrollText");
   lastGuess.style.display = "none";
-  if (sessionStorage.getItem("multiplayer") == "true")
+  if (isMultiplayer() == true)
     multiplayerWin();
 }
-export function dead(text = "YOU ARE DEAD") {
+export function dead(text = "YOU ARE DEAD", countDead = true) {
   end();
   input.classList.add("dead");
   output.innerHTML = `${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp;`;
   output.classList.add("scrollTextDead");
   lastGuess.textContent = `It was ${rand}`;
   lastGuess.style.marginTop = "122px";
+  if (isMultiplayer() == true && countDead == true)
+    multiplayerDead();
 }
 let ReadyForReloadPage = false;
 let reloadPage;
@@ -71,7 +73,7 @@ export function gameEvents() {
   window.addEventListener("load", () => {
     setTimeout(() => {
       reloadBlock = false;
-    }, 1e3);
+    }, 500);
     setTimeout(() => {
       window.scrollTo(0, 0);
     }, 40);
@@ -91,10 +93,10 @@ export function gameEvents() {
       reloadPage = setTimeout(function() {
         if (ReadyForReloadPage)
           location.reload();
-      }, 1e3);
+      }, 500);
       ReadyForReloadPage = true;
       circleLoad.style.setProperty("--anim-play-state", "running");
-      circleLoad.style.setProperty("--anim", "circleLoad 1s linear");
+      circleLoad.style.setProperty("--anim", "circleLoad 0.5s linear");
       circleLoad.style.opacity = "1";
     }
     if (e.key === "h" || e.key === "H") {

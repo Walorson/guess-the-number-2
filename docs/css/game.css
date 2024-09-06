@@ -50,10 +50,10 @@ body {
     height: 50px;
     width: 50px;
     border-radius: 50%;
-    background: black linear-gradient(to right, transparent 50%, red 0);
+    background: black linear-gradient(to right, transparent 50%, var(--color-progressCircle) 0);
     opacity: 1;
     --anim-play-state: paused;
-    --anim: circleLoad 1s linear;
+    --anim: circleLoad 0.5s linear;
     opacity: 0;
 }
 .progressCircle::before {
@@ -167,11 +167,11 @@ body {
     }
     50% {
         transform: rotate(calc(0 * 0.01turn));
-        background-color: red;
+        background-color: var(--color-progressCircle);
     }
     100% {
         transform: rotate(calc(50 * 0.01turn));
-        background-color: red;
+        background-color: var(--color-progressCircle);
     }
 }
 

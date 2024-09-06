@@ -22,6 +22,10 @@
     font-family: "minecraft";
     src: url("../fonts/Minecraft.ttf");
 }
+@font-face {
+    font-family: "horror";
+    src: url("../fonts/HelpMe.ttf");
+}
 
 :root {
     --color-main: rgb(217, 29, 29);
@@ -29,6 +33,7 @@
     --color-border: rgb(137,16,16);
     --color-shadow: rgb(175, 21, 21);
     --color-shadow2: rgba(137,16,16, 0.75);
+    --color-progressCircle: red;
 
     --font-main: typewriter;
     --font-title: milker;

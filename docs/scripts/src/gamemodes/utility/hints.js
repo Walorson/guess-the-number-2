@@ -89,6 +89,13 @@ function isInFibonacciSequence(num) {
       n2 = temp;
   }
 }
+export function printOneChanceHint(rand) {
+  hint.innerHTML = "You have only one chance to guess. I'll tell you the number is ";
+  if (rand % 2 == 0)
+    hint.innerHTML += "even";
+  else
+    hint.innerHTML += "odd";
+}
 export function setHint(text) {
   document.getElementById("hint").textContent = text;
 }
