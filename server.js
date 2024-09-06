@@ -55,7 +55,8 @@ io.on("connection", socket => {
             inGame: false,
             isRoundEnd: false,
             pointsToWin: pointsToWinCount,
-            gamemode: gamemodeName
+            gamemode: gamemodeName,
+            deadCount: 0
         });
 
         serversList[serversList.length-1].points[nicknames[socket.id]] = 0;
@@ -93,7 +94,7 @@ io.on("connection", socket => {
         io.socketsLeave(ownerID);
     });
 
-    /////GAME/////
+    //////GAME/////
 
     socket.on("connectToGame", (gameID, nickname) => {
         const lobby = serversList.find(obj => obj.gameID == gameID);
@@ -114,6 +115,7 @@ io.on("connection", socket => {
 
         if(lobby.members.length == lobby.maxPlayers) {
             io.to(gameID).emit("startMatch", lobby.points, lobby.pointsToWin);
+            lobby.deadCount = 0;
             
             let rand;
 
@@ -123,6 +125,16 @@ io.on("connection", socket => {
                 rand = returnRand(interval[0], interval[1]);
                 io.to(gameID).emit("setServerVariables", rand, lobby.gamemode, interval[0], interval[1]);
             }
+            else if(lobby.gamemode == 'oneChance')
+            {
+                rand = returnRand(0, 10);
+                io.to(gameID).emit("setServerVariables", rand, lobby.gamemode);
+            }
+            else if(lobby.gamemode == 'threeChances')
+                {
+                    rand = returnRand(0, 20);
+                    io.to(gameID).emit("setServerVariables", rand, lobby.gamemode);
+                }
             else 
             {
                 rand = returnRand(0, 100);
@@ -160,6 +172,24 @@ io.on("connection", socket => {
             io.to(gameID).emit("endGame", nickname.toUpperCase());
         }
     });
+
+    socket.on("multiplayerDead", (gameID, postRoundTime) => {
+        const lobby = serversList.find(obj => obj.gameID == gameID);
+        lobby.deadCount++;
+
+        if(lobby.deadCount >= lobby.members.length) {
+            io.to(gameID).emit("roundDraw");
+
+            setTimeout(() => {
+
+                lobby.isRoundEnd = false;
+                io.to(gameID).emit("startNewRound");
+                io.socketsLeave(gameID);
+                lobby.members = [];
+    
+            }, postRoundTime * 1000);
+        }
+    })
 
     function terminateLobby(gameID) 
     {

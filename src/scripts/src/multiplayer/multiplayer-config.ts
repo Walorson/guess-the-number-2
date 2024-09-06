@@ -1,4 +1,4 @@
-export const SERVER_URL: string = "127.0.0.1:3000";
+export const SERVER_URL: string = "https://guess-the-number-2.onrender.com";
 
 //TIME IN SECONDS//
 export const SERVER_LIST_REFRESH_TIME: number = 1;
@@ -10,7 +10,7 @@ export const SCOREBOARD_DELAY_TIME: number = 1;
 export const TERMINATE_LOBBY_DELAY: number = 15;
 
 export const ROOM_MIN_PLAYERS_COUNT: number = 2;
-export const ROOM_MAX_PLAYERS_COUNT: number = 6;
+export const ROOM_MAX_PLAYERS_COUNT: number = 13;
 export const POINTS_MAX_COUNT: number = 10;
 export const POINTS_MIN_COUNT: number = 1;
 export const ROOM_NAME_MAX_LENGTH: number = 20;

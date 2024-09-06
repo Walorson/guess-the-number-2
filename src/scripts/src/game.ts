@@ -1,6 +1,6 @@
 import { writeGuess } from "./input.js";
 import { time } from "./time.js";
-import { connectToServer, multiplayerWin } from "./multiplayer/game-client.js";
+import { connectToServer, multiplayerDead, multiplayerWin } from "./multiplayer/game-client.js";
 import { isMultiplayer } from "./multiplayer/multiplayer-config.js";
 import { changeBackground, changeColor, changeFont } from "./theme.js";
 import { rand } from "./random.js";
@@ -70,10 +70,10 @@ export function win(): void
     output.classList.add("scrollText");
     lastGuess.style.display = 'none';
 
-    if(sessionStorage.getItem("multiplayer") == "true") multiplayerWin();
+    if(isMultiplayer() == true) multiplayerWin();
 }
 
-export function dead(text: string = "YOU ARE DEAD"): void 
+export function dead(text: string = "YOU ARE DEAD", countDead: boolean = true): void 
 {
     end();
     input.classList.add("dead");
@@ -81,6 +81,8 @@ export function dead(text: string = "YOU ARE DEAD"): void
     output.classList.add("scrollTextDead");
     lastGuess.textContent = `It was ${rand}`;
     lastGuess.style.marginTop = "122px";
+
+    if(isMultiplayer() == true && countDead == true) multiplayerDead();
 }
 
 let ReadyForReloadPage: boolean = false;
@@ -90,7 +92,7 @@ let reloadBlock: boolean = true;
 export function gameEvents(): void 
 {
     window.addEventListener("load",() => {
-        setTimeout(() => { reloadBlock = false }, 1000);
+        setTimeout(() => { reloadBlock = false }, 500);
         setTimeout(() => { window.scrollTo(0, 0); }, 40);
 
         if(localStorage.getItem("isGuideVisible") == 'false') 
@@ -109,11 +111,11 @@ export function gameEvents(): void
         {
             if(reloadBlock == true) return;
 
-            reloadPage = setTimeout(function() { if(ReadyForReloadPage) location.reload() }, 1000);
+            reloadPage = setTimeout(function() { if(ReadyForReloadPage) location.reload() }, 500);
             
             ReadyForReloadPage = true;
             circleLoad.style.setProperty('--anim-play-state', 'running');
-            circleLoad.style.setProperty('--anim', 'circleLoad 1s linear'); 
+            circleLoad.style.setProperty('--anim', 'circleLoad 0.5s linear'); 
             circleLoad.style.opacity = '1';
         }
         if(e.key === 'h' || e.key === 'H' )
