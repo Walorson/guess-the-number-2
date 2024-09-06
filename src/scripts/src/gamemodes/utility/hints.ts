@@ -108,6 +108,16 @@ function isInFibonacciSequence(num: number): boolean
     }
 }
 
+export function printOneChanceHint(rand: number): void
+{
+    hint.innerHTML = "You have only one chance to guess. I'll tell you the number is ";
+
+    if(rand % 2 == 0)
+        hint.innerHTML += "even";
+    else
+        hint.innerHTML += "odd";
+}
+
 export function setHint(text: string): void
 {
     document.getElementById("hint").textContent = text;

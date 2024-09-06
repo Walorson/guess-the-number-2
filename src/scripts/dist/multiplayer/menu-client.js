@@ -76,7 +76,7 @@ export function createLobby() {
         waitingRoom.innerHTML += `<button class="empty-slot">.</button>`;
     }
     document.getElementById("start-game-button").style.display = 'block';
-    socket.emit("createLobby", localStorage.getItem("Room Name"), playersCount, localStorage.getItem("Points To Win"), localStorage.getItem("Gamemode").toLowerCase());
+    socket.emit("createLobby", localStorage.getItem("Room Name"), playersCount, localStorage.getItem("Points To Win"), localStorage.getItem("Gamemode"));
     sessionStorage.setItem("lobby", socket.id);
 }
 function getServersList() {
