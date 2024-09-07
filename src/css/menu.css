@@ -56,8 +56,8 @@ button:hover {
     width: 100%;
 }
 #gamemodes {
-    top: 180px;
-    transform: translateX(-50%);
+    top: 50%;
+    transform: translate(-50%, -50%);
 }
 .edit {
     animation: edit 0.8s infinite linear;

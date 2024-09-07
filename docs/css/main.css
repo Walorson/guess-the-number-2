@@ -26,6 +26,14 @@
     font-family: "horror";
     src: url("../fonts/HelpMe.ttf");
 }
+@font-face {
+    font-family: "capture it";
+    src: url("../fonts/Capture\ it.ttf");
+}
+@font-face {
+    font-family: "super mario";
+    src: url("../fonts/SuperMario256.ttf");
+}
 
 :root {
     --color-main: rgb(217, 29, 29);
