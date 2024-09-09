@@ -57,7 +57,7 @@ function colorPalette(colorMain, colorTitle, colorBorder, colorShadow, colorShad
 }
 export function changeBackground(name) {
     if (name != "none")
-        document.body.style.background = `url("https://walorson.github.io/guess-the-number-2/img/backgrounds/${name}.webp")`;
+        document.body.style.background = `url("../img/backgrounds/${name}.webp")`;
     else
         document.body.style.background = `black`;
 }

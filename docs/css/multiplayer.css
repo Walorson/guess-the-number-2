@@ -63,3 +63,6 @@
     bottom: 90px;
     display: none;
 }
+.disconnected {
+    filter: grayscale(100%);
+}

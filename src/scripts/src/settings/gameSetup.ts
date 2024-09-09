@@ -33,7 +33,7 @@ window.addEventListener("load", () => {
                 gameSetup[2].setValue(POINTS_MAX_COUNT+"");
             }
         }),
-        new CustomSettingMultiple("Gamemode", "Classic", "host", ["classic", "hardcore", "puzzle", "blind", "oneChance", "threeChances"])
+        new CustomSettingMultiple("Gamemode", "classic", "host", ["classic", "hardcore", "puzzle", "blind", "health", "oneChance", "threeChances"])
     ];
 
     gameSetup[0].onlyNumbers = false;

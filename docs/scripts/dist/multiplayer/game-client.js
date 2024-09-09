@@ -38,9 +38,9 @@ export function connectToServer() {
         updateScoreboardInfo("ROUND DRAW");
         setText("ROUND DRAW");
     });
-    socket.on("startMatch", (scoreboard, pointsToWinCount) => {
+    socket.on("startMatch", (scoreboard, pointsToWinCount, disconnectedUsers) => {
         pointsToWin = pointsToWinCount;
-        loadScoreboard(scoreboard);
+        loadScoreboard(scoreboard, disconnectedUsers);
         timerStart(PRE_ROUND_TIME, roundStart);
     });
     socket.on("setServerVariables", (randomNumber, gamemodeServer, minI, maxI) => {
@@ -93,17 +93,20 @@ export function multiplayerDead() {
     socket.emit("multiplayerDead", gameID, POST_ROUND_TIME);
     console.log("wykonałes sie kurwa?");
 }
-function loadScoreboard(scoreboard) {
+function loadScoreboard(scoreboard, disconnectedUsers) {
     const div = document.createElement("div");
     div.setAttribute("id", "scoreboard");
     let points = "";
     for (let i = 0; i < pointsToWin; i++) {
         points += '<div class="point"></div>';
     }
-    for (let key in scoreboard) {
+    for (let nickname in scoreboard) {
+        let disconnectedEffect = "";
+        if (disconnectedUsers.includes(nickname))
+            disconnectedEffect = "disconnected";
         div.innerHTML += `
-            <div class="row" id="scoreboard-${key}">
-                <div>${key}</div>
+            <div class="row ${disconnectedEffect}" id="scoreboard-${nickname}">
+                <div>${nickname}</div>
                 <div class="points-row">
                     ${points}
                 <div>

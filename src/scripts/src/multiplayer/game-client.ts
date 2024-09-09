@@ -48,10 +48,10 @@ export function connectToServer(): void
         setText("ROUND DRAW");
     })
 
-    socket.on("startMatch", (scoreboard: number[], pointsToWinCount: number) => {
+    socket.on("startMatch", (scoreboard: number[], pointsToWinCount: number, disconnectedUsers: string[]) => {
         pointsToWin = pointsToWinCount;
 
-        loadScoreboard(scoreboard);
+        loadScoreboard(scoreboard, disconnectedUsers);
         timerStart(PRE_ROUND_TIME, roundStart);
     });
 
@@ -122,7 +122,7 @@ export function multiplayerDead(): void
     console.log("wykonałes sie kurwa?")
 }
 
-function loadScoreboard(scoreboard: number[]): void
+function loadScoreboard(scoreboard: number[], disconnectedUsers: string[]): void
 {   
     const div: HTMLElement = document.createElement("div");
     div.setAttribute("id","scoreboard");
@@ -133,11 +133,16 @@ function loadScoreboard(scoreboard: number[]): void
         points += '<div class="point"></div>';
     }
 
-    for(let key in scoreboard)
+    for(let nickname in scoreboard)
     {
+        let disconnectedEffect: string = "";
+
+        if(disconnectedUsers.includes(nickname))
+            disconnectedEffect = "disconnected";
+
         div.innerHTML += `
-            <div class="row" id="scoreboard-${key}">
-                <div>${key}</div>
+            <div class="row ${disconnectedEffect}" id="scoreboard-${nickname}">
+                <div>${nickname}</div>
                 <div class="points-row">
                     ${points}
                 <div>

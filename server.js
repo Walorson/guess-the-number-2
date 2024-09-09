@@ -1,6 +1,7 @@
 import { Server } from "socket.io";
 import { getRandomInterval } from "./src/scripts/dist/gamemodes/utility/interval.js";
 import { returnRand } from "./src/scripts/dist/random.js";
+import { disconnect } from "process";
  
 const io = new Server(3000, {
     cors: { origin: "*" }
@@ -32,6 +33,17 @@ io.on("connection", socket => {
             io.to(lobby.gameID).emit("removePlayerFromWaitingRoom", nicknames[socket.id]);
         }
 
+        if(lobby != undefined && lobby.inGame == true)
+        {
+            lobby.disconnectedUsers.push(nicknames[socket.id]);
+
+            let playerIndex = lobby.members.indexOf(nicknames[socket.id]);
+            delete lobby.members[playerIndex];
+            lobby.members = lobby.members.filter(obj => obj != undefined);
+
+            lobby.maxPlayers--;
+        }
+
         online--;
         if(online < 0) online = 0;
     });
@@ -56,7 +68,8 @@ io.on("connection", socket => {
             isRoundEnd: false,
             pointsToWin: pointsToWinCount,
             gamemode: gamemodeName,
-            deadCount: 0
+            deadCount: 0,
+            disconnectedUsers: []
         });
 
         serversList[serversList.length-1].points[nicknames[socket.id]] = 0;
@@ -114,7 +127,7 @@ io.on("connection", socket => {
         lobby.members.push(nicknames[socket.id]);
 
         if(lobby.members.length == lobby.maxPlayers) {
-            io.to(gameID).emit("startMatch", lobby.points, lobby.pointsToWin);
+            io.to(gameID).emit("startMatch", lobby.points, lobby.pointsToWin, lobby.disconnectedUsers);
             lobby.deadCount = 0;
             
             let rand;
