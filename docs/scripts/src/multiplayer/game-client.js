@@ -89,7 +89,6 @@ export function multiplayerWin() {
 }
 export function multiplayerDead() {
   socket.emit("multiplayerDead", gameID, POST_ROUND_TIME);
-  console.log("wykonałes sie kurwa?");
 }
 function loadScoreboard(scoreboard) {
   const div = document.createElement("div");
