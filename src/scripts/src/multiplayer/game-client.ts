@@ -50,7 +50,7 @@ export function connectToServer(): void
 
     socket.on("startMatch", (scoreboard: number[], pointsToWinCount: number, disconnectedUsers: string[]) => {
         pointsToWin = pointsToWinCount;
-
+        console.log(disconnectedUsers);
         loadScoreboard(scoreboard, disconnectedUsers);
         timerStart(PRE_ROUND_TIME, roundStart);
     });
@@ -134,7 +134,7 @@ function loadScoreboard(scoreboard: number[], disconnectedUsers: string[]): void
 
     for(let nickname in scoreboard)
     {
-        let disconnectedEffect: string = "";
+        let disconnectedEffect: string = "";            
 
         if(disconnectedUsers.includes(nickname))
             disconnectedEffect = "disconnected";

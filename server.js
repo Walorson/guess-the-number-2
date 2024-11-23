@@ -1,7 +1,6 @@
 import { Server } from "socket.io";
 import { getRandomInterval } from "./src/scripts/dist/gamemodes/utility/interval.js";
 import { returnRand } from "./src/scripts/dist/random.js";
-import { disconnect } from "process";
  
 const io = new Server(3000, {
     cors: { origin: "*" }

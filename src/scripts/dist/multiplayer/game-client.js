@@ -40,6 +40,7 @@ export function connectToServer() {
     });
     socket.on("startMatch", (scoreboard, pointsToWinCount, disconnectedUsers) => {
         pointsToWin = pointsToWinCount;
+        console.log(disconnectedUsers);
         loadScoreboard(scoreboard, disconnectedUsers);
         timerStart(PRE_ROUND_TIME, roundStart);
     });
