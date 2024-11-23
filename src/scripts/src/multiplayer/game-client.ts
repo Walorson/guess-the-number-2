@@ -119,7 +119,6 @@ export function multiplayerWin(): void
 export function multiplayerDead(): void
 {
     socket.emit("multiplayerDead", gameID, POST_ROUND_TIME);
-    console.log("wykonałes sie kurwa?")
 }
 
 function loadScoreboard(scoreboard: number[], disconnectedUsers: string[]): void
