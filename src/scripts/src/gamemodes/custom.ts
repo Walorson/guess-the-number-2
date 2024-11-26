@@ -4,6 +4,8 @@ import { init, win, dead } from "../game.js";
 import { printHints } from "./utility/hints.js";
 import { time } from "../time.js";
 import { rand, setRand } from "../random.js";
+import { loadLanguage } from "../languages/language.js";
+const lang: any = await loadLanguage();
 
 localStorage.setItem("Custom Mode", "true");
 
@@ -42,16 +44,16 @@ function customGamemode(): void
     {
         if(guess > rand)
         {
-            output.set(output.TOO_BIG);
+            output.set(lang.TOO_BIG);
         }
         if(guess < rand)
         {
-            output.set(output.TOO_SMALL);
+            output.set(lang.TOO_SMALL);
         }
     }
     else
     {
-        output.set(output.INCORRECT);
+        output.set(lang.INCORRECT);
     }
 
     if(attempts >= maxAttempts && !isNaN(maxAttempts)) {

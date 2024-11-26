@@ -5,6 +5,8 @@ import { rand, setRand } from "../random.js";
 import { setHint } from "./utility/hints.js";
 import { isMultiplayer } from "../multiplayer/multiplayer-config.js";
 import { setMinMax } from "./utility/setMinMax.js";
+import { loadLanguage } from "../languages/language.js";
+const lang: any = await loadLanguage();
 
 const questDiv: HTMLElement = document.getElementById("quest");
 const input: HTMLElement = document.getElementById("input");
@@ -33,11 +35,11 @@ function intervalGamemode(): void
 
     if(guess > intervalBound)
     {
-        output.set(output.TOO_BIG);
+        output.set(lang.TOO_BIG);
     }
     else if(guess < intervalBound)
     {
-        output.set(output.TOO_SMALL);
+        output.set(lang.TOO_SMALL);
     }
     else if(isMinGuess == false) {
         isMinGuess = true;
@@ -46,7 +48,7 @@ function intervalGamemode(): void
 
         setAnimation(input, "correctEffect", 0.75);
 
-        output.set(output.CORRECT);
+        output.set(lang.CORRECT);
     }
     else {
         setHint(rand+` is in the interval <${min}, ${max}>`);

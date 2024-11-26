@@ -4,12 +4,14 @@ import { init, win } from "../game.js";
 import { isMultiplayer } from "../multiplayer/multiplayer-config.js";
 import { printHints } from "./utility/hints.js";
 import { rand } from "../random.js";
+import { loadLanguage } from "../languages/language.js";
+const lang = await loadLanguage();
 function puzzleGamemode() {
     let guess = getGuess();
     if (guess == rand)
         win();
     else
-        output.set(output.INCORRECT);
+        output.set(lang.INCORRECT);
     if (guess != rand)
         clearGuess();
 }

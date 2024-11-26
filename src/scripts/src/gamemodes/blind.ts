@@ -4,6 +4,8 @@ import { init, win } from "../game.js";
 import { rand, setRand } from "../random.js"
 import { getRandomInterval, revealInterval } from "./utility/interval.js";
 import { isMultiplayer } from "../multiplayer/multiplayer-config.js";
+import { loadLanguage } from "../languages/language.js";
+const lang: any = await loadLanguage();
 
 function blindGamemode(): void
 {
@@ -11,11 +13,11 @@ function blindGamemode(): void
 
     if(guess > rand)
     {
-        output.set(output.TOO_BIG);
+        output.set(lang.TOO_BIG);
     }
     else if(guess < rand)
     {
-        output.set(output.TOO_SMALL);
+        output.set(lang.TOO_SMALL);
     }
     else {
         win();
