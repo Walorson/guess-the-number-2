@@ -5,6 +5,7 @@ import { SERVER_URL, SERVER_LIST_REFRESH_TIME, PING_REFRESH_TIME } from "./multi
 import { ping } from "./ping.js";
 let socket;
 let nickname;
+let serverlist;
 const connectInfo = document.getElementById("connecting-to-server");
 const waitingRoom = document.getElementById("waiting-room-players");
 const serversList = document.getElementById("servers-list");
@@ -15,6 +16,17 @@ window.addEventListener("load", () => {
     sessionStorage.removeItem("lobby");
     sessionStorage.removeItem("multiplayer");
 });
+function refreshServerList() {
+    serversList.innerHTML = ``;
+    for (let i = 0; i < serverlist.length; i++) {
+        serversList.innerHTML += `<button owner="${serverlist[i].gameID}" class="lobby-button">${serverlist[i].name} <div class="playersCount">${serverlist[i].members.length}/${serverlist[i].maxPlayers}</div></button>`;
+    }
+    serversList.querySelectorAll("button").forEach((button) => {
+        button.onclick = () => {
+            connectTo(button.getAttribute('owner'));
+        };
+    });
+}
 export function connectToServer() {
     socket = io(SERVER_URL);
     let timer = setTimeout(() => {
@@ -34,15 +46,16 @@ export function connectToServer() {
         setInterval(getServersList, SERVER_LIST_REFRESH_TIME * 1000);
     });
     socket.on("getServersList", (list) => {
-        serversList.innerHTML = ``;
+        let doRefresh = false;
         for (let i = 0; i < list.length; i++) {
-            serversList.innerHTML += `<button owner="${list[i].gameID}" class="lobby-button">${list[i].name} <div class="playersCount">${list[i].members.length}/${list[i].maxPlayers}</div></button>`;
+            if (list[i] != serverlist[i]) {
+                doRefresh = true;
+            }
         }
-        serversList.querySelectorAll("button").forEach((button) => {
-            button.onclick = () => {
-                connectTo(button.getAttribute('owner'));
-            };
-        });
+        if (doRefresh) {
+            serverlist = list;
+            refreshServerList();
+        }
     });
     socket.on("addPlayerToWaitingRoom", (newPlayer) => {
         const emptySlot = waitingRoom.querySelector(".empty-slot");
