@@ -1,3 +1,4 @@
+export let loadLanguage;
 let language;
 const lang = localStorage.getItem("Language");
 switch (lang) {
@@ -9,7 +10,10 @@ switch (lang) {
         language = "english";
         break;
 }
-export function loadLanguage() {
-    return import(`../languages/${language}.js`);
+{
+    let langs = await import(`../languages/${language}.js`);
+    loadLanguage = function () {
+        return langs.language;
+    };
 }
 //# sourceMappingURL=language.js.map

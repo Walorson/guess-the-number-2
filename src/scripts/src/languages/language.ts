@@ -1,3 +1,4 @@
+export let loadLanguage: Function;
 let language: string;
 const lang = localStorage.getItem("Language");
 
@@ -8,7 +9,11 @@ switch(lang)
     default: language = "english"; break;
 }
 
-export function loadLanguage(): any
 {
-    return import(`../languages/${language}.js`);
+    let langs = await import(`../languages/${language}.js`);
+
+    loadLanguage = function(): any
+    {
+        return langs.language;
+    }
 }
