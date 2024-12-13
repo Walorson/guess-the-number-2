@@ -6,6 +6,7 @@ import { ping } from "./ping.js";
 
 let socket: any;
 let nickname: string;
+let serverlist: any[];
 const connectInfo: HTMLElement = document.getElementById("connecting-to-server");
 const waitingRoom: HTMLElement = document.getElementById("waiting-room-players");
 const serversList: HTMLElement = document.getElementById("servers-list");
@@ -17,6 +18,19 @@ window.addEventListener("load", () => {
     sessionStorage.removeItem("lobby");
     sessionStorage.removeItem("multiplayer");
 });
+
+function refreshServerList(): void {
+    serversList.innerHTML = ``;
+    for (let i = 0; i < serverlist.length; i++) {
+        serversList.innerHTML += `<button owner="${serverlist[i].gameID}" class="lobby-button">${serverlist[i].name} <div class="playersCount">${serverlist[i].members.length}/${serverlist[i].maxPlayers}</div></button>`;
+    }
+
+    serversList.querySelectorAll("button").forEach((button: HTMLButtonElement) => {
+        button.onclick = () => {
+            connectTo(button.getAttribute('owner'));
+        }
+    });
+}
 
 export function connectToServer(): void {
     socket = io(SERVER_URL);
@@ -31,7 +45,7 @@ export function connectToServer(): void {
         clearTimeout(timer);
 
         nickname = localStorage.getItem("Nickname");
-        gameSetup[0].setValue(nickname+"'s room");
+        gameSetup[0].setValue(nickname + "'s room");
         gameSetup[0].applySetting();
 
         socket.emit("join", nickname);
@@ -41,16 +55,17 @@ export function connectToServer(): void {
     });
 
     socket.on("getServersList", (list: any[]) => {
-        serversList.innerHTML = ``;
-        for(let i=0; i<list.length; i++) {
-            serversList.innerHTML += `<button owner="${list[i].gameID}" class="lobby-button">${list[i].name} <div class="playersCount">${list[i].members.length}/${list[i].maxPlayers}</div></button>`;
+        let doRefresh = false;
+        for (let i = 0; i < list.length; i++) {
+            if (list[i] != serverlist[i]) {
+                doRefresh = true;
+            }
         }
 
-        serversList.querySelectorAll("button").forEach((button: HTMLButtonElement) => {
-            button.onclick = () => {
-                connectTo(button.getAttribute('owner'));
-            }
-        });
+        if (doRefresh) {
+            serverlist = list;
+            refreshServerList();
+        }
     });
 
     socket.on("addPlayerToWaitingRoom", (newPlayer: string) => {
@@ -70,9 +85,9 @@ export function connectToServer(): void {
 
     socket.on("removePlayerFromWaitingRoom", (nickname: string) => {
         waitingRoom.querySelectorAll("button").forEach((button: HTMLElement) => {
-            if(button.textContent == nickname) {
+            if (button.textContent == nickname) {
                 button.textContent = '.';
-                button.setAttribute("class","empty-slot");
+                button.setAttribute("class", "empty-slot");
                 return;
             }
         });
@@ -81,14 +96,13 @@ export function connectToServer(): void {
 
 export function createLobby(): void {
     waitingRoom.innerHTML =
-    `
+        `
         <button><span style="color:gold">${nickname}</span></button>
     `;
 
     const playersCount: number = Number(localStorage.getItem('Players Count'));
 
-    for(let i=1; i<playersCount; i++)
-    {
+    for (let i = 1; i < playersCount; i++) {
         waitingRoom.innerHTML += `<button class="empty-slot">.</button>`;
     }
 
@@ -104,7 +118,7 @@ function getServersList(): void {
 function onlinePlayers(): void {
     socket.emit("getOnlinePlayers");
     socket.on("getOnlinePlayers", (onlinePlayers: number) => {
-        onlinePlayersDiv.textContent = "Online: "+onlinePlayers;
+        onlinePlayersDiv.textContent = "Online: " + onlinePlayers;
     });
 }
 
@@ -114,13 +128,11 @@ function connectTo(ownerID: string): void {
     socket.on("connectTo", (lobby: any) => {
         changeMenu("waiting-room");
 
-        for(let i=0; i<lobby.maxPlayers; i++) 
-        {
-            if(lobby.members[i] != undefined)
-            {
-                if(i == 0)
+        for (let i = 0; i < lobby.maxPlayers; i++) {
+            if (lobby.members[i] != undefined) {
+                if (i == 0)
                     waitingRoom.innerHTML += `<button><span style="color:gold">${lobby.members[i]}</span></button>`;
-                else            
+                else
                     waitingRoom.innerHTML += `<button>${lobby.members[i]}</button>`;
             }
             else
