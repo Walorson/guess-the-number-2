@@ -5,6 +5,8 @@ import { rand, setRand } from "../random.js";
 import { setHint } from "./utility/hints.js";
 import { isMultiplayer } from "../multiplayer/multiplayer-config.js";
 import { setMinMax } from "./utility/setMinMax.js";
+import { loadLanguage } from "../languages/language.js";
+const lang = await loadLanguage();
 const questDiv = document.getElementById("quest");
 const input = document.getElementById("input");
 let min;
@@ -25,17 +27,17 @@ function intervalGamemode() {
     else
         intervalBound = max;
     if (guess > intervalBound) {
-        output.set(output.TOO_BIG);
+        output.set(lang.TOO_BIG);
     }
     else if (guess < intervalBound) {
-        output.set(output.TOO_SMALL);
+        output.set(lang.TOO_SMALL);
     }
     else if (isMinGuess == false) {
         isMinGuess = true;
         setHint(rand + ` is in the interval <${min}, ???>`);
         questDiv.textContent = `Guess an interval. Guess the upper bound of the interval.`;
         setAnimation(input, "correctEffect", 0.75);
-        output.set(output.CORRECT);
+        output.set(lang.CORRECT);
     }
     else {
         setHint(rand + ` is in the interval <${min}, ${max}>`);

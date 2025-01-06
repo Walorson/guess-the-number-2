@@ -13,8 +13,4 @@ export function setText(text) {
     text = text.toUpperCase();
     output.innerHTML = `${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp; ${text} &nbsp;`;
 }
-export const TOO_SMALL = "TOO SMALL!";
-export const TOO_BIG = "TOO BIG!";
-export const INCORRECT = "INCORRECT!";
-export const CORRECT = "CORRECT!";
 //# sourceMappingURL=output.js.map

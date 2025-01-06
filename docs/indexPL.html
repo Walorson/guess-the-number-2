@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess The Number 2</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon/favicon-16x16.png">
+    <link rel="manifest" href="img/favicon/site.webmanifest">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/menu.css">
+
+    <script type="module" src="scripts/dist/menu.js" defer></script>
+    <script type="module" src="scripts/dist/menu-client.js"></script>
+</head>
+<body>
+    <div class="title"><h1><span class="big-letter">G</span>uess <span class="big-letter">T</span>he <span class="big-letter">N</span>umber <span class="big-letter rotated">2</span></h1></div>
+    <div id="guide">
+        <p><span class="outline">↑</span>
+            <span class="outline">↓</span>
+            Select buttons</p>
+    </div>
+    <div class="menu" id="main">
+        <button data-click="changeMenu('gamemodes')">Jednoosobowy</button>
+        <button data-click="changeMenu('set-nickname')">Wieloosobowy</button>
+        <button data-click="changeMenu('options')">Opcje</button>
+        <button data-click="window.close()">Wyjdź</button>
+    </div>
+    <div class="menu" id="options"></div>
+    <div class="menu" id="gamemodes">
+        <div class="double-menu">
+            <button data-click="location.href = 'gamemodes/classic.html'">Klasyczny</button>
+            <button data-click="location.href = 'gamemodes/hardcore.html'">Hardkorowy</button>
+            <button data-click="location.href = 'gamemodes/puzzle.html'">Zagadkowy</button>
+            <button data-click="location.href = 'gamemodes/health.html'">Okaleczający</button>
+            <button data-click="location.href = 'gamemodes/time.html'">Czasowy</button>
+            <button data-click="location.href = 'gamemodes/oneChance.html'">Jedna Szansa</button>
+            <button data-click="location.href = 'gamemodes/threeChances.html'">Trzy Szanse</button>
+            <button data-click="location.href = 'gamemodes/blind.html'">Ślepy</button>
+            <button data-click="location.href = 'gamemodes/interval.html'">Przedział</button>
+            <button data-click="changeMenu('custom')" style="color:gold">Niestandardowy</button>
+        </div>
+        
+        <button class="back-button" data-click="changeMenu('main')">Powrót</button>
+    </div>
+
+    <div class="menu" id="set-nickname"></div>
+
+    <div class="menu" id="multiplayer">
+        <div class="message-box" id="connecting-to-server">Łączenie z serwerem...</div>
+        <div class="servers-list" id="servers-list">
+
+        </div>
+        <button class="back-button" data-click="changeMenu('host')">Stwórz Lobby</button>
+        <button data-click="location.reload()">Powrót</button>
+    </div>
+
+    <div class="menu" id="host"></div>
+    <div class="menu" id="waiting-room">
+        <div id="waiting-room-players"></div>
+        <button class="back-button" id="start-game-button" startgame>Start</button>
+    </div>
+    <div class="menu" id="custom"></div>
+    <div class="menu" id="custom-hints"></div>
+
+    <div id="ping">Ping: 0ms</div>
+    <div id="online-players">Online: ?</div>
+</body>
+</html>
