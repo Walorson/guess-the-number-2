@@ -99,6 +99,7 @@ io.on("connection", socket => {
 
     socket.on("startGame", ownerID => {
         const lobby = serversList.find(obj => obj.gameID == ownerID);
+        lobby.maxPlayers = lobby.members.length;
         lobby.members = [];
         lobby.inGame = true;
 
